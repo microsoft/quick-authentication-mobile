@@ -1,7 +1,0 @@
-com.microsoft.quick.auth.signin
-com.microsoft.quick.auth.signin.callback
-com.microsoft.quick.auth.signin.entity
-com.microsoft.quick.auth.signin.error
-com.microsoft.quick.auth.signin.logger
-com.microsoft.quick.auth.signin.signapplicationclient
-com.microsoft.quick.auth.signin.view
