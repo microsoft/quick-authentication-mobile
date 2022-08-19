@@ -1,0 +1,48 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: rootProject.file("gradle/versions.gradle")
+    repositories {
+        maven {
+            url 'file:///home/jingjinggu/develop/microsoft/edgeinternal.identity.3p-demo-site/mobile-android/aar'
+        }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
+        google()
+        mavenLocal()
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        // This only for demo app to test kotlin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url 'file:///home/jingjinggu/develop/microsoft/edgeinternal.identity.3p-demo-site/mobile-android/aar'
+        }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
+        google()
+        mavenLocal()
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

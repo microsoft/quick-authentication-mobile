@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Sign-In button dark theme color  -->
+    <color name="mqa_sign_in_button_color_dark">#2F2F2F</color>
+    <color name="mqa_sign_in_button_text_color_dark">#FFFFFF</color>
+
+    <!--  Sign-In button light theme color  -->
+    <color name="mqa_sign_in_button_color_light">#FFFFFF</color>
+    <color name="mqa_sign_in_button_border_light">#D6D6D6</color>
+    <color name="mqa_sign_in_button_text_color_light">#323130</color>
+</resources>

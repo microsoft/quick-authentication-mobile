@@ -1,0 +1,27 @@
+<resources>
+    <!--  Sign-In button  -->
+    <dimen name="mqa_sign_in_button_icon_padding">12dp</dimen>
+    <dimen name="mqa_sign_in_button_text_padding">12dp</dimen>
+    <dimen name="mqa_sign_in_button_width">280dp</dimen>
+    <dimen name="mqa_sign_in_button_background_border_width">1dp</dimen>
+
+    <!--  Sign-In button size Large -->
+    <dimen name="mqa_sign_in_button_height_large">42dp</dimen>
+    <dimen name="mqa_sign_in_button_icon_size_large">20dp</dimen>
+    <dimen name="mqa_sign_in_button_text_size_large">16sp</dimen>
+
+    <!--  Sign-In button size Medium -->
+    <dimen name="mqa_sign_in_button_height_medium">36dp</dimen>
+    <dimen name="mqa_sign_in_button_icon_size_medium">16dp</dimen>
+    <dimen name="mqa_sign_in_button_text_size_medium">14sp</dimen>
+
+    <!--  Sign-In button size Small -->
+    <dimen name="mqa_sign_in_button_height_small">28dp</dimen>
+    <dimen name="mqa_sign_in_button_icon_size_small">12dp</dimen>
+    <dimen name="mqa_sign_in_button_text_size_small">12sp</dimen>
+
+    <!--  Sign-In button shape  -->
+    <dimen name="mqa_sign_in_button_radios_square">0dp</dimen>
+    <dimen name="mqa_sign_in_button_radios_round">4dp</dimen>
+    <dimen name="mqa_sign_in_button_radios_pill">24dp</dimen>
+</resources>

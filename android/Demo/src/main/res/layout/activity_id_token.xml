@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_grey_700"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="Microsoft Quick Auth SDK"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/ms_sign_button"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="Get Token"
+        android:background="@color/blue_grey_500"
+        android:layout_marginTop="30dp" />
+
+    <!--  token type  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="button token request type"
+            android:layout_marginStart="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:id="@+id/sign_button_type_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/acquire_oken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="acquire token"
+                android:textColor="@android:color/white" />
+
+            <RadioButton
+                android:id="@+id/acquire_token_silent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="acquire token silent"
+                android:textColor="@android:color/white" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <ScrollView
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/token_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white" />
+
+    </ScrollView>
+
+</LinearLayout>
