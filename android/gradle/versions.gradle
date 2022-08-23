@@ -17,6 +17,7 @@ ext {
     // Libraries
     msalSDKVersion = "4.0.1"
     kotlinVersion = "1.8.0"
+    recyclerviewVersion = "1.2.1"
     androidxTestRunnerVersion = "1.2.0"
     androidxTestOrchestratorVersion = "1.2.0"
     androidxTestMonitorVersion = "1.2.0"

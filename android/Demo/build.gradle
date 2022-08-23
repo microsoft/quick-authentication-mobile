@@ -65,6 +65,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$rootProject.ext.kotlinVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintLayoutVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.ext.recyclerviewVersion"
 
     // libraries for test
     testImplementation "junit:junit:${rootProject.ext.junitVersion}"
