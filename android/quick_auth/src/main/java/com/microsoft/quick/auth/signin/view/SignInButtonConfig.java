@@ -11,6 +11,7 @@ public class SignInButtonConfig {
     private Context mContext;
     private int mIconSize;
     private int mContainerHeight;
+    private int mContainerWidth;
     private Drawable mBackground;
     private int mButtonTextAppearance;
     private int mButtonTextColor;
@@ -24,6 +25,7 @@ public class SignInButtonConfig {
 
         mIconSize = mContext.getResources().getDimensionPixelSize(getIconSize(size));
         mContainerHeight = mContext.getResources().getDimensionPixelSize(getContainerHeight(size));
+        mContainerWidth = mContext.getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_width);
         mBackground = getBackground(theme, shape);
         mButtonTextAppearance = getButtonTextTextAppearance(size);
         mButtonTextColor = mContext.getResources().getColor(getButtonTextColor(theme));
@@ -130,6 +132,10 @@ public class SignInButtonConfig {
 
     public int getContainerHeight() {
         return mContainerHeight;
+    }
+
+    public int getContainerWidth() {
+        return mContainerWidth;
     }
 
     public Drawable getBackground() {
