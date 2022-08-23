@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -44,14 +45,14 @@ public class MQASignInButton extends FrameLayout {
         super(context, attrs, defStyleAttr);
         initAttrs(context, attrs, defStyleAttr);
         init(context);
+        updateButtonView();
     }
 
     private void init(Context context) {
-        View.inflate(context, R.layout.mqa_view_sign_in_button, this);
+        LayoutInflater.from(context).inflate(R.layout.mqa_view_sign_in_button, this, true);
         mSignInContainer = findViewById(R.id.ms_sign_in_button_container);
         mSignInIcon = findViewById(R.id.ms_sign_in_icon);
         mSignInText = findViewById(R.id.ms_sign_in_text);
-        updateButtonView();
     }
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -141,10 +142,12 @@ public class MQASignInButton extends FrameLayout {
         mSignInContainer.setBackground(config.getBackground());
         ViewGroup.LayoutParams containerLayoutParams = mSignInContainer.getLayoutParams();
         if (containerLayoutParams != null) {
-            containerLayoutParams.height = config.getContainerHeight();
+            int height = getButtonViewHeight(config);
+            int width = getButtonViewWidth(config);
+            containerLayoutParams.height = height;
             containerLayoutParams.width = mButtonType == ButtonType.ICON ?
-                    config.getContainerHeight() :
-                    getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_width);
+                    Math.min(width, height) :
+                    width;
             mSignInContainer.setLayoutParams(containerLayoutParams);
         }
         // set icon
@@ -192,5 +195,35 @@ public class MQASignInButton extends FrameLayout {
             iconViewLayoutParams.setMargins(0, 0, 0, 0);
             mSignInContainer.setGravity(Gravity.CENTER);
         }
+    }
+
+    private int getButtonViewHeight(SignInButtonConfig config) {
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (layoutParams == null) return config.getContainerHeight();
+        if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            return config.getContainerHeight();
+        } else if (layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            return ViewGroup.LayoutParams.MATCH_PARENT;
+        } else {
+            return config.getContainerHeight();
+        }
+    }
+
+    private int getButtonViewWidth(SignInButtonConfig config) {
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (layoutParams == null) return config.getContainerWidth();
+        if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            return config.getContainerWidth();
+        } else if (layoutParams.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+            return ViewGroup.LayoutParams.MATCH_PARENT;
+        } else {
+            return config.getContainerWidth();
+        }
+    }
+
+    @Override
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        super.setLayoutParams(params);
+        updateButtonView();
     }
 }

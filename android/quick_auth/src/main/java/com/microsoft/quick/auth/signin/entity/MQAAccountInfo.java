@@ -9,18 +9,12 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 
 public class MQAAccountInfo implements AccountInfo {
-    private String mAuthority;
     private String mAccessToken;
     private String mFullName;
     private String mUserName;
     private String mId;
     private Bitmap mUserPhoto;
     private IAccount mIAccount;
-
-    @NonNull
-    protected String getAuthority() {
-        return mAuthority;
-    }
 
     @NonNull
     public String getAccessToken() {
@@ -55,10 +49,6 @@ public class MQAAccountInfo implements AccountInfo {
         this.mUserPhoto = userPhoto;
     }
 
-    public void setAuthority(String authority) {
-        this.mAuthority = authority;
-    }
-
     public void setAccessToken(String accessToken) {
         this.mAccessToken = accessToken;
     }
@@ -88,7 +78,6 @@ public class MQAAccountInfo implements AccountInfo {
         account.setAccessToken(authenticationResult.getAccessToken());
         IAccount iAccount = authenticationResult.getAccount();
         account.setIAccount(iAccount);
-        account.setAuthority(iAccount.getAuthority());
         account.setId(account.getId());
         account.setUserName(iAccount.getUsername());
         return account;

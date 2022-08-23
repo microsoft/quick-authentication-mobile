@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_grey_700"
@@ -27,10 +28,38 @@
         android:textSize="14sp" />
 
     <LinearLayout
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.microsoft.quick.auth.signin.view.MQASignInButton
+            android:id="@+id/ms_sign_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/ms_sign_button_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_grey_500"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Click to setting sign in button style"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="3"
         android:id="@+id/ll_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -54,285 +83,5 @@
 
     </LinearLayout>
 
-    <com.microsoft.quick.auth.signin.view.MQASignInButton
-        android:id="@+id/ms_sign_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:orientation="vertical">
-
-            <!--    type    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button type setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_type_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/standard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="standard"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="icon"
-                        android:textColor="@android:color/white" />
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <!--    theme    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button theme setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_theme_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/filled_black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="filled_black"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/filled_light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="filled_light"
-                        android:textColor="@android:color/white" />
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <!--    size    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button size setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_size_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/size_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="large"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/size_medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="medium"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/size_small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="small"
-                        android:textColor="@android:color/white" />
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <!--    text    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button text setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_text_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/signin_with"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="signin_with"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/signup_with"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="signup_with"
-                        android:textColor="@android:color/white" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <!--    shape    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button shape setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_shape_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rectangular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="rectangular"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/rounded"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="rounded"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/pill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="pill"
-                        android:textColor="@android:color/white" />
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <!--    logo_alignment    -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="button shape setting"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <RadioGroup
-                    android:id="@+id/sign_button_logo_alignment_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="left"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="center"
-                        android:textColor="@android:color/white" />
-
-                    <RadioButton
-                        android:id="@+id/icon_left_text_center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="icon_left_text_center"
-                        android:textColor="@android:color/white" />
-
-                </RadioGroup>
-            </LinearLayout>
-        </LinearLayout>
-
-    </ScrollView>
 </LinearLayout>

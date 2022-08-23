@@ -8,8 +8,21 @@ task androidSourcesJar(type: Jar) {
 def GROUP_ID = "com.microsoft.quickauth"
 def ARTIFACT_ID = "signin"
 def VERSION = "0.0.8"
-//def MAVEN_GROUP_URL = "file:///home/jingjinggu/develop/microsoft/edgeinternal.identity.3p-demo-site/mobile-android/aar"
 //def MAVEN_GROUP_URL = "https://microsoft.pkgs.visualstudio.com/Edge/_packaging/EdgeMobileWebView/maven/v1"
+ext["repoUsername"] = ''
+ext["repoUserToken"] = ''
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+}
 
 afterEvaluate {
     publishing {
@@ -42,8 +55,8 @@ afterEvaluate {
                     basic(BasicAuthentication)
                 }
                 credentials {
-                    username project.findProperty("repoUsername")
-                    password project.findProperty("repoUserToken")
+                    username repoUsername
+                    password repoUserToken
                 }
             }
         }
