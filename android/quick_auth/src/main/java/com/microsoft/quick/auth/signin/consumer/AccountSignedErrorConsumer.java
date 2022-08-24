@@ -17,6 +17,7 @@ import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
+import com.microsoft.quick.auth.signin.tracker.MQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 public class AccountSignedErrorConsumer implements Function<Exception, Task<MQAAccountInfo>> {
@@ -25,11 +26,15 @@ public class AccountSignedErrorConsumer implements Function<Exception, Task<MQAA
     IAccountClientHolder mSignClient;
     private final @NonNull
     Activity mActivity;
+    private final @NonNull
+    MQATracker mTracker;
 
     public AccountSignedErrorConsumer(final @NonNull Activity activity,
-                                      final @NonNull IAccountClientHolder signClient) {
+                                      final @NonNull IAccountClientHolder signClient,
+                                      @NonNull MQATracker tracker) {
         mActivity = activity;
         mSignClient = signClient;
+        mTracker = tracker;
     }
 
     @Override
@@ -42,6 +47,8 @@ public class AccountSignedErrorConsumer implements Function<Exception, Task<MQAA
                 if (exception instanceof MsalException && MsalClientException.INVALID_PARAMETER.equals(((MsalException) exception).getErrorCode())) {
                     LogUtil.error(TAG, "sign error with account has signed add will start" +
                             " get sign account");
+                    mTracker.track(TAG, "sign error with account has signed add will start get " +
+                            "sign account");
                     MQAInnerSignInClient.getCurrentSignInAccount(mActivity, true,
                             new OnCompleteListener<MQAAccountInfo>() {
                                 @Override
@@ -51,14 +58,18 @@ public class AccountSignedErrorConsumer implements Function<Exception, Task<MQAA
                                         @Override
                                         public void run() {
                                             if (accountInfo != null) {
+                                                mTracker.track(TAG, "error and retry get account " +
+                                                        "success");
                                                 consumer.onSuccess(accountInfo);
                                             } else {
+                                                mTracker.track(TAG, "error and retry get account " +
+                                                        "error:" + error);
                                                 consumer.onError(error);
                                             }
                                         }
                                     });
                                 }
-                            });
+                            }, mTracker);
                 } else {
                     consumer.onError(exception);
                 }
