@@ -16,6 +16,7 @@ import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
+import com.microsoft.quick.auth.signin.tracker.MQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
@@ -27,9 +28,13 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
     Activity mActivity;
     private static final String TAG = CurrentTokenRequestConsumer.class.getSimpleName();
     private final boolean mErrorRetry;
+    private @NonNull
+    final MQATracker mTracker;
 
     public CurrentTokenRequestConsumer(@NonNull Activity activity, boolean errorRetry,
-                                       @NonNull IAccountClientHolder clientHolder) {
+                                       @NonNull IAccountClientHolder clientHolder,
+                                       @NonNull final MQATracker tracker) {
+        mTracker = tracker;
         mClientHolder = clientHolder;
         mActivity = activity;
         mErrorRetry = errorRetry;
@@ -44,15 +49,19 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                 final Scheduler scheduler = TaskExecutorUtil.IO();
                 // Get silent token first, if error will request token with acquireToken api
                 try {
+                    mTracker.track(TAG, "start request MSAL acquireTokenSilent api");
                     IAuthenticationResult authenticationResult =
                             clientApplication.acquireTokenSilent(iAccount,
                                     mClientHolder.getOptions().getScopes());
                     if (authenticationResult != null) {
+                        mTracker.track(TAG, "request MSAL acquireTokenSilent api success");
                         consumer.onSuccess(MQAAccountInfo.getAccount(authenticationResult));
                         return;
                     }
                 } catch (final Exception exception) {
                     if (!mErrorRetry) {
+                        mTracker.track(TAG,
+                                "request MSAL acquireTokenSilent api error:" + exception.getMessage());
                         scheduler.schedule(new Runnable() {
                             @Override
                             public void run() {
@@ -64,6 +73,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                     LogUtil.error(TAG, "acquire token silent catch an error, will start acquire " +
                             "token", exception);
                 }
+                mTracker.track(TAG, "request MSAL acquireToken api");
                 clientApplication.acquireToken(mActivity, mClientHolder.getOptions().getScopes(),
                         mClientHolder.getOptions().getLoginHint(),
                         new AuthenticationCallback() {
@@ -72,6 +82,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG, "request MSAL acquireToken cancel");
                                         consumer.onCancel();
                                     }
                                 });
@@ -82,6 +93,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG, "request MSAL acquireToken success");
                                         consumer.onSuccess(MQAAccountInfo.getAccount(authenticationResult));
                                     }
                                 });
@@ -92,6 +104,8 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG,
+                                                "request MSAL acquireToken error:" + exception.getMessage());
                                         consumer.onError(exception);
                                     }
                                 });

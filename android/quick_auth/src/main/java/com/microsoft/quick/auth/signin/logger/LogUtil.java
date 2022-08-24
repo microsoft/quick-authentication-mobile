@@ -3,9 +3,6 @@ package com.microsoft.quick.auth.signin.logger;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.microsoft.identity.client.ILoggerCallback;
-import com.microsoft.identity.client.Logger;
-
 public class LogUtil {
 
     private static final String TAG = LogUtil.class.getSimpleName();
@@ -20,7 +17,7 @@ public class LogUtil {
      * @param logLevel The {@link LogLevel} to be enabled for the diagnostic logging.
      */
     public static void setLogLevel(final @LogLevel int logLevel) {
-        Logger.getInstance().setLogLevel(adapter(logLevel));
+        MQALogger.getInstance().setLogLevel(logLevel);
     }
 
     /**
@@ -29,7 +26,7 @@ public class LogUtil {
      * @param enableLogcatLog True if enabling the logcat logging, false otherwise.
      */
     public static void setEnableLogcatLog(final boolean enableLogcatLog) {
-        Logger.getInstance().setEnableLogcatLog(enableLogcatLog);
+        MQALogger.getInstance().setEnableLogcatLog(enableLogcatLog);
     }
 
     /**
@@ -41,50 +38,8 @@ public class LogUtil {
      *                       designated
      *                       places.
      */
-    public static void setExternalLogger(final @NonNull ILogger externalLogger) throws IllegalStateException {
-        try {
-            Logger.getInstance().setExternalLogger(new ILoggerCallback() {
-                @Override
-                public void log(String tag, Logger.LogLevel logLevel, String message,
-                                boolean containsPII) {
-                    externalLogger.log(adapter(logLevel), message);
-                }
-            });
-
-        } catch (Exception e) {
-            error(TAG, e.getMessage(), e);
-        }
-    }
-
-    private static @LogLevel
-    int adapter(Logger.LogLevel logLevel) {
-        switch (logLevel) {
-            case VERBOSE:
-                return LogLevel.VERBOSE;
-            case INFO:
-                return LogLevel.INFO;
-            case WARNING:
-                return LogLevel.WARN;
-            case ERROR:
-                return LogLevel.ERROR;
-            default:
-                return LogLevel.VERBOSE;
-        }
-    }
-
-    private static Logger.LogLevel adapter(@LogLevel int logLevel) {
-        switch (logLevel) {
-            case LogLevel.VERBOSE:
-                return Logger.LogLevel.VERBOSE;
-            case LogLevel.INFO:
-                return Logger.LogLevel.INFO;
-            case LogLevel.WARN:
-                return Logger.LogLevel.WARNING;
-            case LogLevel.ERROR:
-                return Logger.LogLevel.ERROR;
-            default:
-                return Logger.LogLevel.VERBOSE;
-        }
+    public static void setExternalLogger(final @NonNull ILogger externalLogger) {
+        MQALogger.getInstance().setExternalLogger(externalLogger);
     }
 
     /**
@@ -98,15 +53,15 @@ public class LogUtil {
      */
     public static void error(final String tag, @Nullable final String errorMessage,
                              @Nullable final Throwable exception) {
-        com.microsoft.identity.common.logging.Logger.error(tag, errorMessage, exception);
+        MQALogger.getInstance().error(tag, errorMessage, exception);
     }
 
     public static void error(final String tag, @Nullable final String errorMessage) {
-        com.microsoft.identity.common.logging.Logger.error(tag, errorMessage, null);
+        MQALogger.getInstance().error(tag, errorMessage, null);
     }
 
     public static void error(final String tag, @Nullable final Throwable exception) {
-        com.microsoft.identity.common.logging.Logger.error(tag, null, exception);
+        MQALogger.getInstance().error(tag, null, exception);
     }
 
     /**
@@ -118,7 +73,7 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void warn(final String tag, @Nullable final String message) {
-        com.microsoft.identity.common.logging.Logger.warn(tag, message);
+        MQALogger.getInstance().warn(tag, message);
     }
 
     /**
@@ -131,7 +86,7 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void info(final String tag, @Nullable final String message) {
-        com.microsoft.identity.common.logging.Logger.info(tag, message);
+        MQALogger.getInstance().info(tag, message);
     }
 
     /**
@@ -144,6 +99,6 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void verbose(final String tag, @Nullable final String message) {
-        com.microsoft.identity.common.logging.Logger.verbose(tag, message);
+        MQALogger.getInstance().verbose(tag, message);
     }
 }

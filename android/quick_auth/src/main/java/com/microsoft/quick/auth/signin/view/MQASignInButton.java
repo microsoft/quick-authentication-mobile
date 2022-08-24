@@ -121,12 +121,6 @@ public class MQASignInButton extends FrameLayout {
         return this;
     }
 
-    private String getTextByIndex(int index) {
-        String[] array = getResources().getStringArray(index);
-        if (array != null && index < array.length) return array[index];
-        return null;
-    }
-
     @SuppressLint("RtlHardcoded")
     private void updateButtonView() {
         if (mSignInIcon == null || mSignInText == null) return;
