@@ -16,21 +16,28 @@ import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
+import com.microsoft.quick.auth.signin.tracker.MQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
-public class AcquireTokenConsumer implements Function<IAccountClientApplication, Task<ITokenResult>> {
+public class AcquireTokenConsumer implements Function<IAccountClientApplication,
+        Task<ITokenResult>> {
     private final @NonNull
     Activity mActivity;
     private @NonNull
     final String[] mScopes;
     private @Nullable
     final String mLoginHint;
+    private @NonNull
+    final MQATracker mTracker;
+    private static final String TAG = AcquireTokenConsumer.class.getSimpleName();
 
     public AcquireTokenConsumer(final @NonNull Activity activity, @NonNull final String[] scopes,
-                                @Nullable final String loginHint) {
+                                @Nullable final String loginHint,
+                                @NonNull final MQATracker tracker) {
         mActivity = activity;
         mScopes = scopes;
         mLoginHint = loginHint;
+        mTracker = tracker;
     }
 
     @Override
@@ -39,6 +46,7 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
         return Task.create(new Task.OnSubscribe<ITokenResult>() {
             @Override
             public void subscribe(@NonNull final Consumer<? super ITokenResult> consumer) {
+                mTracker.track(TAG, "start request MSAL acquireToken api");
                 iAccountClientApplication.acquireToken(mActivity, mScopes, mLoginHint,
                         new AuthenticationCallback() {
                             @Override
@@ -46,6 +54,7 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG, "request MSAL acquireToken api cancel");
                                         consumer.onCancel();
                                     }
                                 });
@@ -56,6 +65,8 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG, "request MSAL acquireToken api " +
+                                                "success");
                                         consumer.onSuccess(new MQASignInTokenResult(authenticationResult));
                                     }
                                 });
@@ -66,6 +77,8 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
                                 scheduler.schedule(new Runnable() {
                                     @Override
                                     public void run() {
+                                        mTracker.track(TAG, "request MSAL acquireToken api " +
+                                                "error:" + exception);
                                         consumer.onError(exception);
                                     }
                                 });

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.logger.LogUtil;
+import com.microsoft.quick.auth.signin.logger.MQALogger;
 
 public class MQASignInInitializer extends ContentProvider {
     @Override
@@ -19,9 +20,8 @@ public class MQASignInInitializer extends ContentProvider {
     }
 
     private void init(Context context) {
+        MQALogger.getInstance().init(context);
         MQAApplicationManager.getInstance().init(context);
-        // Disable Sdk android logcat log by default.
-        LogUtil.setEnableLogcatLog(false);
     }
 
     @Nullable

@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
+import com.microsoft.quick.auth.signin.tracker.MQATracker;
 
 public final class MQASignInClient implements SignInClient {
     private final Context mContext;
@@ -24,7 +25,7 @@ public final class MQASignInClient implements SignInClient {
     public Disposable signIn(@NonNull Activity activity,
                              @NonNull final OnCompleteListener<AccountInfo> completeListener) {
         Disposable disposable = MQAInnerSignInClient.signIn(activity, null, null,
-                completeListener);
+                completeListener, new MQATracker("signIn"));
         mDisposable.add(disposable);
         return disposable;
     }
@@ -32,7 +33,7 @@ public final class MQASignInClient implements SignInClient {
 
     @Override
     public Disposable signOut(@NonNull final OnCompleteListener<Boolean> callback) {
-        Disposable disposable = MQAInnerSignInClient.signOut(callback);
+        Disposable disposable = MQAInnerSignInClient.signOut(callback, new MQATracker("signOut"));
         mDisposable.add(disposable);
         return disposable;
     }
@@ -41,7 +42,7 @@ public final class MQASignInClient implements SignInClient {
     public Disposable getCurrentSignInAccount(@NonNull final Activity activity,
                                               @NonNull final OnCompleteListener<AccountInfo> completeListener) {
         Disposable disposable = MQAInnerSignInClient.getCurrentSignInAccount(activity, false,
-                completeListener);
+                completeListener, new MQATracker("getCurrentSignInAccount"));
         mDisposable.add(disposable);
         return disposable;
     }
@@ -51,7 +52,7 @@ public final class MQASignInClient implements SignInClient {
                                    @Nullable final String loginHint,
                                    @NonNull final OnCompleteListener<ITokenResult> completeListener) {
         Disposable disposable = MQAInnerSignInClient.acquireToken(activity, scopes, loginHint,
-                completeListener);
+                completeListener, new MQATracker("acquireToken"));
         mDisposable.add(disposable);
         return disposable;
     }
@@ -61,7 +62,7 @@ public final class MQASignInClient implements SignInClient {
                                          @NonNull final String[] scopes,
                                          @NonNull final OnCompleteListener<ITokenResult> completeListener) {
         Disposable disposable = MQAInnerSignInClient.acquireTokenSilent(accountInfo, scopes,
-                completeListener);
+                completeListener, new MQATracker("acquireTokenSilent"));
         mDisposable.add(disposable);
         return disposable;
     }
