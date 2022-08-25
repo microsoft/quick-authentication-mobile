@@ -1,6 +1,6 @@
 package com.microsoft.quick.auth.signin.entity;
 
-public class MQASignInOptions {
+public class MQASignInInnerConfig {
     private final String mClientId;
 
     private final String mRedirectUri;
@@ -11,7 +11,7 @@ public class MQASignInOptions {
 
     private int mConfigRes;
 
-    public MQASignInOptions(MQASignInOptions.Builder builder) {
+    public MQASignInInnerConfig(MQASignInInnerConfig.Builder builder) {
         mClientId = builder.mClientId;
         mRedirectUri = builder.mRedirectUri;
         mConfigRes = builder.mConfigRes;
@@ -89,8 +89,8 @@ public class MQASignInOptions {
             return this;
         }
 
-        public MQASignInOptions build() {
-            return new MQASignInOptions(this);
+        public MQASignInInnerConfig build() {
+            return new MQASignInInnerConfig(this);
         }
     }
 }

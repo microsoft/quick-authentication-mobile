@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
-import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
+import com.microsoft.quick.auth.signin.entity.MQASignInInnerConfig;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
 import org.json.JSONException;
@@ -53,7 +53,7 @@ public class FileUtil {
 
     @WorkerThread
     public static File reWriteConfig(Context context, String configFileName,
-                                     MQASignInOptions options) {
+                                     MQASignInInnerConfig options) {
         File configFile = getSignInConfigFile(context, configFileName);
         if (configFile != null && configFile.exists()) return configFile;
 

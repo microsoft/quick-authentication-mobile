@@ -7,9 +7,9 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 public class AcquireTokenSilentConsumer implements Function<IAccountClientApplication,
         ITokenResult> {
@@ -18,12 +18,12 @@ public class AcquireTokenSilentConsumer implements Function<IAccountClientApplic
     private final @NonNull
     String[] mScopes;
     private @NonNull
-    final MSQATracker mTracker;
+    final MSQATrackerUtil mTracker;
     private static final String TAG = AcquireTokenSilentConsumer.class.getSimpleName();
 
     public AcquireTokenSilentConsumer(final @NonNull AccountInfo accountInfo,
                                       final @NonNull String[] scopes,
-                                      @NonNull final MSQATracker tracker) {
+                                      @NonNull final MSQATrackerUtil tracker) {
         mAccountInfo = accountInfo;
         mScopes = scopes;
         mTracker = tracker;

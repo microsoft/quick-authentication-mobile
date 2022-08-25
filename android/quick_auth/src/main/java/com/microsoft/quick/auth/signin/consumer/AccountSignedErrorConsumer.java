@@ -7,17 +7,17 @@ import androidx.annotation.Nullable;
 
 import com.microsoft.identity.client.exception.MsalClientException;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.MSQAInnerSignInClient;
+import com.microsoft.quick.auth.signin.MSQASignInClientHelper;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 public class AccountSignedErrorConsumer implements Function<Exception, Task<MSQAAccountInfo>> {
@@ -27,11 +27,11 @@ public class AccountSignedErrorConsumer implements Function<Exception, Task<MSQA
     private final @NonNull
     Activity mActivity;
     private final @NonNull
-    MSQATracker mTracker;
+    MSQATrackerUtil mTracker;
 
     public AccountSignedErrorConsumer(final @NonNull Activity activity,
                                       final @NonNull IAccountClientHolder signClient,
-                                      @NonNull MSQATracker tracker) {
+                                      @NonNull MSQATrackerUtil tracker) {
         mActivity = activity;
         mSignClient = signClient;
         mTracker = tracker;
@@ -49,7 +49,7 @@ public class AccountSignedErrorConsumer implements Function<Exception, Task<MSQA
                             " get sign account");
                     mTracker.track(TAG, "sign error with account has signed add will start get " +
                             "sign account");
-                    MSQAInnerSignInClient.getCurrentSignInAccount(mActivity, true,
+                    MSQASignInClientHelper.getCurrentSignInAccount(mActivity, true,
                             new OnCompleteListener<MSQAAccountInfo>() {
                                 @Override
                                 public void onComplete(@Nullable final MSQAAccountInfo accountInfo,

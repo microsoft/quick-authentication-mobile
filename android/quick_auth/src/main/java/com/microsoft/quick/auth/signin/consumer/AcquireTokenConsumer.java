@@ -10,13 +10,13 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 public class AcquireTokenConsumer implements Function<IAccountClientApplication,
@@ -28,12 +28,12 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
     private @Nullable
     final String mLoginHint;
     private @NonNull
-    final MSQATracker mTracker;
+    final MSQATrackerUtil mTracker;
     private static final String TAG = AcquireTokenConsumer.class.getSimpleName();
 
     public AcquireTokenConsumer(final @NonNull Activity activity, @NonNull final String[] scopes,
                                 @Nullable final String loginHint,
-                                @NonNull final MSQATracker tracker) {
+                                @NonNull final MSQATrackerUtil tracker) {
         mActivity = activity;
         mScopes = scopes;
         mLoginHint = loginHint;

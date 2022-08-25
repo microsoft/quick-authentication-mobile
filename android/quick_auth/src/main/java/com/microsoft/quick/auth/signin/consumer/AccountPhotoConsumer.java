@@ -10,7 +10,7 @@ import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MicrosoftAPI;
 import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -19,9 +19,9 @@ public class AccountPhotoConsumer implements Function<MSQAAccountInfo,
         MSQAAccountInfo> {
     private static final String TAG = AccountPhotoConsumer.class.getSimpleName();
     private final @NonNull
-    MSQATracker mTracker;
+    MSQATrackerUtil mTracker;
 
-    public AccountPhotoConsumer(@NonNull MSQATracker tracker) {
+    public AccountPhotoConsumer(@NonNull MSQATrackerUtil tracker) {
         mTracker = tracker;
     }
 

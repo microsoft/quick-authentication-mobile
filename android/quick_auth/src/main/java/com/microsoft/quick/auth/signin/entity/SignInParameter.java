@@ -4,16 +4,15 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.SignInClient;
+import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
-import com.microsoft.quick.auth.signin.task.Task;
 
 public class SignInParameter {
     private final @NonNull
     Activity mActivity;
 
     private final @NonNull
-    SignInClient mSignInClient;
+    MSQASignInClient mSignInClient;
 
     private final @NonNull
     OnCompleteListener<AccountInfo> mOnCompleteListener;
@@ -25,7 +24,7 @@ public class SignInParameter {
      * @param onCompleteListener A callback to be invoked when complete and will return sign in
      *                           account info.
      */
-    public SignInParameter(@NonNull Activity activity, @NonNull SignInClient signInClient,
+    public SignInParameter(@NonNull Activity activity, @NonNull MSQASignInClient signInClient,
                            @NonNull OnCompleteListener<AccountInfo> onCompleteListener) {
         mActivity = activity;
         mSignInClient = signInClient;
@@ -44,7 +43,7 @@ public class SignInParameter {
     }
 
     @NonNull
-    public SignInClient getSignInClient() {
+    public MSQASignInClient getSignInClient() {
         return mSignInClient;
     }
 

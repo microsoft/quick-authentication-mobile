@@ -7,7 +7,7 @@ import androidx.annotation.WorkerThread;
 
 import com.microsoft.identity.common.java.AuthenticationConstants;
 import com.microsoft.quick.auth.signin.Disposable;
-import com.microsoft.quick.auth.signin.GraphAccountPhotoTask;
+import com.microsoft.quick.auth.signin.task.GraphAccountPhotoTask;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;

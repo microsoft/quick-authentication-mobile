@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
-public class MSQASignInInitializer extends ContentProvider {
+public class MSQAInitializerProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         init(getContext());
