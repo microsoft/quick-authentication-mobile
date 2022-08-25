@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 
-public class MQAAccountInfo implements AccountInfo {
+public class MSQAAccountInfo implements AccountInfo {
     private String mAccessToken;
     private String mFullName;
     private String mUserName;
@@ -73,8 +73,8 @@ public class MQAAccountInfo implements AccountInfo {
         this.mIAccount = account;
     }
 
-    public static MQAAccountInfo getAccount(IAuthenticationResult authenticationResult) {
-        MQAAccountInfo account = new MQAAccountInfo();
+    public static MSQAAccountInfo getAccount(IAuthenticationResult authenticationResult) {
+        MSQAAccountInfo account = new MSQAAccountInfo();
         account.setAccessToken(authenticationResult.getAccessToken());
         IAccount iAccount = authenticationResult.getAccount();
         account.setIAccount(iAccount);

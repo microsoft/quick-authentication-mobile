@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.R;
 import com.microsoft.quick.auth.signin.entity.SignInParameter;
 
-public class MQASignInButton extends FrameLayout {
+public class MSQASignInButton extends FrameLayout {
 
     private SignInParameter mSignInParameter;
     private int mButtonTheme;
@@ -32,16 +32,16 @@ public class MQASignInButton extends FrameLayout {
     private ImageView mSignInIcon;
     private TextView mSignInText;
 
-    public MQASignInButton(@NonNull Context context) {
+    public MSQASignInButton(@NonNull Context context) {
         this(context, null);
     }
 
-    public MQASignInButton(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public MSQASignInButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MQASignInButton(@NonNull Context context, @Nullable AttributeSet attrs,
-                           int defStyleAttr) {
+    public MSQASignInButton(@NonNull Context context, @Nullable AttributeSet attrs,
+                            int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(context, attrs, defStyleAttr);
         init(context);
@@ -49,7 +49,7 @@ public class MQASignInButton extends FrameLayout {
     }
 
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.mqa_view_sign_in_button, this, true);
+        LayoutInflater.from(context).inflate(R.layout.msqa_view_sign_in_button, this, true);
         mSignInContainer = findViewById(R.id.ms_sign_in_button_container);
         mSignInIcon = findViewById(R.id.ms_sign_in_icon);
         mSignInText = findViewById(R.id.ms_sign_in_text);
@@ -74,47 +74,47 @@ public class MQASignInButton extends FrameLayout {
         typedArray.recycle();
     }
 
-    public MQASignInButton setSignInParameters(SignInParameter parameter) {
+    public MSQASignInButton setSignInParameters(SignInParameter parameter) {
         mSignInParameter = parameter;
         return this;
     }
 
-    public MQASignInButton setButtonTheme(@ButtonTheme int colorTheme) {
+    public MSQASignInButton setButtonTheme(@ButtonTheme int colorTheme) {
         if (mButtonTheme == colorTheme) return this;
         mButtonTheme = colorTheme;
         updateButtonView();
         return this;
     }
 
-    public MQASignInButton setButtonLogoAlignment(@ButtonLogoAlignment int logoAlignment) {
+    public MSQASignInButton setButtonLogoAlignment(@ButtonLogoAlignment int logoAlignment) {
         if (mButtonLogoAlignment == logoAlignment) return this;
         mButtonLogoAlignment = logoAlignment;
         updateButtonView();
         return this;
     }
 
-    public MQASignInButton setButtonShape(@ButtonShape int shape) {
+    public MSQASignInButton setButtonShape(@ButtonShape int shape) {
         if (mButtonShape == shape) return this;
         mButtonShape = shape;
         updateButtonView();
         return this;
     }
 
-    public MQASignInButton setButtonSize(@ButtonSize int size) {
+    public MSQASignInButton setButtonSize(@ButtonSize int size) {
         if (mButtonSize == size) return this;
         mButtonSize = size;
         updateButtonView();
         return this;
     }
 
-    public MQASignInButton setButtonText(@ButtonText int text) {
+    public MSQASignInButton setButtonText(@ButtonText int text) {
         if (mButtonText == text) return this;
         mButtonText = text;
         updateButtonView();
         return this;
     }
 
-    public MQASignInButton setButtonType(@ButtonType int type) {
+    public MSQASignInButton setButtonType(@ButtonType int type) {
         if (mButtonType == type) return this;
         mButtonType = type;
         updateButtonView();

@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.entity.MQAAccountInfo;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
@@ -15,31 +15,31 @@ import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
-public class SignInConsumer implements Function<IAccountClientApplication, Task<MQAAccountInfo>> {
+public class SignInConsumer implements Function<IAccountClientApplication, Task<MSQAAccountInfo>> {
 
     private final @NonNull
     Activity mActivity;
     private final @NonNull
     MQASignInOptions mOptions;
     private final @NonNull
-    MQATracker mTracker;
+    MSQATracker mTracker;
     private static final String TAG = SignInConsumer.class.getSimpleName();
 
     public SignInConsumer(final @NonNull Activity activity,
-                          final @NonNull MQASignInOptions options, @NonNull MQATracker tracker) {
+                          final @NonNull MQASignInOptions options, @NonNull MSQATracker tracker) {
         mActivity = activity;
         mOptions = options;
         mTracker = tracker;
     }
 
     @Override
-    public Task<MQAAccountInfo> apply(@NonNull final IAccountClientApplication iAccountClientApplication) throws Exception {
-        return Task.create(new Task.OnSubscribe<MQAAccountInfo>() {
+    public Task<MSQAAccountInfo> apply(@NonNull final IAccountClientApplication iAccountClientApplication) throws Exception {
+        return Task.create(new Task.OnSubscribe<MSQAAccountInfo>() {
             @Override
-            public void subscribe(@NonNull final Consumer<? super MQAAccountInfo> consumer) {
+            public void subscribe(@NonNull final Consumer<? super MSQAAccountInfo> consumer) {
                 final Scheduler scheduler = TaskExecutorUtil.IO();
                 mTracker.track(TAG, "start request msal sign in api");
                 iAccountClientApplication.signIn(mActivity, mOptions.getLoginHint(),
@@ -52,8 +52,8 @@ public class SignInConsumer implements Function<IAccountClientApplication, Task<
                                     @Override
                                     public void run() {
                                         mTracker.track(TAG, "request msal sign in success");
-                                        MQAAccountInfo account =
-                                                MQAAccountInfo.getAccount(authenticationResult);
+                                        MSQAAccountInfo account =
+                                                MSQAAccountInfo.getAccount(authenticationResult);
                                         consumer.onSuccess(account);
                                     }
                                 });

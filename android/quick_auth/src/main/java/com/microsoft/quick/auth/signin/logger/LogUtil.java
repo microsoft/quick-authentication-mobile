@@ -17,7 +17,7 @@ public class LogUtil {
      * @param logLevel The {@link LogLevel} to be enabled for the diagnostic logging.
      */
     public static void setLogLevel(final @LogLevel int logLevel) {
-        MQALogger.getInstance().setLogLevel(logLevel);
+        MSQALogger.getInstance().setLogLevel(logLevel);
     }
 
     /**
@@ -26,7 +26,7 @@ public class LogUtil {
      * @param enableLogcatLog True if enabling the logcat logging, false otherwise.
      */
     public static void setEnableLogcatLog(final boolean enableLogcatLog) {
-        MQALogger.getInstance().setEnableLogcatLog(enableLogcatLog);
+        MSQALogger.getInstance().setEnableLogcatLog(enableLogcatLog);
     }
 
     /**
@@ -39,7 +39,7 @@ public class LogUtil {
      *                       places.
      */
     public static void setExternalLogger(final @NonNull ILogger externalLogger) {
-        MQALogger.getInstance().setExternalLogger(externalLogger);
+        MSQALogger.getInstance().setExternalLogger(externalLogger);
     }
 
     /**
@@ -53,15 +53,15 @@ public class LogUtil {
      */
     public static void error(final String tag, @Nullable final String errorMessage,
                              @Nullable final Throwable exception) {
-        MQALogger.getInstance().error(tag, errorMessage, exception);
+        MSQALogger.getInstance().error(tag, errorMessage, exception);
     }
 
     public static void error(final String tag, @Nullable final String errorMessage) {
-        MQALogger.getInstance().error(tag, errorMessage, null);
+        MSQALogger.getInstance().error(tag, errorMessage, null);
     }
 
     public static void error(final String tag, @Nullable final Throwable exception) {
-        MQALogger.getInstance().error(tag, null, exception);
+        MSQALogger.getInstance().error(tag, null, exception);
     }
 
     /**
@@ -73,7 +73,7 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void warn(final String tag, @Nullable final String message) {
-        MQALogger.getInstance().warn(tag, message);
+        MSQALogger.getInstance().warn(tag, message);
     }
 
     /**
@@ -86,7 +86,7 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void info(final String tag, @Nullable final String message) {
-        MQALogger.getInstance().info(tag, message);
+        MSQALogger.getInstance().info(tag, message);
     }
 
     /**
@@ -99,6 +99,6 @@ public class LogUtil {
      * @param message The message to log.
      */
     public static void verbose(final String tag, @Nullable final String message) {
-        MQALogger.getInstance().verbose(tag, message);
+        MSQALogger.getInstance().verbose(tag, message);
     }
 }

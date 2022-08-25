@@ -19,32 +19,33 @@ import com.microsoft.quick.auth.signin.consumer.SignInConsumer;
 import com.microsoft.quick.auth.signin.consumer.SignOutConsumer;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
-import com.microsoft.quick.auth.signin.entity.MQAAccountInfo;
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInError;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInErrorHelper;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.DefaultConsumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 
-public final class MQAInnerSignInClient {
-    private static final String TAG = MQAInnerSignInClient.class.getSimpleName();
+public final class MSQAInnerSignInClient {
+    private static final String TAG = MSQAInnerSignInClient.class.getSimpleName();
 
     public static Disposable signIn(@NonNull Activity activity,
-                                    final OnSuccessListener<? super MQAAccountInfo> successListener,
+                                    final OnSuccessListener<? super MSQAAccountInfo> successListener,
                                     final OnFailureListener failureListener,
-                                    final OnCompleteListener<? super MQAAccountInfo> completeListener, @NonNull final MQATracker tracker) {
+                                    final OnCompleteListener<? super MSQAAccountInfo> completeListener,
+                                    @NonNull final MSQATracker tracker) {
         IAccountClientHolder signClient =
-                MQAApplicationManager.getInstance().getSignInApplication(true);
-        return MQAApplicationTask.getApplicationObservable(signClient, tracker)
+                MSQAApplicationManager.getInstance().getSignInApplication(true);
+        return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
                 .flatMap(new SignInConsumer(activity, signClient.getOptions(), tracker))
                 .errorRetry(new AccountSignedErrorConsumer(activity, signClient, tracker))
                 .map(new AccountUpdateWithGraphConsumer(tracker))
                 .map(new AccountPhotoConsumer(tracker))
                 .nextConsumerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new DefaultConsumer<MQAAccountInfo>() {
+                .subscribe(new DefaultConsumer<MSQAAccountInfo>() {
                     @Override
-                    public void onSuccess(MQAAccountInfo microsoftAccount) {
+                    public void onSuccess(MSQAAccountInfo microsoftAccount) {
                         tracker.track(TAG, "inner request signIn api success");
                         if (successListener != null) {
                             successListener.onSuccess(microsoftAccount);
@@ -74,10 +75,10 @@ public final class MQAInnerSignInClient {
     }
 
     public static Disposable signOut(@NonNull final OnCompleteListener<Boolean> callback,
-                                     @NonNull final MQATracker tracker) {
+                                     @NonNull final MSQATracker tracker) {
         IAccountClientHolder signClient =
-                MQAApplicationManager.getInstance().getSignInApplication(true);
-        return MQAApplicationTask.getApplicationObservable(signClient, tracker)
+                MSQAApplicationManager.getInstance().getSignInApplication(true);
+        return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
                 .map(new SignOutConsumer(tracker))
                 .nextConsumerOn(DirectToScheduler.directToMainWhenCreateInMain())
                 .subscribe(new DefaultConsumer<Boolean>() {
@@ -108,27 +109,28 @@ public final class MQAInnerSignInClient {
     public static Disposable getCurrentSignInAccount(@NonNull final Activity activity,
                                                      boolean errorRetry,
                                                      @NonNull final OnCompleteListener<?
-                                                             super MQAAccountInfo> completeListener, @NonNull final MQATracker tracker) {
+                                                             super MSQAAccountInfo> completeListener,
+                                                     @NonNull final MSQATracker tracker) {
         IAccountClientHolder signClient =
-                MQAApplicationManager.getInstance().getSignInApplication(true);
-        return MQAApplicationTask.getApplicationObservable(signClient, tracker)
+                MSQAApplicationManager.getInstance().getSignInApplication(true);
+        return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
                 .map(new CurrentAccountConsumer(tracker))
                 .flatMap(new CurrentTokenRequestConsumer(activity, errorRetry, signClient, tracker))
                 .map(new AccountUpdateWithGraphConsumer(tracker))
                 .map(new AccountPhotoConsumer(tracker))
                 .nextConsumerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new DefaultConsumer<MQAAccountInfo>() {
+                .subscribe(new DefaultConsumer<MSQAAccountInfo>() {
                     @Override
-                    public void onSuccess(MQAAccountInfo microsoftAccountInfo) {
+                    public void onSuccess(MSQAAccountInfo microsoftAccountInfo) {
                         tracker.track(TAG, "inner request getCurrentSignInAccount api success");
                         completeListener.onComplete(microsoftAccountInfo, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
-                        if (t instanceof MicrosoftSignInError && (MicrosoftSignInErrorHelper.NO_CURRENT_ACCOUNT.equals(((MicrosoftSignInError) t).getErrorCode()))) {
+                        if (t instanceof MSQASignInError && (MSQASignInErrorHelper.NO_CURRENT_ACCOUNT.equals(((MSQASignInError) t).getErrorCode()))) {
                             tracker.track(TAG,
-                                    "inner request getCurrentSignInAccount api error:" + MicrosoftSignInErrorHelper.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                                    "inner request getCurrentSignInAccount api error:" + MSQASignInErrorHelper.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
                             completeListener.onComplete(null, null);
                         } else {
                             tracker.track(TAG,
@@ -147,10 +149,11 @@ public final class MQAInnerSignInClient {
 
     public static Disposable acquireTokenSilent(@NonNull final AccountInfo accountInfo,
                                                 @NonNull final String[] scopes,
-                                                @NonNull final OnCompleteListener<ITokenResult> completeListener, @NonNull final MQATracker tracker) {
+                                                @NonNull final OnCompleteListener<ITokenResult> completeListener,
+                                                @NonNull final MSQATracker tracker) {
         IAccountClientHolder signClient =
-                MQAApplicationManager.getInstance().getSignInApplication(false);
-        return MQAApplicationTask.getApplicationObservable(signClient, tracker)
+                MSQAApplicationManager.getInstance().getSignInApplication(false);
+        return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
                 .map(new AcquireTokenSilentConsumer(accountInfo, scopes, tracker))
                 .nextConsumerOn(DirectToScheduler.directToMainWhenCreateInMain())
                 .subscribe(new DefaultConsumer<ITokenResult>() {
@@ -181,10 +184,10 @@ public final class MQAInnerSignInClient {
                                           @NonNull final String[] scopes,
                                           @Nullable final String loginHint,
                                           @NonNull final OnCompleteListener<ITokenResult> completeListener,
-                                          @NonNull final MQATracker tracker) {
+                                          @NonNull final MSQATracker tracker) {
         final IAccountClientHolder signClient =
-                MQAApplicationManager.getInstance().getSignInApplication(false);
-        return MQAApplicationTask.getApplicationObservable(signClient, tracker)
+                MSQAApplicationManager.getInstance().getSignInApplication(false);
+        return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
                 .flatMap(new AcquireTokenConsumer(activity, scopes, loginHint, tracker))
                 .nextConsumerOn(DirectToScheduler.directToMainWhenCreateInMain())
                 .subscribe(new DefaultConsumer<ITokenResult>() {

@@ -11,7 +11,7 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.IMultipleAccountPublicClientApplication;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
-import com.microsoft.quick.auth.signin.entity.MQAAccountInfo;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 
 import java.util.List;
 
@@ -59,8 +59,8 @@ public class MultipleAccountClientApplication implements IAccountClientApplicati
 
     @Override
     public IAccount getAccount(@NonNull AccountInfo accountInfo) throws Exception {
-        if (accountInfo instanceof MQAAccountInfo && ((MQAAccountInfo) accountInfo).getIAccount() != null) {
-            return ((MQAAccountInfo) accountInfo).getIAccount();
+        if (accountInfo instanceof MSQAAccountInfo && ((MSQAAccountInfo) accountInfo).getIAccount() != null) {
+            return ((MSQAAccountInfo) accountInfo).getIAccount();
         }
         if (TextUtils.isEmpty(accountInfo.getUserName())) return null;
         return mSignClient.getAccount(accountInfo.getUserName());

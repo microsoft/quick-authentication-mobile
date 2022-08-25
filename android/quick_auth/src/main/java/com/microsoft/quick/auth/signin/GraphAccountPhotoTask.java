@@ -5,8 +5,8 @@ import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInError;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInErrorHelper;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
@@ -40,8 +40,8 @@ public class GraphAccountPhotoTask implements Task.OnSubscribe<Bitmap> {
                 consumer.onSuccess(bitmap);
             } else {
                 responseStream = conn.getErrorStream();
-                MicrosoftSignInError error =
-                        new MicrosoftSignInError(MicrosoftSignInErrorHelper.HTTP_ACCOUNT_PHOTO_REQUEST_ERROR,
+                MSQASignInError error =
+                        new MSQASignInError(MSQASignInErrorHelper.HTTP_ACCOUNT_PHOTO_REQUEST_ERROR,
                                 HttpConnectionClient.convertStreamToString(responseStream));
                 consumer.onError(error);
                 LogUtil.error(TAG, "request account photo with graph api return error", error);

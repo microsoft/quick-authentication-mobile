@@ -4,14 +4,14 @@ import androidx.annotation.NonNull;
 
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
 
 public class SignOutConsumer implements Function<IAccountClientApplication, Boolean> {
     private static final String TAG = SignOutConsumer.class.getSimpleName();
     private @NonNull
-    final MQATracker mTracker;
+    final MSQATracker mTracker;
 
-    public SignOutConsumer(@NonNull final MQATracker tracker) {
+    public SignOutConsumer(@NonNull final MSQATracker tracker) {
         mTracker = tracker;
     }
 

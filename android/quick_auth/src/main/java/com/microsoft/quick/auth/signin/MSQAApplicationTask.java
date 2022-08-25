@@ -2,41 +2,41 @@ package com.microsoft.quick.auth.signin;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Task;
 
-class MQAApplicationTask implements Task.OnSubscribe<IAccountClientApplication> {
+class MSQAApplicationTask implements Task.OnSubscribe<IAccountClientApplication> {
     private final @NonNull
     IAccountClientHolder mClientHolder;
     private final @NonNull
-    MQATracker mMqaTracker;
-    private static final String TAG = MQAApplicationTask.class.getSimpleName();
+    MSQATracker mMSQATracker;
+    private static final String TAG = MSQAApplicationTask.class.getSimpleName();
 
-    public MQAApplicationTask(@NonNull IAccountClientHolder clientHolder,
-                              @NonNull MQATracker tracker) {
+    public MSQAApplicationTask(@NonNull IAccountClientHolder clientHolder,
+                               @NonNull MSQATracker tracker) {
         mClientHolder = clientHolder;
-        mMqaTracker = tracker;
+        mMSQATracker = tracker;
     }
 
     @Override
     public void subscribe(@NonNull Consumer<? super IAccountClientApplication> observer) {
         try {
-            mMqaTracker.track(TAG, "start get application");
+            mMSQATracker.track(TAG, "start get application");
             observer.onSuccess(mClientHolder.getClientApplication());
-            mMqaTracker.track(TAG, "get application success");
+            mMSQATracker.track(TAG, "get application success");
         } catch (Exception e) {
             observer.onError(e);
-            mMqaTracker.track(TAG, "get application error:" + e.getMessage());
+            mMSQATracker.track(TAG, "get application error:" + e.getMessage());
         }
     }
 
     public static Task<IAccountClientApplication> getApplicationObservable(@NonNull IAccountClientHolder clientHolder,
-                                                                           @NonNull MQATracker tracker) {
-        return Task.create(new MQAApplicationTask(clientHolder, tracker))
+                                                                           @NonNull MSQATracker tracker) {
+        return Task.create(new MSQAApplicationTask(clientHolder, tracker))
                 .taskScheduleOn(DirectToScheduler.directToIOWhenCreateInMain())
                 .nextConsumerOn(DirectToScheduler.directToIOWhenCreateInMain());
     }

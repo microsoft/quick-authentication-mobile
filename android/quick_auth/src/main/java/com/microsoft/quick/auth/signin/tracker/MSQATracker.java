@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
-public class MQATracker {
+public class MSQATracker {
     private final @NonNull
     String mFrom;
     private final long mCurrentTime;
 
-    public MQATracker(String from) {
+    public MSQATracker(String from) {
         mFrom = from;
         mCurrentTime = System.currentTimeMillis();
     }

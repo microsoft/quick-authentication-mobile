@@ -9,10 +9,9 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.microsoft.quick.auth.signin.logger.LogUtil;
-import com.microsoft.quick.auth.signin.logger.MQALogger;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
-public class MQASignInInitializer extends ContentProvider {
+public class MSQASignInInitializer extends ContentProvider {
     @Override
     public boolean onCreate() {
         init(getContext());
@@ -20,8 +19,8 @@ public class MQASignInInitializer extends ContentProvider {
     }
 
     private void init(Context context) {
-        MQALogger.getInstance().init(context);
-        MQAApplicationManager.getInstance().init(context);
+        MSQALogger.getInstance().init(context);
+        MSQAApplicationManager.getInstance().init(context);
     }
 
     @Nullable
