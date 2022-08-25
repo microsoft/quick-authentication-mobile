@@ -8,14 +8,14 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
+import com.microsoft.quick.auth.signin.entity.MQASignInInnerConfig;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 public class SignInConsumer implements Function<IAccountClientApplication, Task<MSQAAccountInfo>> {
@@ -23,13 +23,13 @@ public class SignInConsumer implements Function<IAccountClientApplication, Task<
     private final @NonNull
     Activity mActivity;
     private final @NonNull
-    MQASignInOptions mOptions;
+    MQASignInInnerConfig mOptions;
     private final @NonNull
-    MSQATracker mTracker;
+    MSQATrackerUtil mTracker;
     private static final String TAG = SignInConsumer.class.getSimpleName();
 
     public SignInConsumer(final @NonNull Activity activity,
-                          final @NonNull MQASignInOptions options, @NonNull MSQATracker tracker) {
+                          final @NonNull MQASignInInnerConfig options, @NonNull MSQATrackerUtil tracker) {
         mActivity = activity;
         mOptions = options;
         mTracker = tracker;

@@ -20,21 +20,22 @@ import com.microsoft.quick.auth.signin.consumer.SignOutConsumer;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.task.MSQAApplicationTask;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.DefaultConsumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 
-public final class MSQAInnerSignInClient {
-    private static final String TAG = MSQAInnerSignInClient.class.getSimpleName();
+public final class MSQASignInClientHelper {
+    private static final String TAG = MSQASignInClientHelper.class.getSimpleName();
 
     public static Disposable signIn(@NonNull Activity activity,
                                     final OnSuccessListener<? super MSQAAccountInfo> successListener,
                                     final OnFailureListener failureListener,
                                     final OnCompleteListener<? super MSQAAccountInfo> completeListener,
-                                    @NonNull final MSQATracker tracker) {
+                                    @NonNull final MSQATrackerUtil tracker) {
         IAccountClientHolder signClient =
                 MSQAApplicationManager.getInstance().getSignInApplication(true);
         return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
@@ -75,7 +76,7 @@ public final class MSQAInnerSignInClient {
     }
 
     public static Disposable signOut(@NonNull final OnCompleteListener<Boolean> callback,
-                                     @NonNull final MSQATracker tracker) {
+                                     @NonNull final MSQATrackerUtil tracker) {
         IAccountClientHolder signClient =
                 MSQAApplicationManager.getInstance().getSignInApplication(true);
         return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
@@ -110,7 +111,7 @@ public final class MSQAInnerSignInClient {
                                                      boolean errorRetry,
                                                      @NonNull final OnCompleteListener<?
                                                              super MSQAAccountInfo> completeListener,
-                                                     @NonNull final MSQATracker tracker) {
+                                                     @NonNull final MSQATrackerUtil tracker) {
         IAccountClientHolder signClient =
                 MSQAApplicationManager.getInstance().getSignInApplication(true);
         return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
@@ -150,7 +151,7 @@ public final class MSQAInnerSignInClient {
     public static Disposable acquireTokenSilent(@NonNull final AccountInfo accountInfo,
                                                 @NonNull final String[] scopes,
                                                 @NonNull final OnCompleteListener<ITokenResult> completeListener,
-                                                @NonNull final MSQATracker tracker) {
+                                                @NonNull final MSQATrackerUtil tracker) {
         IAccountClientHolder signClient =
                 MSQAApplicationManager.getInstance().getSignInApplication(false);
         return MSQAApplicationTask.getApplicationObservable(signClient, tracker)
@@ -184,7 +185,7 @@ public final class MSQAInnerSignInClient {
                                           @NonNull final String[] scopes,
                                           @Nullable final String loginHint,
                                           @NonNull final OnCompleteListener<ITokenResult> completeListener,
-                                          @NonNull final MSQATracker tracker) {
+                                          @NonNull final MSQATrackerUtil tracker) {
         final IAccountClientHolder signClient =
                 MSQAApplicationManager.getInstance().getSignInApplication(false);
         return MSQAApplicationTask.getApplicationObservable(signClient, tracker)

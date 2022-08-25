@@ -1,4 +1,4 @@
-package com.microsoft.quick.auth.signin.signapplicationclient;
+package com.microsoft.quick.auth.signin.signapplication;
 
 import android.app.Activity;
 import android.text.TextUtils;

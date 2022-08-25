@@ -5,12 +5,12 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
+import com.microsoft.quick.auth.signin.entity.MQASignInInnerConfig;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountMode;
 import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
-import com.microsoft.quick.auth.signin.signapplicationclient.MultipleApplicationHolder;
-import com.microsoft.quick.auth.signin.signapplicationclient.SingleApplicationHolder;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientHolder;
+import com.microsoft.quick.auth.signin.signapplication.MultipleApplicationHolder;
+import com.microsoft.quick.auth.signin.signapplication.SingleApplicationHolder;
 import com.microsoft.quick.auth.signin.util.SystemUtil;
 
 public class MSQAApplicationManager {
@@ -36,7 +36,7 @@ public class MSQAApplicationManager {
 
     public void init(Context context) {
         mSingleApplication = new SingleApplicationHolder(context,
-                new MQASignInOptions.Builder()
+                new MQASignInInnerConfig.Builder()
                         .setScopes(READ_SCOPE)
                         .setConfigRes(R.raw.msqa_basic_config)
                         .setClientId(getClientId(context))
@@ -44,7 +44,7 @@ public class MSQAApplicationManager {
                         .setAccountMode(MSQAAccountMode.SINGLE)
                         .build());
         mMultipleApplication = new MultipleApplicationHolder(context,
-                new MQASignInOptions.Builder()
+                new MQASignInInnerConfig.Builder()
                         .setScopes(READ_SCOPE)
                         .setConfigRes(R.raw.msqa_basic_config)
                         .setClientId(getClientId(context))

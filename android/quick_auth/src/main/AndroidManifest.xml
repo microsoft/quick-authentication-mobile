@@ -7,7 +7,7 @@
 
     <application>
         <provider
-            android:name=".MSQASignInInitializer"
+            android:name=".MSQAInitializerProvider"
             android:authorities="${applicationId}.microsoft-sign-in"
             android:exported="false" />
     </application>

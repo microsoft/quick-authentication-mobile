@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.Disposable;
+import com.microsoft.quick.auth.signin.MSQASignInClientImp;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
-import com.microsoft.quick.auth.signin.SignInClient;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
 
@@ -21,7 +21,7 @@ public class IdTokenActivity extends Activity {
     private boolean mSilentToken;
     private Button mSignInButton;
 
-    private SignInClient mSignInClient;
+    private MSQASignInClient mSignInClient;
     private AccountInfo mAccountInfo;
     private Disposable mDisposable;
 
@@ -45,7 +45,7 @@ public class IdTokenActivity extends Activity {
                         (iTokenResult, error) -> uploadSignInfo(iTokenResult, error));
             }
         });
-        mSignInClient = new MSQASignInClient(this);
+        mSignInClient = new MSQASignInClientImp(this);
         getCurrentInfo();
     }
 

@@ -1,4 +1,4 @@
-package com.microsoft.quick.auth.signin;
+package com.microsoft.quick.auth.signin.task;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +11,6 @@ import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MicrosoftAPI;
-import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToScheduler;
-import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
 import java.io.InputStream;
