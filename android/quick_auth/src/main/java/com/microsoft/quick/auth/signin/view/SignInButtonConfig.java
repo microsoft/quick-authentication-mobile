@@ -34,7 +34,7 @@ public class SignInButtonConfig {
 
     private Drawable getBackground(@ButtonTheme int theme, @ButtonShape int shape) {
         int radios = getBackgroundRadios(shape);
-        int backgroundRes = R.drawable.mqa_sign_in_button_background;
+        int backgroundRes = R.drawable.msqa_sign_in_button_background;
         Drawable drawable = mContext.getResources().getDrawable(backgroundRes);
         if (drawable instanceof GradientDrawable) {
             GradientDrawable gradientDrawable = (GradientDrawable) drawable;

@@ -12,7 +12,7 @@
         android:layout_width="@dimen/mqa_sign_in_button_icon_size_large"
         android:layout_height="@dimen/mqa_sign_in_button_icon_size_large"
         android:scaleType="fitXY"
-        android:src="@drawable/mqa_sign_in_button_icon" />
+        android:src="@drawable/msqa_sign_in_button_icon" />
 
     <TextView
         android:id="@+id/ms_sign_in_text"

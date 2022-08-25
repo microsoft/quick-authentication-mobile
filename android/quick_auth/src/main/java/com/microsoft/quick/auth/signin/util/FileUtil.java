@@ -68,6 +68,7 @@ public class FileUtil {
             JSONObject jsonObject = new JSONObject(config);
             jsonObject.put("client_id", options.getClientId());
             jsonObject.put("redirect_uri", options.getRedirectUri());
+            jsonObject.put("account_mode", options.getAccountMode());
             writeToFile(configFile, jsonObject.toString());
         } catch (IOException exception) {
             exception.printStackTrace();

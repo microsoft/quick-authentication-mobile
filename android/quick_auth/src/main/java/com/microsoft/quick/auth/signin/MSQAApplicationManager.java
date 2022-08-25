@@ -6,28 +6,29 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
-import com.microsoft.quick.auth.signin.entity.MQASignInScope;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountMode;
+import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.signapplicationclient.MultipleApplicationHolder;
 import com.microsoft.quick.auth.signin.signapplicationclient.SingleApplicationHolder;
 import com.microsoft.quick.auth.signin.util.SystemUtil;
 
-public class MQAApplicationManager {
-    private MQAApplicationManager() {
+public class MSQAApplicationManager {
+    private MSQAApplicationManager() {
     }
 
     private static class SingletonHolder {
-        private static final MQAApplicationManager sInstance =
-                new MQAApplicationManager();
+        private static final MSQAApplicationManager sInstance =
+                new MSQAApplicationManager();
     }
 
-    public static MQAApplicationManager getInstance() {
+    public static MSQAApplicationManager getInstance() {
         return SingletonHolder.sInstance;
     }
 
     private IAccountClientHolder mSingleApplication;
     private IAccountClientHolder mMultipleApplication;
-    private String[] READ_SCOPE = new String[]{MQASignInScope.READ};
+    private String[] READ_SCOPE = new String[]{MSQASignInScope.READ};
     private String mClientId;
     private String mRedirectUri;
     private String CLIENT_ID_KEY = "com.microsoft.quick.auth.signin.clientId";
@@ -37,16 +38,18 @@ public class MQAApplicationManager {
         mSingleApplication = new SingleApplicationHolder(context,
                 new MQASignInOptions.Builder()
                         .setScopes(READ_SCOPE)
-                        .setConfigRes(R.raw.auth_config_single_account)
+                        .setConfigRes(R.raw.msqa_basic_config)
                         .setClientId(getClientId(context))
                         .setRedirectUri(getRedirectUrl(context))
+                        .setAccountMode(MSQAAccountMode.SINGLE)
                         .build());
         mMultipleApplication = new MultipleApplicationHolder(context,
                 new MQASignInOptions.Builder()
                         .setScopes(READ_SCOPE)
-                        .setConfigRes(R.raw.auth_config_multiple_account)
+                        .setConfigRes(R.raw.msqa_basic_config)
                         .setClientId(getClientId(context))
                         .setRedirectUri(getRedirectUrl(context))
+                        .setAccountMode(MSQAAccountMode.MULTIPLE)
                         .build());
     }
 

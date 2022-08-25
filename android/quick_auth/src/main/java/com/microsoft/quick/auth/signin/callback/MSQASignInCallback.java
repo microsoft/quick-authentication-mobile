@@ -2,7 +2,7 @@ package com.microsoft.quick.auth.signin.callback;
 
 import androidx.annotation.NonNull;
 
-public interface MQASignInCallback<TResult> {
+public interface MSQASignInCallback<TResult> {
     /**
      * Called once succeed and pass the result object.
      *

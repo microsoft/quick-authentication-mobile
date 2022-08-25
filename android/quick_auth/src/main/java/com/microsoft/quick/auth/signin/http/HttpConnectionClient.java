@@ -9,8 +9,8 @@ import com.microsoft.identity.common.java.AuthenticationConstants;
 import com.microsoft.quick.auth.signin.Disposable;
 import com.microsoft.quick.auth.signin.GraphAccountPhotoTask;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInError;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInErrorHelper;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 import com.microsoft.quick.auth.signin.task.DefaultConsumer;
 
@@ -27,7 +27,7 @@ public class HttpConnectionClient {
 
     @WorkerThread
     public static String requestAccountInfo(@NonNull HttpRequest request) throws IOException,
-            MicrosoftSignInError {
+            MSQASignInError {
         InputStream responseStream = null;
         try {
             HttpURLConnection conn = HttpConnectionClient.createHttpURLConnection(request);
@@ -37,7 +37,7 @@ public class HttpConnectionClient {
                         HttpConnectionClient.convertStreamToString(responseStream);
             } else {
                 responseStream = conn.getErrorStream();
-                throw new MicrosoftSignInError(MicrosoftSignInErrorHelper.HTTP_ACCOUNT_REQUEST_ERROR,
+                throw new MSQASignInError(MSQASignInErrorHelper.HTTP_ACCOUNT_REQUEST_ERROR,
                         HttpConnectionClient.convertStreamToString(responseStream));
             }
         } finally {
