@@ -5,16 +5,16 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 public class CurrentAccountConsumer implements Function<IAccountClientApplication, IAccount> {
     private static final String TAG = CurrentAccountConsumer.class.getSimpleName();
     private @NonNull
-    final MSQATracker mTracker;
+    final MSQATrackerUtil mTracker;
 
-    public CurrentAccountConsumer(@NonNull final MSQATracker tracker) {
+    public CurrentAccountConsumer(@NonNull final MSQATrackerUtil tracker) {
         mTracker = tracker;
     }
 

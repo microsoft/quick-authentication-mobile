@@ -9,14 +9,14 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
-import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
+import com.microsoft.quick.auth.signin.signapplication.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
@@ -29,11 +29,11 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQA
     private static final String TAG = CurrentTokenRequestConsumer.class.getSimpleName();
     private final boolean mErrorRetry;
     private @NonNull
-    final MSQATracker mTracker;
+    final MSQATrackerUtil mTracker;
 
     public CurrentTokenRequestConsumer(@NonNull Activity activity, boolean errorRetry,
                                        @NonNull IAccountClientHolder clientHolder,
-                                       @NonNull final MSQATracker tracker) {
+                                       @NonNull final MSQATrackerUtil tracker) {
         mTracker = tracker;
         mClientHolder = clientHolder;
         mActivity = activity;

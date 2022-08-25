@@ -11,14 +11,14 @@ import com.microsoft.identity.common.java.util.StringUtil;
 import com.microsoft.identity.common.java.util.ThrowableUtil;
 
 public class MSQALogger {
-    private final MSQAAndroidLogCatLogger MSQAAndroidLogCatLogger;
+    private final MSQALogCatLogger MSQALogCatLogger;
     private ILogger mExternalLogger;
     private boolean mEnableLogcatLog;
     private @LogLevel
     int mLogLevel;
 
     private MSQALogger() {
-        MSQAAndroidLogCatLogger = new MSQAAndroidLogCatLogger();
+        MSQALogCatLogger = new MSQALogCatLogger();
         mLogLevel = LogLevel.VERBOSE;
     }
 
@@ -37,7 +37,7 @@ public class MSQALogger {
             int level = adapter(logLevel);
             if (mLogLevel > level) return;
             if (mEnableLogcatLog) {
-                MSQAAndroidLogCatLogger.log(tag, logLevel, message, containsPII);
+                MSQALogCatLogger.log(tag, logLevel, message, containsPII);
             }
             if (mExternalLogger != null) mExternalLogger.log(level, message);
         }

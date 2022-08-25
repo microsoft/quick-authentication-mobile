@@ -5,7 +5,7 @@ import android.util.Log;
 import com.microsoft.identity.client.ILoggerCallback;
 import com.microsoft.identity.client.Logger;
 
-public class MSQAAndroidLogCatLogger implements ILoggerCallback {
+public class MSQALogCatLogger implements ILoggerCallback {
 
     @Override
     public void log(String tag, Logger.LogLevel logLevel, String message, boolean containsPII) {

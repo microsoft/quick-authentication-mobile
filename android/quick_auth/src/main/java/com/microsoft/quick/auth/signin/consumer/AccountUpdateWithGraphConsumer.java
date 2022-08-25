@@ -13,7 +13,7 @@ import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MicrosoftAPI;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
-import com.microsoft.quick.auth.signin.tracker.MSQATracker;
+import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import org.json.JSONObject;
 
@@ -22,9 +22,9 @@ public class AccountUpdateWithGraphConsumer implements Function<MSQAAccountInfo,
 
     private static final String TAG = AccountUpdateWithGraphConsumer.class.getSimpleName();
     private final @NonNull
-    MSQATracker mTracker;
+    MSQATrackerUtil mTracker;
 
-    public AccountUpdateWithGraphConsumer(@NonNull MSQATracker tracker) {
+    public AccountUpdateWithGraphConsumer(@NonNull MSQATrackerUtil tracker) {
         mTracker = tracker;
     }
 

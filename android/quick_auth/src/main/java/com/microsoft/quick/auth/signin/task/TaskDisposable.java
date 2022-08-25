@@ -1,4 +1,6 @@
-package com.microsoft.quick.auth.signin;
+package com.microsoft.quick.auth.signin.task;
+
+import com.microsoft.quick.auth.signin.Disposable;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.microsoft.quick.auth.signin.signapplicationclient;
+package com.microsoft.quick.auth.signin.signapplication;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
+import com.microsoft.quick.auth.signin.entity.MQASignInInnerConfig;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.util.FileUtil;
@@ -21,13 +21,13 @@ public class SingleApplicationHolder implements IAccountClientHolder {
     private volatile IAccountClientApplication mClient;
     private volatile MSQASignInError mClientError;
     private final @NonNull
-    MQASignInOptions mOptions;
+    MQASignInInnerConfig mOptions;
     private volatile CountDownLatch mCountDownLatch;
     private static final String TAG = SingleApplicationHolder.class.getSimpleName();
     private final String SINGLE_CONFIG_FILE_NAME = "single_config_account.json";
 
     public SingleApplicationHolder(final Context context,
-                                   @NonNull final MQASignInOptions options) {
+                                   @NonNull final MQASignInInnerConfig options) {
         mOptions = options;
         mCountDownLatch = new CountDownLatch(1);
 
@@ -73,7 +73,7 @@ public class SingleApplicationHolder implements IAccountClientHolder {
 
     @Override
     @NonNull
-    public MQASignInOptions getOptions() {
+    public MQASignInInnerConfig getOptions() {
         return mOptions;
     }
 }
