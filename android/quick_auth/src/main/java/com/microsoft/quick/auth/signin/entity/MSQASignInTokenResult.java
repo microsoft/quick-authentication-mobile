@@ -9,12 +9,12 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import java.util.Date;
 import java.util.UUID;
 
-public class MQASignInTokenResult implements ITokenResult {
+public class MSQASignInTokenResult implements ITokenResult {
 
     private final @NonNull
     IAuthenticationResult mAuthenticationResult;
 
-    public MQASignInTokenResult(@NonNull IAuthenticationResult authenticationResult) {
+    public MSQASignInTokenResult(@NonNull IAuthenticationResult authenticationResult) {
         mAuthenticationResult = authenticationResult;
     }
 

@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
-import com.microsoft.quick.auth.signin.entity.MQASignInScope;
+import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
 
 public interface SignInClient {
     /**
@@ -60,7 +60,7 @@ public interface SignInClient {
      *                         process.
      * @param scopes           The non-null array of scopes to be requested for the access token,
      *                         the supported
-     *                         scopes can be found in{@link MQASignInScope}.
+     *                         scopes can be found in{@link MSQASignInScope}.
      * @param completeListener A callback to be invoked when token get finished.
      */
     Disposable acquireTokenSilent(@NonNull final AccountInfo accountInfo,
@@ -72,7 +72,7 @@ public interface SignInClient {
      *
      * @param activity         Activity that is used as the parent activity for get token.
      * @param scopes           The non-null array of scopes to be requested for the access token,
-     *                         the supported scopes can be found in{@link MQASignInScope}.
+     *                         the supported scopes can be found in{@link MSQASignInScope}.
      * @param loginHint        Optional. If provided, will be used as the query parameter sent
      *                         for authenticating the user, which will have the UPN pre-populated.
      * @param completeListener A callback to be invoked when token get finished.

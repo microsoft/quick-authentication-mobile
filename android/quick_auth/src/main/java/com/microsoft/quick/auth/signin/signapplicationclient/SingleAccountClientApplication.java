@@ -11,7 +11,7 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
-import com.microsoft.quick.auth.signin.entity.MQAAccountInfo;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class SingleAccountClientApplication implements IAccountClientApplication
     @Nullable
     @Override
     public IAccount getAccount(@NonNull AccountInfo accountInfo) throws Exception {
-        if (accountInfo instanceof MQAAccountInfo && ((MQAAccountInfo) accountInfo).getIAccount() != null) {
-            return ((MQAAccountInfo) accountInfo).getIAccount();
+        if (accountInfo instanceof MSQAAccountInfo && ((MSQAAccountInfo) accountInfo).getIAccount() != null) {
+            return ((MSQAAccountInfo) accountInfo).getIAccount();
         }
         return null;
     }

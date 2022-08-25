@@ -9,14 +9,14 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.ITokenResult;
-import com.microsoft.quick.auth.signin.entity.MQASignInTokenResult;
+import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 public class AcquireTokenConsumer implements Function<IAccountClientApplication,
@@ -28,12 +28,12 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
     private @Nullable
     final String mLoginHint;
     private @NonNull
-    final MQATracker mTracker;
+    final MSQATracker mTracker;
     private static final String TAG = AcquireTokenConsumer.class.getSimpleName();
 
     public AcquireTokenConsumer(final @NonNull Activity activity, @NonNull final String[] scopes,
                                 @Nullable final String loginHint,
-                                @NonNull final MQATracker tracker) {
+                                @NonNull final MSQATracker tracker) {
         mActivity = activity;
         mScopes = scopes;
         mLoginHint = loginHint;
@@ -67,7 +67,7 @@ public class AcquireTokenConsumer implements Function<IAccountClientApplication,
                                     public void run() {
                                         mTracker.track(TAG, "request MSAL acquireToken api " +
                                                 "success");
-                                        consumer.onSuccess(new MQASignInTokenResult(authenticationResult));
+                                        consumer.onSuccess(new MSQASignInTokenResult(authenticationResult));
                                     }
                                 });
                             }

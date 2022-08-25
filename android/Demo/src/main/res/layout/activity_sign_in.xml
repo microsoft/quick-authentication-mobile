@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.microsoft.quick.auth.signin.view.MQASignInButton
+        <com.microsoft.quick.auth.signin.view.MSQASignInButton
             android:id="@+id/ms_sign_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

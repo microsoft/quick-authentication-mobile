@@ -8,8 +8,8 @@ import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MQASignInOptions;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInError;
-import com.microsoft.quick.auth.signin.error.MicrosoftSignInErrorHelper;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.util.FileUtil;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
@@ -19,7 +19,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class SingleApplicationHolder implements IAccountClientHolder {
     private volatile IAccountClientApplication mClient;
-    private volatile MicrosoftSignInError mClientError;
+    private volatile MSQASignInError mClientError;
     private final @NonNull
     MQASignInOptions mOptions;
     private volatile CountDownLatch mCountDownLatch;
@@ -45,11 +45,11 @@ public class SingleApplicationHolder implements IAccountClientHolder {
                     exception.printStackTrace();
                     if (exception instanceof MsalException) {
                         mClientError =
-                                new MicrosoftSignInError(((MsalException) exception).getErrorCode(),
+                                new MSQASignInError(((MsalException) exception).getErrorCode(),
                                         exception.getMessage());
                     } else {
                         mClientError =
-                                new MicrosoftSignInError(MicrosoftSignInErrorHelper.INTERRUPTED_ERROR,
+                                new MSQASignInError(MSQASignInErrorHelper.INTERRUPTED_ERROR,
                                         exception.getMessage());
                     }
                     // Remove config file

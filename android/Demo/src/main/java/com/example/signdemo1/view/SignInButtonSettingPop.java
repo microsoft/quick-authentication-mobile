@@ -18,14 +18,14 @@ import com.microsoft.quick.auth.signin.view.ButtonSize;
 import com.microsoft.quick.auth.signin.view.ButtonText;
 import com.microsoft.quick.auth.signin.view.ButtonTheme;
 import com.microsoft.quick.auth.signin.view.ButtonType;
-import com.microsoft.quick.auth.signin.view.MQASignInButton;
+import com.microsoft.quick.auth.signin.view.MSQASignInButton;
 
 public class SignInButtonSettingPop extends PopupWindow {
 
     private final @NonNull
     Context mContext;
     private final @NonNull
-    MQASignInButton mSignInButton;
+    MSQASignInButton mSignInButton;
     private RadioGroup mTypeRadioGroup;
     private RadioGroup mThemeRadioGroup;
     private RadioGroup mSizeRadioGroup;
@@ -33,7 +33,7 @@ public class SignInButtonSettingPop extends PopupWindow {
     private RadioGroup mShapeRadioGroup;
     private RadioGroup mAlignmentRadioGroup;
 
-    public SignInButtonSettingPop(@NonNull Context context, @NonNull MQASignInButton signInButton) {
+    public SignInButtonSettingPop(@NonNull Context context, @NonNull MSQASignInButton signInButton) {
         super(context);
         mContext = context;
         mSignInButton = signInButton;

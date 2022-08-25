@@ -7,6 +7,7 @@ public class MQASignInOptions {
 
     private String[] mScopes;
     private String mLoginHint;
+    private String mAccountMode;
 
     private int mConfigRes;
 
@@ -15,9 +16,10 @@ public class MQASignInOptions {
         mRedirectUri = builder.mRedirectUri;
         mConfigRes = builder.mConfigRes;
         mScopes = builder.mScopes;
+        mAccountMode = builder.mAccountMode;
         mLoginHint = builder.mLoginHint;
         if (mScopes == null || mScopes.length == 0) {
-            mScopes = new String[]{MQASignInScope.READ};
+            mScopes = new String[]{MSQASignInScope.READ};
         }
     }
 
@@ -31,6 +33,10 @@ public class MQASignInOptions {
 
     public String getRedirectUri() {
         return mRedirectUri;
+    }
+
+    public String getAccountMode() {
+        return mAccountMode;
     }
 
     public int getConfigRes() {
@@ -47,8 +53,10 @@ public class MQASignInOptions {
         private int mConfigRes;
         private String[] mScopes;
         private String mLoginHint;
+        private String mAccountMode;
 
         public Builder() {
+            mAccountMode = MSQAAccountMode.SINGLE;
         }
 
         public Builder setClientId(String clientId) {
@@ -68,6 +76,11 @@ public class MQASignInOptions {
 
         public Builder setConfigRes(int configRes) {
             mConfigRes = configRes;
+            return this;
+        }
+
+        public Builder setAccountMode(String accountMode) {
+            mAccountMode = accountMode;
             return this;
         }
 

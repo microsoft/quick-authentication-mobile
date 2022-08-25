@@ -8,7 +8,7 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.entity.MQAAccountInfo;
+import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientApplication;
 import com.microsoft.quick.auth.signin.signapplicationclient.IAccountClientHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
@@ -16,11 +16,11 @@ import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
 import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.tracker.MQATracker;
+import com.microsoft.quick.auth.signin.tracker.MSQATracker;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 import com.microsoft.quick.auth.signin.logger.LogUtil;
 
-public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAAccountInfo>> {
+public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQAAccountInfo>> {
 
     private final @NonNull
     IAccountClientHolder mClientHolder;
@@ -29,11 +29,11 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
     private static final String TAG = CurrentTokenRequestConsumer.class.getSimpleName();
     private final boolean mErrorRetry;
     private @NonNull
-    final MQATracker mTracker;
+    final MSQATracker mTracker;
 
     public CurrentTokenRequestConsumer(@NonNull Activity activity, boolean errorRetry,
                                        @NonNull IAccountClientHolder clientHolder,
-                                       @NonNull final MQATracker tracker) {
+                                       @NonNull final MSQATracker tracker) {
         mTracker = tracker;
         mClientHolder = clientHolder;
         mActivity = activity;
@@ -41,11 +41,11 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
     }
 
     @Override
-    public Task<MQAAccountInfo> apply(@NonNull final IAccount iAccount) throws Exception {
+    public Task<MSQAAccountInfo> apply(@NonNull final IAccount iAccount) throws Exception {
         final IAccountClientApplication clientApplication = mClientHolder.getClientApplication();
-        return Task.create(new Task.OnSubscribe<MQAAccountInfo>() {
+        return Task.create(new Task.OnSubscribe<MSQAAccountInfo>() {
             @Override
-            public void subscribe(@NonNull final Consumer<? super MQAAccountInfo> consumer) {
+            public void subscribe(@NonNull final Consumer<? super MSQAAccountInfo> consumer) {
                 final Scheduler scheduler = TaskExecutorUtil.IO();
                 // Get silent token first, if error will request token with acquireToken api
                 try {
@@ -55,7 +55,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                                     mClientHolder.getOptions().getScopes());
                     if (authenticationResult != null) {
                         mTracker.track(TAG, "request MSAL acquireTokenSilent api success");
-                        consumer.onSuccess(MQAAccountInfo.getAccount(authenticationResult));
+                        consumer.onSuccess(MSQAAccountInfo.getAccount(authenticationResult));
                         return;
                     }
                 } catch (final Exception exception) {
@@ -94,7 +94,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MQAA
                                     @Override
                                     public void run() {
                                         mTracker.track(TAG, "request MSAL acquireToken success");
-                                        consumer.onSuccess(MQAAccountInfo.getAccount(authenticationResult));
+                                        consumer.onSuccess(MSQAAccountInfo.getAccount(authenticationResult));
                                     }
                                 });
                             }

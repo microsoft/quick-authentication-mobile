@@ -10,25 +10,25 @@ import com.microsoft.identity.client.Logger;
 import com.microsoft.identity.common.java.util.StringUtil;
 import com.microsoft.identity.common.java.util.ThrowableUtil;
 
-public class MQALogger {
-    private final AndroidLogCatLogger androidLogCatLogger;
+public class MSQALogger {
+    private final MSQAAndroidLogCatLogger MSQAAndroidLogCatLogger;
     private ILogger mExternalLogger;
     private boolean mEnableLogcatLog;
     private @LogLevel
     int mLogLevel;
 
-    private MQALogger() {
-        androidLogCatLogger = new AndroidLogCatLogger();
+    private MSQALogger() {
+        MSQAAndroidLogCatLogger = new MSQAAndroidLogCatLogger();
         mLogLevel = LogLevel.VERBOSE;
     }
 
     private static class SingletonHolder {
-        private static final MQALogger sInstance =
-                new MQALogger();
+        private static final MSQALogger sInstance =
+                new MSQALogger();
     }
 
-    public static MQALogger getInstance() {
-        return MQALogger.SingletonHolder.sInstance;
+    public static MSQALogger getInstance() {
+        return MSQALogger.SingletonHolder.sInstance;
     }
 
     private final ILoggerCallback innerLogger = new ILoggerCallback() {
@@ -37,7 +37,7 @@ public class MQALogger {
             int level = adapter(logLevel);
             if (mLogLevel > level) return;
             if (mEnableLogcatLog) {
-                androidLogCatLogger.log(tag, logLevel, message, containsPII);
+                MSQAAndroidLogCatLogger.log(tag, logLevel, message, containsPII);
             }
             if (mExternalLogger != null) mExternalLogger.log(level, message);
         }

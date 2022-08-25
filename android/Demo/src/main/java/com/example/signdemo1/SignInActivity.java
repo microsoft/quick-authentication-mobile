@@ -11,15 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.signdemo1.view.SignInButtonSettingPop;
-import com.microsoft.quick.auth.signin.MQASignInClient;
+import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.view.ButtonText;
-import com.microsoft.quick.auth.signin.view.MQASignInButton;
+import com.microsoft.quick.auth.signin.view.MSQASignInButton;
 
 public class SignInActivity extends Activity {
 
-    private MQASignInButton mSignInButton;
+    private MSQASignInButton mSignInButton;
     private TextView mStatus;
     private TextView mUserInfoResult;
     private ImageView mUserPhoto;
@@ -41,7 +41,7 @@ public class SignInActivity extends Activity {
         mUserPhoto = findViewById(R.id.userPhoto);
         mSignButtonSetting = findViewById(R.id.ms_sign_button_setting);
 
-        mSignInClient = new MQASignInClient(this);
+        mSignInClient = new MSQASignInClient(this);
         mSignInButton.setOnClickListener(v -> {
             if (!mSignedIn) {
                 mSignInClient.signIn(this, (accountInfo, error) -> {
