@@ -35,9 +35,35 @@
 
         <com.microsoft.quick.auth.signin.view.MSQASignInButton
             android:id="@+id/ms_sign_button"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/ms_sign_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_grey_500"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:text="Sign Out"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/ms_acquire_token_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_grey_500"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:text="Acquire Token"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/ms_sign_button_setting"
@@ -46,7 +72,6 @@
             android:background="@color/blue_grey_500"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
-            android:layout_marginTop="10dp"
             android:text="Click to setting sign in button style"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
@@ -80,6 +105,14 @@
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_token_result"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

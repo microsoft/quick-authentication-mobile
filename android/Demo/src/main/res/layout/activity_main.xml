@@ -31,6 +31,7 @@
         android:layout_margin="10dp"
         android:gravity="center_vertical"
         android:padding="10dp"
+        android:visibility="gone"
         android:textSize="16sp"
         android:text="IDTokenActivity" />
 
@@ -38,6 +39,7 @@
         android:background="@color/blue_grey_600"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0.5dp" />
 </LinearLayout>
