@@ -2,8 +2,6 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.Disposable;
-
 public class TaskErrorRetry<T> extends Task<T> {
 
     private final @NonNull

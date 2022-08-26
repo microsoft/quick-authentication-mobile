@@ -1,4 +1,4 @@
-package com.microsoft.quick.auth.signin.signapplication;
+package com.microsoft.quick.auth.signin.signinclient;
 
 import android.app.Activity;
 
@@ -13,10 +13,10 @@ import com.microsoft.quick.auth.signin.entity.AccountInfo;
 
 import java.util.List;
 
-public interface IAccountClientApplication {
+public interface ISignInClientApplication {
     void signIn(@NonNull final Activity activity,
                 @Nullable final String loginHint,
-                @NonNull final String[] scopes,
+                @NonNull final List<String> scopes,
                 @NonNull final AuthenticationCallback callback
     );
 
@@ -25,10 +25,11 @@ public interface IAccountClientApplication {
 
     @WorkerThread
     IAuthenticationResult acquireTokenSilent(@NonNull IAccount account,
-                                             @NonNull final String[] scopes) throws Exception;
+                                             @NonNull final List<String> scopes) throws Exception;
 
     void acquireToken(@NonNull final Activity activity,
-                      @NonNull final String[] scopes,
+                      @Nullable IAccount account,
+                      @NonNull final List<String> scopes,
                       @Nullable final String loginHint,
                       @NonNull final AuthenticationCallback callback
     );

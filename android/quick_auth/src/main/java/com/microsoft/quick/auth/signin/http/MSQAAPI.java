@@ -1,6 +1,6 @@
 package com.microsoft.quick.auth.signin.http;
 
-public class MicrosoftAPI {
+public class MSQAAPI {
     public static final int CONNECT_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 30000;
     public static final String MS_GRAPH_TK_REQUEST_PREFIX = "Bearer ";

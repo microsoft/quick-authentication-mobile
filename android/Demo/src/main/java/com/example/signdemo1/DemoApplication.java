@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.MQASignInOptions;
-import com.microsoft.quick.auth.signin.MSQASignIn;
+import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.logger.ILogger;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
@@ -16,17 +16,13 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        MSQASignIn.init(this, new MQASignInOptions.Builder()
-                .setClientId("client id")
-                .setRedirectUri("redirect url")
+        MSQASignInClient.sharedInstance().setSignInOptions(this, new MQASignInOptions.Builder()
+                .setConfigResourceId(R.raw.auth_config_single_account)
+                .setEnableLogcatLog(true)
+                .setLogLevel(LogLevel.VERBOSE)
+                .setExternalLogger((logLevel, message) -> {
+                    // get log message in this
+                })
                 .build());
-        MSQASignIn.setLogLevel(LogLevel.VERBOSE);
-        MSQASignIn.setEnableLogcatLog(true);
-        MSQASignIn.setExternalLogger(new ILogger() {
-            @Override
-            public void log(@NonNull int logLevel, @Nullable String message) {
-                Log.e("DemoApplication", message);
-            }
-        });
     }
 }

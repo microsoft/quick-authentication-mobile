@@ -1,18 +1,11 @@
 package com.microsoft.quick.auth.signin.http;
 
-import android.graphics.Bitmap;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
 import com.microsoft.identity.common.java.AuthenticationConstants;
-import com.microsoft.quick.auth.signin.Disposable;
-import com.microsoft.quick.auth.signin.task.GraphAccountPhotoTask;
-import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
-import com.microsoft.quick.auth.signin.logger.LogUtil;
-import com.microsoft.quick.auth.signin.task.DefaultConsumer;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -24,6 +17,8 @@ import java.net.URL;
 import java.util.Map;
 
 public class HttpConnectionClient {
+
+    private static final String TAG = HttpConnectionClient.class.getSimpleName();
 
     @WorkerThread
     public static String requestAccountInfo(@NonNull HttpRequest request) throws IOException,
@@ -37,28 +32,12 @@ public class HttpConnectionClient {
                         HttpConnectionClient.convertStreamToString(responseStream);
             } else {
                 responseStream = conn.getErrorStream();
-                throw new MSQASignInError(MSQASignInErrorHelper.HTTP_ACCOUNT_REQUEST_ERROR,
+                throw new MSQASignInError(MSQASignInError.HTTP_ACCOUNT_REQUEST_ERROR,
                         HttpConnectionClient.convertStreamToString(responseStream));
             }
         } finally {
             HttpConnectionClient.safeCloseStream(responseStream);
         }
-    }
-
-    public static Disposable fetchAccountImage(@NonNull String toke,
-                                               @NonNull final OnCompleteListener<Bitmap> completeListener) {
-        return GraphAccountPhotoTask.getUserPhotoObservable(toke)
-                .subscribe(new DefaultConsumer<Bitmap>() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        completeListener.onComplete(bitmap, null);
-                    }
-
-                    @Override
-                    public void onError(Exception t) {
-                        completeListener.onComplete(null, t);
-                    }
-                });
     }
 
     public static HttpURLConnection createHttpURLConnection(@NonNull HttpRequest request) throws IOException {
@@ -96,7 +75,7 @@ public class HttpConnectionClient {
             try {
                 stream.close();
             } catch (IOException var3) {
-                LogUtil.error(":safe close stream error", var3);
+                MSQALogger.getInstance().error(TAG, ":safe close stream error", var3);
             }
         }
     }

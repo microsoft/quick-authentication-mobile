@@ -3,38 +3,49 @@ package com.microsoft.quick.auth.signin.consumer;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.signapplication.IAccountClientApplication;
-import com.microsoft.quick.auth.signin.signapplication.IAccountClientHolder;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
+import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
+import com.microsoft.quick.auth.signin.signinclient.ISignInClientHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.task.Scheduler;
+import com.microsoft.quick.auth.signin.task.Schedulers;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
-import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
-import com.microsoft.quick.auth.signin.logger.LogUtil;
 
-public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQAAccountInfo>> {
+import java.util.List;
+
+public class AcquireCurrentTokenTask implements Function<IAccount, Task<MSQAAccountInfo>> {
 
     private final @NonNull
-    IAccountClientHolder mClientHolder;
+    ISignInClientHolder mClientHolder;
     private final @NonNull
     Activity mActivity;
-    private static final String TAG = CurrentTokenRequestConsumer.class.getSimpleName();
+    private static final String TAG = AcquireCurrentTokenTask.class.getSimpleName();
     private final boolean mErrorRetry;
     private @NonNull
     final MSQATrackerUtil mTracker;
+    private @NonNull
+    final List<String> mScopes;
+    private @Nullable
+    final String mLoginHint;
 
-    public CurrentTokenRequestConsumer(@NonNull Activity activity, boolean errorRetry,
-                                       @NonNull IAccountClientHolder clientHolder,
-                                       @NonNull final MSQATrackerUtil tracker) {
+    public AcquireCurrentTokenTask(@NonNull final Activity activity, final boolean errorRetry,
+                                   @NonNull final ISignInClientHolder clientHolder,
+                                   @NonNull final List<String> scopes,
+                                   @Nullable final String loginHint,
+                                   @NonNull final MSQATrackerUtil tracker) {
         mTracker = tracker;
+        mLoginHint = loginHint;
+        mScopes = scopes;
         mClientHolder = clientHolder;
         mActivity = activity;
         mErrorRetry = errorRetry;
@@ -42,17 +53,16 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQA
 
     @Override
     public Task<MSQAAccountInfo> apply(@NonNull final IAccount iAccount) throws Exception {
-        final IAccountClientApplication clientApplication = mClientHolder.getClientApplication();
+        final ISignInClientApplication clientApplication = mClientHolder.getClientApplication();
         return Task.create(new Task.OnSubscribe<MSQAAccountInfo>() {
             @Override
             public void subscribe(@NonNull final Consumer<? super MSQAAccountInfo> consumer) {
-                final Scheduler scheduler = TaskExecutorUtil.IO();
+                final Scheduler scheduler = Schedulers.io();
                 // Get silent token first, if error will request token with acquireToken api
                 try {
                     mTracker.track(TAG, "start request MSAL acquireTokenSilent api");
                     IAuthenticationResult authenticationResult =
-                            clientApplication.acquireTokenSilent(iAccount,
-                                    mClientHolder.getOptions().getScopes());
+                            clientApplication.acquireTokenSilent(iAccount, mScopes);
                     if (authenticationResult != null) {
                         mTracker.track(TAG, "request MSAL acquireTokenSilent api success");
                         consumer.onSuccess(MSQAAccountInfo.getAccount(authenticationResult));
@@ -70,12 +80,11 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQA
                         });
                         return;
                     }
-                    LogUtil.error(TAG, "acquire token silent catch an error, will start acquire " +
+                    MSQALogger.getInstance().error(TAG, "acquire token silent catch an error, will start acquire " +
                             "token", exception);
                 }
                 mTracker.track(TAG, "request MSAL acquireToken api");
-                clientApplication.acquireToken(mActivity, mClientHolder.getOptions().getScopes(),
-                        mClientHolder.getOptions().getLoginHint(),
+                clientApplication.acquireToken(mActivity, iAccount, mScopes, mLoginHint,
                         new AuthenticationCallback() {
                             @Override
                             public void onCancel() {
@@ -109,7 +118,7 @@ public class CurrentTokenRequestConsumer implements Function<IAccount, Task<MSQA
                                         consumer.onError(exception);
                                     }
                                 });
-                                LogUtil.error(TAG, "acquire token catch an error acquire token",
+                                MSQALogger.getInstance().error(TAG, "acquire token catch an error acquire token",
                                         exception);
                             }
                         });

@@ -8,7 +8,7 @@ import com.microsoft.identity.client.IAccount;
 import java.util.Date;
 import java.util.UUID;
 
-public interface ITokenResult {
+public interface TokenResult {
     /**
      * @return The access token requested.
      */
