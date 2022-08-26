@@ -2,8 +2,6 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.Disposable;
-
 public class CancelableConsumer<T> implements Consumer<T>, Disposable {
     private final Object mLock = new Object();
     private volatile boolean mIsCanceled;

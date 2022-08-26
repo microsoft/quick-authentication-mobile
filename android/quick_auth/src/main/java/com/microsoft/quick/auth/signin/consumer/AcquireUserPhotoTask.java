@@ -8,20 +8,21 @@ import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
-import com.microsoft.quick.auth.signin.http.MicrosoftAPI;
+import com.microsoft.quick.auth.signin.http.MSQAAPI;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
-public class AccountPhotoConsumer implements Function<MSQAAccountInfo,
+public class AcquireUserPhotoTask implements Function<MSQAAccountInfo,
         MSQAAccountInfo> {
-    private static final String TAG = AccountPhotoConsumer.class.getSimpleName();
-    private final @NonNull
-    MSQATrackerUtil mTracker;
+    private static final String TAG = AcquireUserPhotoTask.class.getSimpleName();
+    private @NonNull
+    final MSQATrackerUtil mTracker;
 
-    public AccountPhotoConsumer(@NonNull MSQATrackerUtil tracker) {
+    public AcquireUserPhotoTask(@NonNull MSQATrackerUtil tracker) {
         mTracker = tracker;
     }
 
@@ -39,7 +40,8 @@ public class AccountPhotoConsumer implements Function<MSQAAccountInfo,
             }
             return microsoftAccountInfo;
         } catch (Exception e) {
-            e.getMessage();
+            e.printStackTrace();
+            MSQALogger.getInstance().error(TAG, "acquire photo api error", e);
         } finally {
             HttpConnectionClient.safeCloseStream(responseStream);
         }
@@ -48,11 +50,11 @@ public class AccountPhotoConsumer implements Function<MSQAAccountInfo,
 
     private static HttpRequest createRequest(MSQAAccountInfo microsoftAccountInfo) {
         return new HttpRequest.Builder()
-                .setUrl(MicrosoftAPI.MS_GRAPH_USER_PHOTO_LARGEST)
+                .setUrl(MSQAAPI.MS_GRAPH_USER_PHOTO_LARGEST)
                 .setHttpMethod(HttpMethod.GET)
                 .addHeader("Content-Type", "image/jpg")
                 .addHeader("Authorization",
-                        MicrosoftAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccountInfo.getAccessToken())
+                        MSQAAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccountInfo.getAccessToken())
                 .builder();
     }
 }

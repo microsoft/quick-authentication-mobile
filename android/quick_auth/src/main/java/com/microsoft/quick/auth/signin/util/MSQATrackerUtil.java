@@ -2,7 +2,7 @@ package com.microsoft.quick.auth.signin.util;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.logger.LogUtil;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
 public class MSQATrackerUtil {
     private static final String TAG = MSQATrackerUtil.class.getSimpleName();
@@ -16,6 +16,6 @@ public class MSQATrackerUtil {
     }
 
     public void track(String tag, String message) {
-        LogUtil.verbose(TAG + "-mFrom=" + mFrom + "," + tag, message);
+        MSQALogger.getInstance().verbose(TAG + "-mFrom=" + mFrom + "," + tag, message);
     }
 }

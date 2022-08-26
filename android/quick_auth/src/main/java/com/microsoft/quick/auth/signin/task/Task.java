@@ -2,8 +2,6 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.Disposable;
-
 public abstract class Task<T> {
 
     public static <T> Task<T> create(@NonNull OnSubscribe<T> onSubscribe) {
@@ -35,7 +33,7 @@ public abstract class Task<T> {
         return new TaskScheduleOn<>(this, scheduler);
     }
 
-    public Task<T> nextConsumerOn(Scheduler scheduler) {
+    public Task<T> nextTaskSchedulerOn(Scheduler scheduler) {
         return new ConsumerScheduleOn<>(this, scheduler);
     }
 

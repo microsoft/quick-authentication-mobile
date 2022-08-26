@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MQASignInButton">
+    <declare-styleable name="MSQASignInButton">
         <attr name="button_type" format="integer">
             <enum name="standard" value="0" />
             <enum name="icon" value="1" />
