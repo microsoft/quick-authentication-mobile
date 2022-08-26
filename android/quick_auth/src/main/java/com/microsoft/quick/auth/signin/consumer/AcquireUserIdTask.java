@@ -6,25 +6,24 @@ import androidx.annotation.NonNull;
 
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.error.MSQASignInErrorHelper;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
-import com.microsoft.quick.auth.signin.http.MicrosoftAPI;
+import com.microsoft.quick.auth.signin.http.MSQAAPI;
+import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.logger.LogUtil;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import org.json.JSONObject;
 
-public class AccountUpdateWithGraphConsumer implements Function<MSQAAccountInfo,
+public class AcquireUserIdTask implements Function<MSQAAccountInfo,
         MSQAAccountInfo> {
 
-    private static final String TAG = AccountUpdateWithGraphConsumer.class.getSimpleName();
-    private final @NonNull
-    MSQATrackerUtil mTracker;
+    private static final String TAG = AcquireUserIdTask.class.getSimpleName();
+    private @NonNull
+    final MSQATrackerUtil mTracker;
 
-    public AccountUpdateWithGraphConsumer(@NonNull MSQATrackerUtil tracker) {
+    public AcquireUserIdTask(@NonNull MSQATrackerUtil tracker) {
         mTracker = tracker;
     }
 
@@ -35,25 +34,24 @@ public class AccountUpdateWithGraphConsumer implements Function<MSQAAccountInfo,
         String result = HttpConnectionClient.requestAccountInfo(httpRequest);
         if (!TextUtils.isEmpty(result)) {
             JSONObject jsonObject = new JSONObject(result);
-            microsoftAccount.setFullName(jsonObject.optString("displayName"));
             microsoftAccount.setId(jsonObject.optString("id"));
             mTracker.track(TAG, "request graph api to get account info success");
         } else {
-            LogUtil.error(TAG, "request account with graph api return empty result error");
+            MSQALogger.getInstance().error(TAG, "request account with graph api return empty result error", null);
             mTracker.track(TAG, "request graph api to get account info error: return empty result error");
-            throw new MSQASignInError(MSQASignInErrorHelper.HTTP_ACCOUNT_REQUEST_ERROR,
-                    MSQASignInErrorHelper.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
+            throw new MSQASignInError(MSQASignInError.HTTP_ACCOUNT_REQUEST_ERROR,
+                    MSQASignInError.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
         }
         return microsoftAccount;
     }
 
     private static HttpRequest getHttpRequest(MSQAAccountInfo microsoftAccount) {
         return new HttpRequest.Builder()
-                .setUrl(MicrosoftAPI.MS_GRAPH_USER_INFO_PATH)
+                .setUrl(MSQAAPI.MS_GRAPH_USER_INFO_PATH)
                 .setHttpMethod(HttpMethod.GET)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization",
-                        MicrosoftAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccount.getAccessToken())
+                        MSQAAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccount.getAccessToken())
                 .builder();
     }
 }

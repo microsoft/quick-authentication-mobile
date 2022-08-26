@@ -5,10 +5,6 @@ import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.task.DefaultToScheduler;
-import com.microsoft.quick.auth.signin.task.Scheduler;
-import com.microsoft.quick.auth.signin.task.Schedulers;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,13 +38,5 @@ public class TaskExecutorUtil {
 
     public static boolean isMainThread() {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
-    }
-
-    public static Scheduler IO() {
-        return new DefaultToScheduler(Schedulers.io());
-    }
-
-    public static Scheduler MainThread() {
-        return new DefaultToScheduler(Schedulers.mainThread());
     }
 }

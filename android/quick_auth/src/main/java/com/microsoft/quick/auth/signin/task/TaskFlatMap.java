@@ -2,8 +2,6 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-import com.microsoft.quick.auth.signin.Disposable;
-
 public class TaskFlatMap<T, R> extends Task<R> {
 
     private final @NonNull

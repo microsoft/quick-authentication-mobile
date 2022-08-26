@@ -79,6 +79,10 @@ public class MSQAAccountInfo implements AccountInfo {
         IAccount iAccount = authenticationResult.getAccount();
         account.setIAccount(iAccount);
         account.setId(account.getId());
+        if (iAccount.getClaims() != null && iAccount.getClaims().containsKey("name")) {
+            Object name = iAccount.getClaims().get("name");
+            account.setFullName(name != null ? name.toString() : null);
+        }
         account.setUserName(iAccount.getUsername());
         return account;
     }

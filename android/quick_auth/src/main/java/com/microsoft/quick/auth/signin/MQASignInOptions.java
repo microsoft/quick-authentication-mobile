@@ -1,35 +1,71 @@
 package com.microsoft.quick.auth.signin;
 
-public class MQASignInOptions {
-    private final String mClientId;
+import androidx.annotation.Nullable;
 
-    private final String mRedirectUri;
+import com.microsoft.quick.auth.signin.logger.ILogger;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
+
+public class MQASignInOptions {
+    private final int mConfigResourceId;
+    private final boolean mEnableLogcatLog;
+    private final @Nullable
+    ILogger mExternalLogger;
+    private final @LogLevel
+    int mLogLevel;
 
     public MQASignInOptions(MQASignInOptions.Builder builder) {
-        mClientId = builder.mClientId;
-        mRedirectUri = builder.mRedirectUri;
+        mConfigResourceId = builder.mConfigResourceId;
+        mEnableLogcatLog = builder.mEnableLogcatLog;
+        mExternalLogger = builder.mExternalLogger;
+        mLogLevel = builder.mLogLevel;
     }
 
-    public String getClientId() {
-        return mClientId;
+    public int getConfigResourceId() {
+        return mConfigResourceId;
     }
 
+    public boolean isEnableLogcatLog() {
+        return mEnableLogcatLog;
+    }
 
-    public String getRedirectUri() {
-        return mRedirectUri;
+    @Nullable
+    public ILogger getExternalLogger() {
+        return mExternalLogger;
+    }
+
+    public int getLogLevel() {
+        return mLogLevel;
     }
 
     public static final class Builder {
-        private String mClientId;
-        private String mRedirectUri;
+        private int mConfigResourceId;
+        private boolean mEnableLogcatLog;
+        private @Nullable
+        ILogger mExternalLogger;
+        private @LogLevel
+        int mLogLevel;
 
-        public Builder setClientId(String clientId) {
-            mClientId = clientId;
+        public Builder() {
+            mLogLevel = LogLevel.VERBOSE;
+        }
+
+        public Builder setConfigResourceId(int configResourceId) {
+            mConfigResourceId = configResourceId;
             return this;
         }
 
-        public Builder setRedirectUri(String redirectUri) {
-            mRedirectUri = redirectUri;
+        public Builder setEnableLogcatLog(boolean enableLogcatLog) {
+            mEnableLogcatLog = enableLogcatLog;
+            return this;
+        }
+
+        public Builder setExternalLogger(ILogger externalLogger) {
+            mExternalLogger = externalLogger;
+            return this;
+        }
+
+        public Builder setLogLevel(@LogLevel int logLevel) {
+            mLogLevel = logLevel;
             return this;
         }
 

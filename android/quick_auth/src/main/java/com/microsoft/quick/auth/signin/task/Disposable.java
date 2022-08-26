@@ -1,4 +1,4 @@
-package com.microsoft.quick.auth.signin;
+package com.microsoft.quick.auth.signin.task;
 
 public interface Disposable {
     /**

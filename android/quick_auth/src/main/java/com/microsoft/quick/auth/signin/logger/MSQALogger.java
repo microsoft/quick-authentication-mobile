@@ -66,7 +66,7 @@ public class MSQALogger {
         mLogLevel = logLevel;
     }
 
-    private static @LogLevel
+    private @LogLevel
     int adapter(Logger.LogLevel logLevel) {
         switch (logLevel) {
             case VERBOSE:
@@ -82,7 +82,7 @@ public class MSQALogger {
         }
     }
 
-    private static Logger.LogLevel adapter(@LogLevel int logLevel) {
+    private Logger.LogLevel adapter(@LogLevel int logLevel) {
         switch (logLevel) {
             case LogLevel.VERBOSE:
                 return Logger.LogLevel.VERBOSE;

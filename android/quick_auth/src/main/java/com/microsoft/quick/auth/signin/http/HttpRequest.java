@@ -55,8 +55,8 @@ public class HttpRequest {
 
         public Builder() {
             mHeader = new HashMap<>();
-            mConnectTimeout = MicrosoftAPI.CONNECT_TIMEOUT;
-            mReadTimeout = MicrosoftAPI.READ_TIMEOUT;
+            mConnectTimeout = MSQAAPI.CONNECT_TIMEOUT;
+            mReadTimeout = MSQAAPI.READ_TIMEOUT;
         }
 
         public Builder setUrl(String url) {
