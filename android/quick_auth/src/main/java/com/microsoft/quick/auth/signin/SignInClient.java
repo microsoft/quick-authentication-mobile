@@ -72,11 +72,8 @@ public interface SignInClient {
      * @param activity         Activity that is used as the parent activity for get token.
      * @param scopes           The non-null array of scopes to be requested for the access token,
      *                         the supported scopes can be found in{@link MSQASignInScope}.
-     * @param loginHint        Optional. If provided, will be used as the query parameter sent
-     *                         for authenticating the user, which will have the UPN pre-populated.
      * @param completeListener A callback to be invoked when token get finished.
      */
     void acquireToken(@NonNull final Activity activity, @NonNull final List<String> scopes,
-                      @Nullable final String loginHint,
                       @NonNull final OnCompleteListener<TokenResult> completeListener);
 }

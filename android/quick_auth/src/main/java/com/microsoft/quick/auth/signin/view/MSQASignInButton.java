@@ -67,7 +67,7 @@ public class MSQASignInButton extends FrameLayout {
         mSignInContainer = findViewById(R.id.ms_sign_in_button_container);
         mSignInIcon = findViewById(R.id.ms_sign_in_icon);
         mSignInText = findViewById(R.id.ms_sign_in_text);
-        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_width);
+        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,18 +79,18 @@ public class MSQASignInButton extends FrameLayout {
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs,
                 R.styleable.MSQASignInButton);
-        mButtonTheme = typedArray.getInt(R.styleable.MSQASignInButton_button_theme,
-                ButtonTheme.FILLED_BLACK);
+        mButtonTheme = typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_theme,
+                ButtonTheme.DARK);
         mButtonLogoAlignment =
-                typedArray.getInt(R.styleable.MSQASignInButton_button_logo_alignment,
+                typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_logo_alignment,
                         ButtonLogoAlignment.LEFT);
-        mButtonShape = typedArray.getInt(R.styleable.MSQASignInButton_button_shape,
+        mButtonShape = typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_shape,
                 ButtonShape.RECTANGULAR);
-        mButtonSize = typedArray.getInt(R.styleable.MSQASignInButton_button_size,
+        mButtonSize = typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_size,
                 ButtonSize.LARGE);
-        mButtonText = typedArray.getInt(R.styleable.MSQASignInButton_button_text,
+        mButtonText = typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_text,
                 ButtonText.SIGN_IN_WITH);
-        mButtonType = typedArray.getInt(R.styleable.MSQASignInButton_button_type,
+        mButtonType = typedArray.getInt(R.styleable.MSQASignInButton_msqa_button_type,
                 ButtonType.STANDARD);
         typedArray.recycle();
     }
@@ -187,20 +187,14 @@ public class MSQASignInButton extends FrameLayout {
         if (mButtonType != ButtonType.ICON) {
             if (mButtonLogoAlignment == ButtonLogoAlignment.CENTER) {
                 buttonTextLayoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                buttonTextLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_text_padding), 0, 0, 0);
+                buttonTextLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0, 0, 0);
                 iconViewLayoutParams.setMargins(0, 0, 0, 0);
                 mSignInText.setGravity(Gravity.CENTER);
                 mSignInContainer.setGravity(Gravity.CENTER);
-            } else if (mButtonLogoAlignment == ButtonLogoAlignment.ICON_LEFT_TEXT_CENTER) {
-                buttonTextLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                buttonTextLayoutParams.setMargins(0, 0, 0, 0);
-                iconViewLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_icon_padding), 0, 0, 0);
-                mSignInText.setGravity(Gravity.CENTER);
-                mSignInContainer.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             } else {
                 buttonTextLayoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                buttonTextLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_text_padding), 0, 0, 0);
-                iconViewLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_icon_padding), 0, 0, 0);
+                buttonTextLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0, 0, 0);
+                iconViewLayoutParams.setMargins(getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_icon_padding), 0, 0, 0);
                 mSignInText.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                 mSignInContainer.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             }
@@ -229,7 +223,7 @@ public class MSQASignInButton extends FrameLayout {
     }
 
     private int getButtonViewWidth() {
-        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.mqa_sign_in_button_width);
+        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         if (layoutParams == null) return mContainerDefaultWidth;
         if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -253,15 +247,15 @@ public class MSQASignInButton extends FrameLayout {
         Drawable drawable = getResources().getDrawable(backgroundRes);
         if (drawable instanceof GradientDrawable) {
             GradientDrawable gradientDrawable = (GradientDrawable) drawable;
-            if (mButtonTheme == ButtonTheme.FILLED_BLACK) {
-                gradientDrawable.setColor(getResources().getColor(R.color.mqa_sign_in_button_color_dark));
+            if (mButtonTheme == ButtonTheme.DARK) {
+                gradientDrawable.setColor(getResources().getColor(R.color.msqa_sign_in_button_color_dark));
                 gradientDrawable.setStroke(0, Color.TRANSPARENT);
             } else {
-                gradientDrawable.setColor(getResources().getColor(R.color.mqa_sign_in_button_color_light));
+                gradientDrawable.setColor(getResources().getColor(R.color.msqa_sign_in_button_color_light));
                 gradientDrawable.setStroke(getResources().getDimensionPixelSize(R.dimen
-                                .mqa_sign_in_button_background_border_width),
+                                .msqa_sign_in_button_background_border_width),
                         getResources().getColor(R.color
-                                .mqa_sign_in_button_border_light));
+                                .msqa_sign_in_button_border_light));
             }
             gradientDrawable.setCornerRadius(getResources().getDimensionPixelSize(radios));
         }
@@ -270,54 +264,59 @@ public class MSQASignInButton extends FrameLayout {
 
     private int getBackgroundRadios() {
         if (mButtonShape == ButtonShape.ROUNDED) {
-            return R.dimen.mqa_sign_in_button_radios_round;
+            return R.dimen.msqa_sign_in_button_radios_round;
         } else if (mButtonShape == ButtonShape.PILL) {
-            return R.dimen.mqa_sign_in_button_radios_pill;
+            return R.dimen.msqa_sign_in_button_radios_pill;
         }
-        return R.dimen.mqa_sign_in_button_radios_square;
+        return R.dimen.msqa_sign_in_button_radios_square;
     }
 
     private int getIconSize() {
-        int sizeResource = R.dimen.mqa_sign_in_button_icon_size_large;
+        int sizeResource = R.dimen.msqa_sign_in_button_icon_size_large;
         if (ButtonSize.SMALL == mButtonSize) {
-            sizeResource = R.dimen.mqa_sign_in_button_icon_size_small;
+            sizeResource = R.dimen.msqa_sign_in_button_icon_size_small;
         } else if (ButtonSize.MEDIUM == mButtonSize) {
-            sizeResource = R.dimen.mqa_sign_in_button_icon_size_medium;
+            sizeResource = R.dimen.msqa_sign_in_button_icon_size_medium;
         }
         return getResources().getDimensionPixelSize(sizeResource);
     }
 
     private int getContainerHeight() {
-        int heightResource = R.dimen.mqa_sign_in_button_height_large;
+        int heightResource = R.dimen.msqa_sign_in_button_height_large;
         if (mButtonSize == ButtonSize.SMALL) {
-            heightResource = R.dimen.mqa_sign_in_button_height_small;
+            heightResource = R.dimen.msqa_sign_in_button_height_small;
         } else if (mButtonSize == ButtonSize.MEDIUM) {
-            heightResource = R.dimen.mqa_sign_in_button_height_medium;
+            heightResource = R.dimen.msqa_sign_in_button_height_medium;
         }
         return getResources().getDimensionPixelSize(heightResource);
     }
 
     private int getButtonTextTextAppearance() {
         if (mButtonSize == ButtonSize.SMALL) {
-            return R.style.MQATextAppearance_SignInButton_Small;
+            return R.style.MSQATextAppearance_SignInButton_Small;
         } else if (mButtonSize == ButtonSize.MEDIUM) {
-            return R.style.MQATextAppearance_SignInButton_Medium;
+            return R.style.MSQATextAppearance_SignInButton_Medium;
         }
-        return R.style.MQATextAppearance_SignInButton_Large;
+        return R.style.MSQATextAppearance_SignInButton_Large;
     }
 
     private int getButtonTextColor() {
-        int color = R.color.mqa_sign_in_button_text_color_light;
-        if (ButtonTheme.FILLED_BLACK == mButtonTheme) {
-            color = R.color.mqa_sign_in_button_text_color_dark;
+        int color = R.color.msqa_sign_in_button_text_color_light;
+        if (ButtonTheme.DARK == mButtonTheme) {
+            color = R.color.msqa_sign_in_button_text_color_dark;
         }
         return getResources().getColor(color);
     }
 
     private int getButtonText() {
-        if (mButtonText == ButtonText.SIGN_OUT) {
-            return R.string.mqa_sign_up_text;
+        if (mButtonText == ButtonText.SIGNUP_WITH) {
+            return R.string.msqa_signup_with_text;
+        } else if (mButtonText == ButtonText.SIGNIN) {
+            return R.string.msqa_signin_text;
+        } else if (mButtonText == ButtonText.CONTINUE_WITH) {
+            return R.string.msqa_continue_with_text;
+        } else {
+            return R.string.msqa_signin_with_text;
         }
-        return R.string.mqa_sign_in_text;
     }
 }

@@ -40,7 +40,7 @@ android {
             outputFileName = fileName
         }
     }
-//    resourcePrefix "mqa_"
+    resourcePrefix "msqa_"
 }
 
 dependencies {
