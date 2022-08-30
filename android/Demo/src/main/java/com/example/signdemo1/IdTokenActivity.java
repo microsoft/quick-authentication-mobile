@@ -39,7 +39,7 @@ public class IdTokenActivity extends Activity {
         mSignInButton.setOnClickListener(v -> {
             mTokenResult.setText("");
             if (!mSilentToken) {
-                mSignInClient.acquireToken(IdTokenActivity.this, scopes, null,
+                mSignInClient.acquireToken(IdTokenActivity.this, scopes,
                         (iTokenResult, error) -> uploadSignInfo(iTokenResult, error));
             } else {
                 mSignInClient.acquireTokenSilent(scopes,

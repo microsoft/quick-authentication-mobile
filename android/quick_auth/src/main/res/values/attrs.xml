@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MSQASignInButton">
-        <attr name="button_type" format="integer">
+        <attr name="msqa_button_type" format="integer">
             <enum name="standard" value="0" />
             <enum name="icon" value="1" />
         </attr>
-        <attr name="button_theme" format="integer">
-            <enum name="filled_black" value="0" />
-            <enum name="filled_blue" value="1" />
-            <enum name="outline" value="2" />
+        <attr name="msqa_button_theme" format="integer">
+            <enum name="dark" value="0" />
+            <enum name="light" value="1" />
         </attr>
-        <attr name="button_size" format="integer">
+        <attr name="msqa_button_size" format="integer">
             <enum name="large" value="0" />
             <enum name="medium" value="1" />
             <enum name="small" value="2" />
         </attr>
-        <attr name="button_text" format="integer">
+        <attr name="msqa_button_text" format="integer">
             <enum name="signin_with" value="0" />
             <enum name="signup_with" value="1" />
+            <enum name="signin" value="2" />
+            <enum name="continue_with" value="3" />
         </attr>
-        <attr name="button_shape" format="integer">
+        <attr name="msqa_button_shape" format="integer">
             <enum name="rectangular" value="0" />
             <enum name="pill" value="1" />
             <enum name="rounded" value="2" />
         </attr>
-        <attr name="button_logo_alignment" format="integer">
+        <attr name="msqa_button_logo_alignment" format="integer">
             <enum name="left" value="0" />
             <enum name="center" value="1" />
-            <enum name="icon_left_text_center" value="2" />
         </attr>
     </declare-styleable>
 

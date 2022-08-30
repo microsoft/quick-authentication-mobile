@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/setting_container"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_sign_in_button_setting_pop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
         <TextView
-            android:text="SignInButton Setting"
-            android:layout_margin="10dp"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:text="SignInButton Setting"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -29,8 +29,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <!--    type    -->
                 <LinearLayout
@@ -196,6 +196,23 @@
                             android:layout_marginLeft="10dp"
                             android:text="signup_with"
                             android:textColor="@color/black" />
+
+                        <RadioButton
+                            android:id="@+id/signin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="signin"
+                            android:textColor="@color/black" />
+
+                        <RadioButton
+                            android:id="@+id/continue_with"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="continue_with"
+                            android:textColor="@color/black" />
+
                     </RadioGroup>
                 </LinearLayout>
 
@@ -284,14 +301,6 @@
                             android:text="center"
                             android:textColor="@color/black" />
 
-                        <RadioButton
-                            android:id="@+id/icon_left_text_center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="icon_left_text_center"
-                            android:textColor="@color/black" />
-
                     </RadioGroup>
                 </LinearLayout>
                 <!--  Text size setting   -->
@@ -301,26 +310,26 @@
                     android:layout_marginTop="10dp"
                     android:text="button width setting"
                     android:textColor="@color/black"
-                    android:visibility="gone"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <SeekBar
                     android:id="@+id/progress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/text1"
-                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_toLeftOf="@+id/text1"
+                    android:max="200"
                     android:maxHeight="2dp"
                     android:minHeight="2dp"
-                    android:paddingBottom="3dp"
                     android:paddingLeft="12dp"
-                    android:max="200"
-                    android:paddingRight="12dp"
                     android:paddingTop="3dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="3dp"
                     android:progressDrawable="@drawable/bg_layer_progress"
-                    android:thumb="@drawable/bg_shape_circle" />
+                    android:thumb="@drawable/bg_shape_circle"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </ScrollView>

@@ -52,6 +52,7 @@ public final class MSQASignInClient implements SignInClient {
         return MSQASignInClient.SingletonHolder.sInstance;
     }
 
+    //    public void setSignInOptions(Context context, final MQASignInOptions signInOptions) throws MSQASignInError {
     public void setSignInOptions(Context context, final MQASignInOptions signInOptions) {
         mClientHolder = new SingleApplicationHolder(context, signInOptions.getConfigResourceId());
         MSQALogger.getInstance().init(context);
@@ -60,19 +61,36 @@ public final class MSQASignInClient implements SignInClient {
         setExternalLogger(signInOptions.getExternalLogger());
     }
 
-    public MSQASignInClient setEnableLogcatLog(boolean enableLogcatLog) {
-        MSQALogger.getInstance().setEnableLogcatLog(enableLogcatLog);
-        return this;
-    }
-
-    public MSQASignInClient setExternalLogger(ILogger externalLogger) {
-        MSQALogger.getInstance().setExternalLogger(externalLogger);
-        return this;
-    }
-
-    public MSQASignInClient setLogLevel(@LogLevel int logLevel) {
+    /**
+     * Set the log level for diagnostic purpose. By default, the sdk enables the verbose level
+     * logging.
+     *
+     * @param logLevel The {@link LogLevel} to be enabled for the diagnostic logging.
+     */
+    public void setLogLevel(final @LogLevel int logLevel) {
         MSQALogger.getInstance().setLogLevel(logLevel);
-        return this;
+    }
+
+    /**
+     * Enable/Disable the Android logcat logging. By default, the sdk enables it.
+     *
+     * @param enableLogcatLog True if enabling the logcat logging, false otherwise.
+     */
+    public void setEnableLogcatLog(final boolean enableLogcatLog) {
+        MSQALogger.getInstance().setEnableLogcatLog(enableLogcatLog);
+    }
+
+    /**
+     * Set the custom logger. Configures external logging to configure a callback that the sdk
+     * will use to pass each
+     * log message. Overriding the logger callback is not allowed.
+     *
+     * @param externalLogger The reference to the ILoggerCallback that can output the logs to the
+     *                       designated
+     *                       places.
+     */
+    public void setExternalLogger(final @NonNull ILogger externalLogger) {
+        MSQALogger.getInstance().setExternalLogger(externalLogger);
     }
 
     @Override
@@ -174,12 +192,11 @@ public final class MSQASignInClient implements SignInClient {
 
     @Override
     public void acquireToken(@NonNull final Activity activity, @NonNull final List<String> scopes,
-                             @Nullable final String loginHint,
                              @NonNull final OnCompleteListener<TokenResult> completeListener) {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireToken");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .flatMap(new AcquireTokenTask(activity, scopes, loginHint, tracker))
+                .flatMap(new AcquireTokenTask(activity, scopes, null, tracker))
                 .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
                 .subscribe(new Consumer<TokenResult>() {
                     @Override

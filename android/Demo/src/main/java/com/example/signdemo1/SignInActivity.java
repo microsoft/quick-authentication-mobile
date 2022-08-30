@@ -104,7 +104,7 @@ public class SignInActivity extends Activity {
     }
 
     private void acquireToken() {
-        mSignInClient.acquireToken(this, scops, null, this::updateTokenResult);
+        mSignInClient.acquireToken(this, scops, this::updateTokenResult);
     }
 
     private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
@@ -130,7 +130,6 @@ public class SignInActivity extends Activity {
 
     private void updateStatus(boolean signIn) {
         mStatus.setText(signIn ? "signed in" : "signed out");
-        mSignInButton.setButtonText(signIn ? ButtonText.SIGN_OUT : ButtonText.SIGN_IN_WITH);
 
         mSignInButton.setVisibility(signIn ? View.GONE : View.VISIBLE);
         mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);
