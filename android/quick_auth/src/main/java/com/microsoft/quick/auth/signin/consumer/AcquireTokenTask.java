@@ -15,16 +15,16 @@ import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToScheduler;
-import com.microsoft.quick.auth.signin.task.Function;
-import com.microsoft.quick.auth.signin.task.Scheduler;
-import com.microsoft.quick.auth.signin.task.Schedulers;
+import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.Convert;
+import com.microsoft.quick.auth.signin.task.ThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.Switchers;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.util.List;
 
-public class AcquireTokenTask implements Function<ISignInClientApplication,
+public class AcquireTokenTask implements Convert<ISignInClientApplication,
         Task<TokenResult>> {
     private @NonNull
     final Activity mActivity;
@@ -46,11 +46,11 @@ public class AcquireTokenTask implements Function<ISignInClientApplication,
     }
 
     @Override
-    public Task<TokenResult> apply(@NonNull final ISignInClientApplication iSignInClientApplication) throws Exception {
-        final Scheduler scheduler = Schedulers.io();
-        return Task.create(new Task.OnSubscribe<TokenResult>() {
+    public Task<TokenResult> convert(@NonNull final ISignInClientApplication iSignInClientApplication) throws Exception {
+        final ThreadSwitcher scheduler = Switchers.io();
+        return Task.create(new Task.ConsumerHolder<TokenResult>() {
             @Override
-            public void subscribe(@NonNull final Consumer<? super TokenResult> consumer) {
+            public void start(@NonNull final Consumer<? super TokenResult> consumer) {
                 mTracker.track(TAG, "start request MSAL acquireToken api");
                 IAccount iAccount = null;
                 try {
@@ -103,6 +103,6 @@ public class AcquireTokenTask implements Function<ISignInClientApplication,
                         });
             }
         })
-                .taskScheduleOn(DirectToScheduler.directToIOWhenCreateInMain());
+                .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
     }
 }

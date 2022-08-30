@@ -7,34 +7,34 @@ public class ConsumerScheduleOn<T> extends Task<T> {
     private final @NonNull
     Task<T> mTask;
     private final @NonNull
-    Scheduler mScheduler;
+    ThreadSwitcher mScheduler;
 
-    public ConsumerScheduleOn(@NonNull Task<T> task, @NonNull Scheduler scheduler) {
+    public ConsumerScheduleOn(@NonNull Task<T> task, @NonNull ThreadSwitcher scheduler) {
         this.mTask = task;
         this.mScheduler = scheduler;
     }
 
     @Override
-    protected void subscribeActual(@NonNull Consumer<? super T> consumer) {
-        mTask.subscribe(new ObserveOnObserver<>(mScheduler, consumer));
+    protected void startActual(@NonNull Consumer<? super T> consumer) {
+        mTask.start(new ScheduleOnConsumer<>(mScheduler, consumer));
     }
 
-    static final class ObserveOnObserver<T> implements Consumer<T> {
+    static final class ScheduleOnConsumer<T> implements Consumer<T> {
 
         private final @NonNull
-        Scheduler mScheduler;
+        ThreadSwitcher mSwitcher;
         private final @NonNull
         Consumer<? super T> mDownStreamConsumer;
 
-        public ObserveOnObserver(@NonNull Scheduler scheduler,
-                                 @NonNull Consumer<? super T> consumer) {
-            this.mScheduler = scheduler;
+        public ScheduleOnConsumer(@NonNull ThreadSwitcher switcher,
+                                  @NonNull Consumer<? super T> consumer) {
+            this.mSwitcher = switcher;
             this.mDownStreamConsumer = consumer;
         }
 
         @Override
         public void onSuccess(final T t) {
-            mScheduler.schedule(new Runnable() {
+            mSwitcher.schedule(new Runnable() {
                 @Override
                 public void run() {
                     mDownStreamConsumer.onSuccess(t);
@@ -44,7 +44,7 @@ public class ConsumerScheduleOn<T> extends Task<T> {
 
         @Override
         public void onError(final Exception t) {
-            mScheduler.schedule(new Runnable() {
+            mSwitcher.schedule(new Runnable() {
                 @Override
                 public void run() {
                     mDownStreamConsumer.onError(t);

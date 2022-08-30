@@ -2,13 +2,13 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-public interface Function<T, R> {
+public interface Convert<T, R> {
     /**
-     * Apply some calculation to the input value and return some other value.
+     * Convert the input value to other value.
      *
      * @param t the input value
      * @return the output value
      * @throws Exception on error
      */
-    R apply(@NonNull T t) throws Exception;
+    R convert(@NonNull T t) throws Exception;
 }

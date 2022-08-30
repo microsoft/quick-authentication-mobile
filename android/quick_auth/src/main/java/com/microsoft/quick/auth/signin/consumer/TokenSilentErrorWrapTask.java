@@ -6,11 +6,11 @@ import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.Function;
+import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
-public class TokenSilentErrorWrapTask implements Function<Exception, Task<TokenResult>> {
+public class TokenSilentErrorWrapTask implements Convert<Exception, Task<TokenResult>> {
     private static final String TAG = TokenSilentErrorWrapTask.class.getSimpleName();
     private @NonNull
     final MSQATrackerUtil mTracker;
@@ -20,11 +20,11 @@ public class TokenSilentErrorWrapTask implements Function<Exception, Task<TokenR
     }
 
     @Override
-    public Task<TokenResult> apply(@NonNull final Exception exception) throws Exception {
-        return Task.create(new Task.OnSubscribe<TokenResult>() {
+    public Task<TokenResult> convert(@NonNull final Exception exception) throws Exception {
+        return Task.create(new Task.ConsumerHolder<TokenResult>() {
 
             @Override
-            public void subscribe(@NonNull Consumer<? super TokenResult> consumer) {
+            public void start(@NonNull Consumer<? super TokenResult> consumer) {
                 Exception silentException = exception;
                 if (exception instanceof MsalUiRequiredException) {
                     mTracker.track(TAG, "token silent error instanceof MsalUiRequiredException, will return wrap " +

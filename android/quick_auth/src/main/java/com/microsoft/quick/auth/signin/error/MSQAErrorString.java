@@ -29,6 +29,11 @@ public class MSQAErrorString {
     public static final String INTERRUPTED_ERROR_MESSAGE = "Request has been interrupted";
 
     /**
+     * Http request error
+     */
+    public static final String HTTP_REQUEST_ERROR = "http_request_error";
+
+    /**
      * Http account info request error
      */
     public static final String HTTP_ACCOUNT_REQUEST_ERROR = "http_account_request_error";

@@ -1,6 +1,6 @@
 package com.microsoft.quick.auth.signin.task;
 
-public interface Scheduler {
+public interface ThreadSwitcher {
     void schedule(Runnable runnable);
 }
 

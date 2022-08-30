@@ -4,10 +4,10 @@ import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 import java.util.concurrent.Executor;
 
-public class MainScheduler implements Scheduler {
+public class MainThreadSwitcher implements ThreadSwitcher {
     private final Executor mExecutor;
 
-    public MainScheduler() {
+    public MainThreadSwitcher() {
         mExecutor = TaskExecutorUtil.main();
     }
 

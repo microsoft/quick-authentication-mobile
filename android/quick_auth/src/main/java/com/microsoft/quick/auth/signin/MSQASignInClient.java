@@ -7,11 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.consumer.AcquireUserPhotoTask;
-import com.microsoft.quick.auth.signin.consumer.SignedErrorRetryTask;
 import com.microsoft.quick.auth.signin.consumer.AcquireUserIdTask;
 import com.microsoft.quick.auth.signin.consumer.AcquireTokenTask;
 import com.microsoft.quick.auth.signin.consumer.AcquireTokenSilentTask;
-import com.microsoft.quick.auth.signin.consumer.AcquireCurrentAccountTask;
 import com.microsoft.quick.auth.signin.consumer.AcquireCurrentTokenTask;
 import com.microsoft.quick.auth.signin.consumer.SignInTask;
 import com.microsoft.quick.auth.signin.consumer.SignOutTask;
@@ -28,7 +26,7 @@ import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientHolder;
 import com.microsoft.quick.auth.signin.signinclient.SingleApplicationHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToScheduler;
+import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
 import com.microsoft.quick.auth.signin.consumer.AcquireClientApplicationTask;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
@@ -53,7 +51,6 @@ public final class MSQASignInClient implements SignInClient {
         return MSQASignInClient.SingletonHolder.sInstance;
     }
 
-    //    public void setSignInOptions(Context context, final MQASignInOptions signInOptions) throws MSQASignInError {
     public void setSignInOptions(Context context, final MQASignInOptions signInOptions) {
         mClientHolder = new SingleApplicationHolder(context, signInOptions.getConfigResourceId());
         MSQALogger.getInstance().init(context);
@@ -100,12 +97,11 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("signIn");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .flatMap(new SignInTask(activity, mScopes, tracker))
-                .errorRetry(new SignedErrorRetryTask(activity, signClient, mScopes, tracker))
-                .map(new AcquireUserIdTask(tracker))
-                .map(new AcquireUserPhotoTask(tracker))
-                .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new Consumer<MSQAAccountInfo>() {
+                .taskConvert(new SignInTask(activity, mScopes, tracker))
+                .convert(new AcquireUserIdTask(tracker))
+                .convert(new AcquireUserPhotoTask(tracker))
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccount) {
                         tracker.track(TAG, "inner request signIn api success");
@@ -131,9 +127,9 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("signOut");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .map(new SignOutTask(tracker))
-                .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new Consumer<Boolean>() {
+                .convert(new SignOutTask(tracker))
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .start(new Consumer<Boolean>() {
                     @Override
                     public void onSuccess(Boolean b) {
                         tracker.track(TAG, "inner request signOut api result=" + b);
@@ -159,12 +155,11 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("getCurrentSignInAccount");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .map(new AcquireCurrentAccountTask(tracker))
-                .flatMap(new AcquireCurrentTokenTask(activity, false, signClient, mScopes, null, tracker))
-                .map(new AcquireUserIdTask(tracker))
-                .map(new AcquireUserPhotoTask(tracker))
-                .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new Consumer<MSQAAccountInfo>() {
+                .taskConvert(new AcquireCurrentTokenTask(activity, false, mScopes, null, tracker))
+                .convert(new AcquireUserIdTask(tracker))
+                .convert(new AcquireUserPhotoTask(tracker))
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccountInfo) {
                         tracker.track(TAG, "inner request getCurrentSignInAccount api success");
@@ -197,9 +192,9 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireToken");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .flatMap(new AcquireTokenTask(activity, scopes, null, tracker))
-                .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new Consumer<TokenResult>() {
+                .taskConvert(new AcquireTokenTask(activity, scopes, null, tracker))
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
                         tracker.track(TAG, "inner request acquireToken api success");
@@ -226,10 +221,10 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireTokenSilent");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .map(new AcquireTokenSilentTask(scopes, tracker))
-                .errorRetry(new TokenSilentErrorWrapTask(tracker))
-                .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
-                .subscribe(new Consumer<TokenResult>() {
+                .convert(new AcquireTokenSilentTask(scopes, tracker))
+                .errorConvert(new TokenSilentErrorWrapTask(tracker))
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
                         tracker.track(TAG, "inner request acquireTokenSilent api success");

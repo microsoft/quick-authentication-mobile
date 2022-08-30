@@ -6,13 +6,13 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToScheduler;
+import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientHolder;
 
-public class AcquireClientApplicationTask implements Task.OnSubscribe<ISignInClientApplication> {
+public class AcquireClientApplicationTask implements Task.ConsumerHolder<ISignInClientApplication> {
     private @Nullable
     final ISignInClientHolder mClientHolder;
     private @NonNull
@@ -26,18 +26,18 @@ public class AcquireClientApplicationTask implements Task.OnSubscribe<ISignInCli
     }
 
     @Override
-    public void subscribe(@NonNull Consumer<? super ISignInClientApplication> observer) {
+    public void start(@NonNull Consumer<? super ISignInClientApplication> consumer) {
         try {
             if (mClientHolder == null) {
-                observer.onError(new MSQASignInException(MSQAErrorString.NO_INITIALIZE,
+                consumer.onError(new MSQASignInException(MSQAErrorString.NO_INITIALIZE,
                         MSQAErrorString.NO_INITIALIZE_MESSAGE));
                 return;
             }
             mTrack.track(TAG, "start get application");
-            observer.onSuccess(mClientHolder.getClientApplication());
+            consumer.onSuccess(mClientHolder.getClientApplication());
             mTrack.track(TAG, "get application success");
         } catch (Exception e) {
-            observer.onError(e);
+            consumer.onError(e);
             mTrack.track(TAG, "get application error:" + e.getMessage());
         }
     }
@@ -45,7 +45,7 @@ public class AcquireClientApplicationTask implements Task.OnSubscribe<ISignInCli
     public static Task<ISignInClientApplication> getApplicationTask(@Nullable ISignInClientHolder clientHolder,
                                                                     @NonNull MSQATrackerUtil tracker) {
         return Task.create(new AcquireClientApplicationTask(clientHolder, tracker))
-                .taskScheduleOn(DirectToScheduler.directToIOWhenCreateInMain())
-                .nextTaskSchedulerOn(DirectToScheduler.directToIOWhenCreateInMain());
+                .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain())
+                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
     }
 }

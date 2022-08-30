@@ -7,17 +7,17 @@ public class TaskMap<T, R> extends Task<R> {
     private final @NonNull
     Task<T> mSource;
     private final @NonNull
-    Function<? super T, ? extends R> mMapper;
+    Convert<? super T, ? extends R> mConverter;
 
-    public TaskMap(@NonNull Task<T> source, @NonNull Function<? super T, ? extends R> mapper) {
+    public TaskMap(@NonNull Task<T> source, @NonNull Convert<? super T, ? extends R> convert) {
         this.mSource = source;
-        this.mMapper = mapper;
+        this.mConverter = convert;
     }
 
     @Override
-    protected void subscribeActual(@NonNull Consumer<? super R> consumer) {
-        MapConsumer<T, R> parent = new MapConsumer<>(consumer, mMapper);
-        mSource.subscribe(parent);
+    protected void startActual(@NonNull Consumer<? super R> consumer) {
+        MapConsumer<T, R> parent = new MapConsumer<>(consumer, mConverter);
+        mSource.start(parent);
     }
 
     static class MapConsumer<T, R> implements Consumer<T> {
@@ -25,19 +25,19 @@ public class TaskMap<T, R> extends Task<R> {
         private final @NonNull
         Consumer<? super R> mDownStream;
         private final @NonNull
-        Function<? super T, ? extends R> mMapper;
+        Convert<? super T, ? extends R> mConverter;
 
-        public MapConsumer(@NonNull Consumer<? super R> observer, @NonNull Function<? super T, ?
-                extends R> mapper) {
-            this.mDownStream = observer;
-            this.mMapper = mapper;
+        public MapConsumer(@NonNull Consumer<? super R> consumer, @NonNull Convert<? super T, ?
+                extends R> convert) {
+            this.mDownStream = consumer;
+            this.mConverter = convert;
         }
 
         @Override
         public void onSuccess(T t) {
             R r;
             try {
-                r = mMapper.apply(t);
+                r = mConverter.convert(t);
             } catch (Exception e) {
                 onError(e);
                 return;
