@@ -36,7 +36,7 @@ import java.util.List;
 public final class MSQASignInClient implements SignInClient {
     private static final String TAG = MSQASignInClient.class.getSimpleName();
     private final List<String> mScopes;
-    private ISignInClientHolder mClientHolder;
+    private volatile ISignInClientHolder mClientHolder;
 
     private MSQASignInClient() {
         mScopes = new ArrayList<>();
@@ -111,7 +111,7 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onError(Exception t) {
                         tracker.track(TAG, "inner request signIn api error:" + t.getMessage());
-                        completeListener.onComplete(null, t);
+                        completeListener.onComplete(null, MSQASignInException.create(t));
                     }
 
                     @Override
@@ -139,7 +139,7 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onError(Exception t) {
                         tracker.track(TAG, "inner request signOut api error:" + t);
-                        callback.onComplete(false, t);
+                        callback.onComplete(false, MSQASignInException.create(t));
                     }
 
                     @Override
@@ -175,7 +175,7 @@ public final class MSQASignInClient implements SignInClient {
                         } else {
                             tracker.track(TAG,
                                     "inner request getCurrentSignInAccount api error:" + t.getMessage());
-                            completeListener.onComplete(null, t);
+                            completeListener.onComplete(null, MSQASignInException.create(t));
                         }
                     }
 
@@ -205,7 +205,7 @@ public final class MSQASignInClient implements SignInClient {
                     public void onError(Exception t) {
                         tracker.track(TAG,
                                 "inner request acquireToken api error:" + t.getMessage());
-                        completeListener.onComplete(null, t);
+                        completeListener.onComplete(null, MSQASignInException.create(t));
                     }
 
                     @Override
@@ -233,7 +233,7 @@ public final class MSQASignInClient implements SignInClient {
 
                     @Override
                     public void onError(Exception t) {
-                        completeListener.onComplete(null, t);
+                        completeListener.onComplete(null, MSQASignInException.create(t));
                         tracker.track(TAG,
                                 "inner request acquireTokenSilent api error:" + t.getMessage());
                     }

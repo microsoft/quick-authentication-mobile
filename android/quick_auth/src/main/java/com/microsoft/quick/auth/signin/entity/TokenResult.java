@@ -50,13 +50,6 @@ public interface TokenResult {
     String getTenantId();
 
     /**
-     * @return Gets the Account.
-     * Returns: The Account to get.
-     */
-    @NonNull
-    IAccount getAccount();
-
-    /**
      * @return The scopes returned from the service.
      */
     @NonNull

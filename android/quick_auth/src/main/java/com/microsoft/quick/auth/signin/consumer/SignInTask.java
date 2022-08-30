@@ -54,7 +54,7 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
                     consumer.onSuccess(iSignInClientApplication);
                 }
             })
-                    .taskConvert(new AcquireCurrentTokenTask(mActivity, false, mScopes, null, mTracker))
+                    .taskConvert(new AcquireCurrentTokenTask(mActivity, true, mScopes, null, mTracker))
                     .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
         } else {
             return Task.create(new Task.ConsumerHolder<MSQAAccountInfo>() {

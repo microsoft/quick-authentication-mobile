@@ -11,13 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.example.signdemo1.view.SignInButtonSettingPop;
-import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
-import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
-import com.microsoft.quick.auth.signin.view.ButtonText;
+import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quick.auth.signin.view.MSQASignInButton;
 
 import java.util.ArrayList;
@@ -94,7 +92,7 @@ public class SignInActivity extends Activity {
              *  - you're introducing a new scope which the user has never consented for.
              */
             mTokenResult.setText("");
-            if (error instanceof MsalUiRequiredException) {
+            if (error instanceof MSQAUiRequiredException) {
                 acquireToken();
             } else {
                 updateTokenResult(iTokenResult, error);
