@@ -24,7 +24,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="400dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -179,7 +179,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/signin_with"
@@ -193,7 +193,6 @@
                             android:id="@+id/signup_with"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:text="signup_with"
                             android:textColor="@color/black" />
 
@@ -201,7 +200,6 @@
                             android:id="@+id/signin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:text="signin"
                             android:textColor="@color/black" />
 
@@ -209,7 +207,6 @@
                             android:id="@+id/continue_with"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:text="continue_with"
                             android:textColor="@color/black" />
 

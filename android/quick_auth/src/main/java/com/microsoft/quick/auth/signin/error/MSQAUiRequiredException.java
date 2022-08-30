@@ -4,6 +4,7 @@ import com.microsoft.identity.client.exception.MsalUiRequiredException;
 
 /**
  * This error class is a wrapper error class for {@link MsalUiRequiredException}.
+ * This error will be created when token silent error instanceof MsalUiRequiredException.
  */
 public class MSQAUiRequiredException extends MSQASignInException {
 

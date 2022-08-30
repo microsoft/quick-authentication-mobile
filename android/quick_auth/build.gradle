@@ -45,7 +45,7 @@ android {
 
 dependencies {
     // libraries for msal
-    api "com.microsoft.identity.client:msal:${rootProject.ext.msalSDKVersion}"
+    implementation "com.microsoft.identity.client:msal:${rootProject.ext.msalSDKVersion}"
 
     // libraries for android
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appCompatVersion}"

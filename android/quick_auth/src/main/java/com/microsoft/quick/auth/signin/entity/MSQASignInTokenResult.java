@@ -50,12 +50,6 @@ public class MSQASignInTokenResult implements TokenResult {
 
     @NonNull
     @Override
-    public IAccount getAccount() {
-        return mAuthenticationResult.getAccount();
-    }
-
-    @NonNull
-    @Override
     public String[] getScope() {
         return mAuthenticationResult.getScope();
     }
