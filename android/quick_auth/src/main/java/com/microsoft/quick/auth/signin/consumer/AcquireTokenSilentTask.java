@@ -6,7 +6,8 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
@@ -32,8 +33,8 @@ public class AcquireTokenSilentTask implements Function<ISignInClientApplication
         mTracker.track(TAG, "start request MSAL api acquireTokenSilent");
         IAccount iAccount = iSignInClientApplication.getCurrentAccount();
         if (iAccount == null)
-            throw new MSQASignInError(MSQASignInError.NO_CURRENT_ACCOUNT,
-                    MSQASignInError.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+            throw new MSQASignInException(MSQAErrorString.NO_CURRENT_ACCOUNT,
+                    MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
         IAuthenticationResult result = iSignInClientApplication.acquireTokenSilent(iAccount,
                 mScopes);
         return new MSQASignInTokenResult(result);
