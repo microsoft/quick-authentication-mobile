@@ -10,13 +10,13 @@ import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MSQAAPI;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
-import com.microsoft.quick.auth.signin.task.Function;
+import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
-public class AcquireUserPhotoTask implements Function<MSQAAccountInfo,
+public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
         MSQAAccountInfo> {
     private static final String TAG = AcquireUserPhotoTask.class.getSimpleName();
     private @NonNull
@@ -27,7 +27,7 @@ public class AcquireUserPhotoTask implements Function<MSQAAccountInfo,
     }
 
     @Override
-    public MSQAAccountInfo apply(@NonNull MSQAAccountInfo microsoftAccountInfo) {
+    public MSQAAccountInfo convert(@NonNull MSQAAccountInfo microsoftAccountInfo) {
         mTracker.track(TAG, "start request graph api to get user photo");
         InputStream responseStream = null;
         try {

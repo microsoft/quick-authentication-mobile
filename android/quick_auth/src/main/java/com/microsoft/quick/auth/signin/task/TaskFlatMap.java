@@ -7,39 +7,39 @@ public class TaskFlatMap<T, R> extends Task<R> {
     private final @NonNull
     Task<T> mSource;
     private final @NonNull
-    Function<? super T, ? extends Task<? extends R>> mMapper;
+    Convert<? super T, ? extends Task<? extends R>> mConverter;
 
-    public TaskFlatMap(@NonNull Task<T> source, @NonNull Function<? super T, ? extends Task<?
-            extends R>> mapper) {
+    public TaskFlatMap(@NonNull Task<T> source, @NonNull Convert<? super T, ? extends Task<?
+            extends R>> converter) {
         this.mSource = source;
-        this.mMapper = mapper;
+        this.mConverter = converter;
     }
 
     @Override
-    protected void subscribeActual(@NonNull Consumer<? super R> consumer) {
-        MapObserver<T, R> parent = new MapObserver<>(consumer, mMapper);
-        mSource.subscribe(parent);
+    protected void startActual(@NonNull Consumer<? super R> consumer) {
+        MapConsumer<T, R> parent = new MapConsumer<>(consumer, mConverter);
+        mSource.start(parent);
     }
 
-    static class MapObserver<T, R> implements Consumer<T> {
+    static class MapConsumer<T, R> implements Consumer<T> {
         private final @NonNull
         Consumer<? super R> mDownStream;
         private final @NonNull
-        Function<? super T, ? extends Task<? extends R>> mMapper;
+        Convert<? super T, ? extends Task<? extends R>> mConverter;
         private Disposable mDisposable;
 
-        public MapObserver(@NonNull Consumer<? super R> observer, @NonNull Function<? super T, ?
+        public MapConsumer(@NonNull Consumer<? super R> consumer, @NonNull Convert<? super T, ?
                 extends Task<?
-                extends R>> mapper) {
-            this.mDownStream = observer;
-            this.mMapper = mapper;
+                extends R>> convert) {
+            this.mDownStream = consumer;
+            this.mConverter = convert;
         }
 
         @Override
         public void onSuccess(T t) {
             try {
-                Task<? extends R> observable = mMapper.apply(t);
-                mDisposable = observable.subscribe(mDownStream);
+                Task<? extends R> task = mConverter.convert(t);
+                mDisposable = task.start(mDownStream);
             } catch (Exception e) {
                 onError(e);
             }

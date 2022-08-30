@@ -4,41 +4,40 @@ import androidx.annotation.NonNull;
 
 public abstract class Task<T> {
 
-    public static <T> Task<T> create(@NonNull OnSubscribe<T> onSubscribe) {
-        return new TaskCreate<>(onSubscribe);
+    public static <T> Task<T> create(@NonNull ConsumerHolder<T> consumerHolder) {
+        return new TaskCreate<>(consumerHolder);
     }
 
-    public Disposable subscribe(@NonNull Consumer<? super T> consumer) {
+    public Disposable start(@NonNull Consumer<? super T> consumer) {
         CancelableConsumer<T> cancelableConsumer = new CancelableConsumer<>(consumer);
-        subscribeActual(cancelableConsumer);
+        startActual(cancelableConsumer);
         return cancelableConsumer;
     }
 
-    protected abstract void subscribeActual(@NonNull Consumer<? super T> consumer);
+    protected abstract void startActual(@NonNull Consumer<? super T> consumer);
 
-    public <R> Task<R> map(@NonNull Function<? super T, ? extends R> mapper) {
+    public <R> Task<R> convert(@NonNull Convert<? super T, ? extends R> mapper) {
         return new TaskMap<>(this, mapper);
     }
 
-    public <R> Task<R> flatMap(@NonNull Function<? super T, ? extends Task<? extends R>> mapper) {
+    public <R> Task<R> taskConvert(@NonNull Convert<? super T, ? extends Task<? extends R>> mapper) {
         return new TaskFlatMap<>(this, mapper);
     }
 
-    public Task<T> errorRetry(@NonNull Function<? super Exception, ? extends Task<? extends T>> mapper) {
-        return new TaskErrorRetry<>(this, mapper);
+    public Task<T> errorConvert(@NonNull Convert<? super Exception, ? extends Task<? extends T>> mapper) {
+        return new TaskError<>(this, mapper);
     }
 
-
-    public Task<T> taskScheduleOn(Scheduler scheduler) {
+    public Task<T> taskScheduleOn(ThreadSwitcher scheduler) {
         return new TaskScheduleOn<>(this, scheduler);
     }
 
-    public Task<T> nextTaskSchedulerOn(Scheduler scheduler) {
+    public Task<T> nextTaskSchedulerOn(ThreadSwitcher scheduler) {
         return new ConsumerScheduleOn<>(this, scheduler);
     }
 
-    public interface OnSubscribe<T> {
-        void subscribe(@NonNull Consumer<? super T> consumer);
+    public interface ConsumerHolder<T> {
+        void start(@NonNull Consumer<? super T> consumer);
     }
 }
 

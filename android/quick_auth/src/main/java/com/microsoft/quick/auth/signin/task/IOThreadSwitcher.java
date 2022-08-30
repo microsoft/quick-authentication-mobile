@@ -4,10 +4,10 @@ import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class IOScheduler implements Scheduler {
+public class IOThreadSwitcher implements ThreadSwitcher {
     private final ThreadPoolExecutor mExecutor;
 
-    public IOScheduler() {
+    public IOThreadSwitcher() {
         mExecutor = TaskExecutorUtil.io();
     }
 

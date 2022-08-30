@@ -22,7 +22,7 @@ public class HttpConnectionClient {
     private static final String TAG = HttpConnectionClient.class.getSimpleName();
 
     @WorkerThread
-    public static String requestAccountInfo(@NonNull HttpRequest request) throws IOException,
+    public static String request(@NonNull HttpRequest request) throws IOException,
             MSQASignInException {
         InputStream responseStream = null;
         try {
@@ -33,7 +33,7 @@ public class HttpConnectionClient {
                         HttpConnectionClient.convertStreamToString(responseStream);
             } else {
                 responseStream = conn.getErrorStream();
-                throw new MSQASignInException(MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
+                throw new MSQASignInException(MSQAErrorString.HTTP_REQUEST_ERROR,
                         HttpConnectionClient.convertStreamToString(responseStream));
             }
         } finally {

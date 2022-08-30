@@ -5,24 +5,24 @@ import androidx.annotation.NonNull;
 public class TaskCreate<T> extends Task<T> {
 
     private final @NonNull
-    OnSubscribe<T> mSource;
+    ConsumerHolder<T> mSource;
 
-    public TaskCreate(@NonNull OnSubscribe<T> source) {
+    public TaskCreate(@NonNull ConsumerHolder<T> source) {
         this.mSource = source;
     }
 
     @Override
-    protected void subscribeActual(@NonNull Consumer<? super T> consumer) {
-        CreateObserver<T> parent = new CreateObserver<>(consumer);
-        mSource.subscribe(parent);
+    protected void startActual(@NonNull Consumer<? super T> consumer) {
+        CreateConsumer<T> parent = new CreateConsumer<>(consumer);
+        mSource.start(parent);
     }
 
-    static class CreateObserver<T> implements Consumer<T> {
+    static class CreateConsumer<T> implements Consumer<T> {
 
         private final @NonNull
         Consumer<? super T> mDownStream;
 
-        public CreateObserver(@NonNull Consumer<? super T> consumer) {
+        public CreateConsumer(@NonNull Consumer<? super T> consumer) {
             mDownStream = consumer;
         }
 

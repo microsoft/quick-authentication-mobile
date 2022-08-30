@@ -7,8 +7,8 @@ public class CancelableConsumer<T> implements Consumer<T>, Disposable {
     private volatile boolean mIsCanceled;
     private final Consumer<? super T> mConsumer;
 
-    public CancelableConsumer(@NonNull Consumer<? super T> observer) {
-        mConsumer = observer;
+    public CancelableConsumer(@NonNull Consumer<? super T> consumer) {
+        mConsumer = consumer;
     }
 
     @Override
