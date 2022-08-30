@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.consumer.AcquireUserPhotoTask;
@@ -16,11 +15,13 @@ import com.microsoft.quick.auth.signin.consumer.AcquireCurrentAccountTask;
 import com.microsoft.quick.auth.signin.consumer.AcquireCurrentTokenTask;
 import com.microsoft.quick.auth.signin.consumer.SignInTask;
 import com.microsoft.quick.auth.signin.consumer.SignOutTask;
+import com.microsoft.quick.auth.signin.consumer.TokenSilentErrorWrapTask;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.ILogger;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
@@ -172,9 +173,9 @@ public final class MSQASignInClient implements SignInClient {
 
                     @Override
                     public void onError(Exception t) {
-                        if (t instanceof MSQASignInError && (MSQASignInError.NO_CURRENT_ACCOUNT.equals(((MSQASignInError) t).getErrorCode()))) {
+                        if (t instanceof MSQASignInException && (MSQAErrorString.NO_CURRENT_ACCOUNT.equals(((MSQASignInException) t).getErrorCode()))) {
                             tracker.track(TAG,
-                                    "inner request getCurrentSignInAccount api error:" + MSQASignInError.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                                    "inner request getCurrentSignInAccount api error:" + MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
                             completeListener.onComplete(null, null);
                         } else {
                             tracker.track(TAG,
@@ -226,6 +227,7 @@ public final class MSQASignInClient implements SignInClient {
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireTokenSilent");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
                 .map(new AcquireTokenSilentTask(scopes, tracker))
+                .errorRetry(new TokenSilentErrorWrapTask(tracker))
                 .nextTaskSchedulerOn(DirectToScheduler.directToMainWhenCreateInMain())
                 .subscribe(new Consumer<TokenResult>() {
                     @Override

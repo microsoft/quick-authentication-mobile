@@ -11,7 +11,8 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
@@ -59,8 +60,8 @@ public class AcquireTokenTask implements Function<ISignInClientApplication,
                 }
                 // If no signed account, return error.
                 if (iAccount == null) {
-                    consumer.onError(new MSQASignInError(MSQASignInError.NO_CURRENT_ACCOUNT,
-                            MSQASignInError.NO_CURRENT_ACCOUNT_ERROR_MESSAGE));
+                    consumer.onError(new MSQASignInException(MSQAErrorString.NO_CURRENT_ACCOUNT,
+                            MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE));
                     return;
                 }
                 iSignInClientApplication.acquireToken(mActivity, iAccount, mScopes, mLoginHint,

@@ -3,7 +3,8 @@ package com.microsoft.quick.auth.signin.consumer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectToScheduler;
 import com.microsoft.quick.auth.signin.task.Task;
@@ -28,8 +29,8 @@ public class AcquireClientApplicationTask implements Task.OnSubscribe<ISignInCli
     public void subscribe(@NonNull Consumer<? super ISignInClientApplication> observer) {
         try {
             if (mClientHolder == null) {
-                observer.onError(new MSQASignInError(MSQASignInError.NO_INITIALIZE,
-                        MSQASignInError.NO_INITIALIZE_MESSAGE));
+                observer.onError(new MSQASignInException(MSQAErrorString.NO_INITIALIZE,
+                        MSQAErrorString.NO_INITIALIZE_MESSAGE));
                 return;
             }
             mTrack.track(TAG, "start get application");
