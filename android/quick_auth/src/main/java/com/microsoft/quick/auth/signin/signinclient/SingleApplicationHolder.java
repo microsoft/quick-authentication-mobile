@@ -7,7 +7,8 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.util.TaskExecutorUtil;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class SingleApplicationHolder implements ISignInClientHolder {
     private volatile ISignInClientApplication mClient;
-    private volatile MSQASignInError mClientError;
+    private volatile MSQASignInException mClientError;
     private final CountDownLatch mCountDownLatch;
     private static final String TAG = SingleApplicationHolder.class.getSimpleName();
 
@@ -35,11 +36,11 @@ public class SingleApplicationHolder implements ISignInClientHolder {
                     exception.printStackTrace();
                     if (exception instanceof MsalException) {
                         mClientError =
-                                new MSQASignInError(((MsalException) exception).getErrorCode(),
+                                new MSQASignInException(((MsalException) exception).getErrorCode(),
                                         exception.getMessage());
                     } else {
                         mClientError =
-                                new MSQASignInError(MSQASignInError.INTERRUPTED_ERROR,
+                                new MSQASignInException(MSQAErrorString.INTERRUPTED_ERROR,
                                         exception.getMessage());
                     }
                     mCountDownLatch.countDown();

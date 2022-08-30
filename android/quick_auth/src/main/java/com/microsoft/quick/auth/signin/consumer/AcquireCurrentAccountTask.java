@@ -3,7 +3,8 @@ package com.microsoft.quick.auth.signin.consumer;
 import androidx.annotation.NonNull;
 
 import com.microsoft.identity.client.IAccount;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Function;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
@@ -26,9 +27,9 @@ public class AcquireCurrentAccountTask implements Function<ISignInClientApplicat
             return currentAccount;
         } else {
             mTracker.track(TAG,
-                    "get current account error:" + MSQASignInError.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
-            throw new MSQASignInError(MSQASignInError.NO_CURRENT_ACCOUNT,
-                    MSQASignInError.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                    "get current account error:" + MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+            throw new MSQASignInException(MSQAErrorString.NO_CURRENT_ACCOUNT,
+                    MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
         }
     }
 }

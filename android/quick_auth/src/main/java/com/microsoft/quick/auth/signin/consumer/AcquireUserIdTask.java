@@ -5,7 +5,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQAErrorString;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
@@ -39,8 +40,8 @@ public class AcquireUserIdTask implements Function<MSQAAccountInfo,
         } else {
             MSQALogger.getInstance().error(TAG, "request account with graph api return empty result error", null);
             mTracker.track(TAG, "request graph api to get account info error: return empty result error");
-            throw new MSQASignInError(MSQASignInError.HTTP_ACCOUNT_REQUEST_ERROR,
-                    MSQASignInError.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
+            throw new MSQASignInException(MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
+                    MSQAErrorString.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
         }
         return microsoftAccount;
     }
