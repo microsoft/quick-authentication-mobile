@@ -1,6 +1,7 @@
 package com.microsoft.quick.auth.signin.error;
 
 import com.microsoft.identity.client.exception.MsalClientException;
+import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.identity.client.internal.MsalUtils;
 import com.microsoft.identity.common.java.exception.BaseException;
 
@@ -104,5 +105,15 @@ public class MSQASignInError extends BaseException {
         }
 
         return "";
+    }
+
+    /**
+     * Check if
+     *
+     * @param exception
+     * @return
+     */
+    public static boolean isUiRequiredException(Exception exception) {
+        return exception instanceof MsalUiRequiredException;
     }
 }

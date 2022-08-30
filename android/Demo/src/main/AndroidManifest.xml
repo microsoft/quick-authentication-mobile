@@ -11,7 +11,7 @@
         android:name=".DemoApplication"
         android:theme="@style/Theme.SignDemo1">
         <activity
-            android:name=".ChooseActivity"
+            android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,21 +30,14 @@
                 <data
                     android:host="@string/ms_sign_in_host"
                     android:path="@string/ms_sign_in_path"
-                    android:scheme="@string/ms_sign_in_scheme" />
+                    android:scheme="msauth" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
+        <activity android:name=".ChooseActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".IdTokenActivity" />
         <activity android:name=".googletest.GoogleTestActivity" />
         <activity android:name=".googletest.GoogleTest1Activity" />
-
-        <meta-data
-            android:name="com.microsoft.quick.auth.signin.clientId"
-            android:value="@string/ms_sign_in_client_id" />
-        <meta-data
-            android:name="com.microsoft.quick.auth.signin.redirectUri"
-            android:value="@string/ms_sign_in_redirect_uri" />
     </application>
 
 </manifest>

@@ -6,9 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@IntDef({ButtonTheme.FILLED_BLACK, ButtonTheme.FILLED_BLUE, ButtonTheme.OUTLINE})
+@IntDef({ButtonTheme.DARK, ButtonTheme.LIGHT})
 public @interface ButtonTheme {
-    int FILLED_BLACK = 0;
-    int FILLED_BLUE = 1;
-    int OUTLINE = 2;
+    int DARK = 0;
+    int LIGHT = 1;
 }

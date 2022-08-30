@@ -4,7 +4,7 @@
 
     <stroke
         android:width="0dp"
-        android:color="@color/mqa_sign_in_button_border_light" />
-    <solid android:color="@color/mqa_sign_in_button_color_light" />
+        android:color="@color/msqa_sign_in_button_border_light" />
+    <solid android:color="@color/msqa_sign_in_button_color_light" />
     <corners android:radius="0dp" />
 </shape>

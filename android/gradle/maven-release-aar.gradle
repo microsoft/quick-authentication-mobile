@@ -1,8 +1,8 @@
 apply plugin: 'maven-publish'
 apply plugin: 'pmd'
 
-ext["GROUP_ID"] = 'com.microsoft.quickauth'
-ext["ARTIFACT_ID"] = "signin"
+ext["GROUP_ID"] = 'com.microsoft'
+ext["ARTIFACT_ID"] = "msquickauth"
 ext["VERSION"] = "0.0.9"
 
 File secretPropsFile = project.rootProject.file('local.properties')

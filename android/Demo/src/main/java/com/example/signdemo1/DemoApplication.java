@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.MQASignInOptions;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
+import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
+import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.logger.ILogger;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 

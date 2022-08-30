@@ -67,8 +67,8 @@ public class SignInButtonSettingPop extends PopupWindow {
                     ButtonType.ICON);
         });
         mThemeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            mSignInButton.setButtonTheme(checkedId == R.id.filled_light ? ButtonTheme.FILLED_BLUE :
-                    ButtonTheme.FILLED_BLACK);
+            mSignInButton.setButtonTheme(checkedId == R.id.filled_light ? ButtonTheme.LIGHT :
+                    ButtonTheme.DARK);
         });
         mSizeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -84,8 +84,19 @@ public class SignInButtonSettingPop extends PopupWindow {
             }
         });
         mTextRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            mSignInButton.setButtonText(checkedId == R.id.signin_with ? ButtonText.SIGN_IN_WITH :
-                    ButtonText.SIGN_OUT);
+            int text = ButtonText.SIGN_IN_WITH;
+            switch (checkedId) {
+                case R.id.signup_with:
+                    text = ButtonText.SIGNUP_WITH;
+                    break;
+                case R.id.signin:
+                    text = ButtonText.SIGNIN;
+                    break;
+                case R.id.continue_with:
+                    text = ButtonText.CONTINUE_WITH;
+                    break;
+            }
+            mSignInButton.setButtonText(text);
         });
         mShapeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -102,9 +113,6 @@ public class SignInButtonSettingPop extends PopupWindow {
         });
         mAlignmentRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
-                case R.id.icon_left_text_center:
-                    mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.ICON_LEFT_TEXT_CENTER);
-                    break;
                 case R.id.center:
                     mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.CENTER);
                     break;
