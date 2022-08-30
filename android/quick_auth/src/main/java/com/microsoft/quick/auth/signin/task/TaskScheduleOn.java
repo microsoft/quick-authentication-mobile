@@ -5,20 +5,20 @@ import androidx.annotation.NonNull;
 public class TaskScheduleOn<T> extends Task<T> {
 
     private final Task<T> mSource;
-    private final Scheduler mScheduler;
+    private final ThreadSwitcher mSwitcher;
 
-    public TaskScheduleOn(Task<T> source, Scheduler scheduler) {
+    public TaskScheduleOn(Task<T> source, ThreadSwitcher switcher) {
         this.mSource = source;
-        this.mScheduler = scheduler;
+        this.mSwitcher = switcher;
     }
 
     @Override
-    protected void subscribeActual(@NonNull Consumer<? super T> consumer) {
+    protected void startActual(@NonNull Consumer<? super T> consumer) {
         final TaskScheduleConsumer<? super T> parent = new TaskScheduleConsumer<>(consumer);
-        mScheduler.schedule(new Runnable() {
+        mSwitcher.schedule(new Runnable() {
             @Override
             public void run() {
-                mSource.subscribe(parent);
+                mSource.start(parent);
             }
         });
     }
@@ -28,8 +28,8 @@ public class TaskScheduleOn<T> extends Task<T> {
         private final @NonNull
         Consumer<? super T> mDownStreamConsumer;
 
-        public TaskScheduleConsumer(@NonNull Consumer<? super T> observer) {
-            this.mDownStreamConsumer = observer;
+        public TaskScheduleConsumer(@NonNull Consumer<? super T> consumer) {
+            this.mDownStreamConsumer = consumer;
         }
 
         @Override

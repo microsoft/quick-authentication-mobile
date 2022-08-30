@@ -12,12 +12,12 @@ import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MSQAAPI;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
-import com.microsoft.quick.auth.signin.task.Function;
+import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import org.json.JSONObject;
 
-public class AcquireUserIdTask implements Function<MSQAAccountInfo,
+public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
         MSQAAccountInfo> {
 
     private static final String TAG = AcquireUserIdTask.class.getSimpleName();
@@ -29,10 +29,10 @@ public class AcquireUserIdTask implements Function<MSQAAccountInfo,
     }
 
     @Override
-    public MSQAAccountInfo apply(@NonNull MSQAAccountInfo microsoftAccount) throws Exception {
+    public MSQAAccountInfo convert(@NonNull MSQAAccountInfo microsoftAccount) throws Exception {
         mTracker.track(TAG, "start request graph api to get account info");
         HttpRequest httpRequest = getHttpRequest(microsoftAccount);
-        String result = HttpConnectionClient.requestAccountInfo(httpRequest);
+        String result = HttpConnectionClient.request(httpRequest);
         if (!TextUtils.isEmpty(result)) {
             JSONObject jsonObject = new JSONObject(result);
             microsoftAccount.setId(jsonObject.optString("id"));

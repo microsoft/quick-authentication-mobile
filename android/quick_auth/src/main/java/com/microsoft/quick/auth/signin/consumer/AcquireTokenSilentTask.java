@@ -9,12 +9,12 @@ import com.microsoft.quick.auth.signin.entity.MSQASignInTokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
-import com.microsoft.quick.auth.signin.task.Function;
+import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.util.List;
 
-public class AcquireTokenSilentTask implements Function<ISignInClientApplication,
+public class AcquireTokenSilentTask implements Convert<ISignInClientApplication,
         TokenResult> {
     private @NonNull
     final List<String> mScopes;
@@ -29,7 +29,7 @@ public class AcquireTokenSilentTask implements Function<ISignInClientApplication
     }
 
     @Override
-    public TokenResult apply(@NonNull ISignInClientApplication iSignInClientApplication) throws Exception {
+    public TokenResult convert(@NonNull ISignInClientApplication iSignInClientApplication) throws Exception {
         mTracker.track(TAG, "start request MSAL api acquireTokenSilent");
         IAccount iAccount = iSignInClientApplication.getCurrentAccount();
         if (iAccount == null)
