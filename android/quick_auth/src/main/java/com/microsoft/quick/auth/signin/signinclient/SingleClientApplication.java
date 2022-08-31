@@ -5,14 +5,11 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.microsoft.identity.client.AcquireTokenParameters;
-import com.microsoft.identity.client.AcquireTokenSilentParameters;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
-import com.microsoft.identity.client.SignInParameters;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 
@@ -32,14 +29,9 @@ public class SingleClientApplication implements ISignInClientApplication {
 
     @Override
     public void signIn(@NonNull Activity activity, @Nullable String loginHint,
-                       @NonNull List<String> scopes,
+                       @NonNull String[] scopes,
                        @NonNull AuthenticationCallback callback) {
-        mSignClient.signIn(SignInParameters.builder()
-                .withActivity(activity)
-                .withLoginHint(loginHint)
-                .withScopes(scopes)
-                .withCallback(callback)
-                .build());
+        mSignClient.signIn(activity, loginHint, scopes, callback);
     }
 
     @Override
@@ -49,26 +41,15 @@ public class SingleClientApplication implements ISignInClientApplication {
 
     @Override
     public IAuthenticationResult acquireTokenSilent(@NonNull IAccount account,
-                                                    @NonNull List<String> scopes) throws Exception {
-        return mSignClient.acquireTokenSilent(new AcquireTokenSilentParameters(new AcquireTokenSilentParameters.Builder()
-                .withScopes(scopes)
-                .forAccount(account)
-                .fromAuthority(account.getAuthority())
-        ));
+                                                    @NonNull String[] scopes) throws Exception {
+        return mSignClient.acquireTokenSilent(scopes, account.getAuthority());
     }
 
     @Override
-    public void acquireToken(@NonNull Activity activity, @Nullable IAccount account, @NonNull List<String> scopes,
-                             @Nullable final String loginHint,
+    public void acquireToken(@NonNull Activity activity, @Nullable IAccount account,
+                             @NonNull String[] scopes,
                              @NonNull AuthenticationCallback callback) {
-        mSignClient.acquireToken(new AcquireTokenParameters(
-                new AcquireTokenParameters.Builder()
-                        .startAuthorizationFromActivity(activity)
-                        .withScopes(scopes)
-                        .forAccount(account)
-                        .withLoginHint(loginHint)
-                        .withCallback(callback)
-        ));
+        mSignClient.acquireToken(activity, scopes, callback);
     }
 
     @Nullable

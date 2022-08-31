@@ -34,8 +34,7 @@ public class IdTokenActivity extends Activity {
         mTokenResult = findViewById(R.id.token_result);
         mRadioGroup.setOnCheckedChangeListener((group, checkedId) -> mSilentToken =
                 checkedId != R.id.sign_button_type_radio_group);
-        List<String> scopes = new ArrayList<>();
-        scopes.add("user.read");
+        String[] scopes = new String[]{"user.read"};
         mSignInButton.setOnClickListener(v -> {
             mTokenResult.setText("");
             if (!mSilentToken) {

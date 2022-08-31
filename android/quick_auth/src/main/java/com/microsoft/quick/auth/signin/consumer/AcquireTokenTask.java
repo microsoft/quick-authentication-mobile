@@ -29,14 +29,14 @@ public class AcquireTokenTask implements Convert<ISignInClientApplication,
     private @NonNull
     final Activity mActivity;
     private @NonNull
-    final List<String> mScopes;
+    final String[] mScopes;
     private @Nullable
     final String mLoginHint;
     private @NonNull
     final MSQATrackerUtil mTracker;
     private static final String TAG = AcquireTokenTask.class.getSimpleName();
 
-    public AcquireTokenTask(@NonNull final Activity activity, @NonNull final List<String> scopes,
+    public AcquireTokenTask(@NonNull final Activity activity, @NonNull final String[] scopes,
                             @Nullable final String loginHint,
                             @NonNull final MSQATrackerUtil tracker) {
         mActivity = activity;
@@ -64,7 +64,7 @@ public class AcquireTokenTask implements Convert<ISignInClientApplication,
                             MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE));
                     return;
                 }
-                iSignInClientApplication.acquireToken(mActivity, iAccount, mScopes, mLoginHint,
+                iSignInClientApplication.acquireToken(mActivity, iAccount, mScopes,
                         new AuthenticationCallback() {
                             @Override
                             public void onCancel() {

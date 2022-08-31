@@ -25,12 +25,12 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
     private @NonNull
     final Activity mActivity;
     private @NonNull
-    final List<String> mScopes;
+    final String[] mScopes;
     private @NonNull
     final MSQATrackerUtil mTracker;
     private static final String TAG = SignInTask.class.getSimpleName();
 
-    public SignInTask(@NonNull final Activity activity, @NonNull List<String> scopes,
+    public SignInTask(@NonNull final Activity activity, @NonNull String[] scopes,
                       @NonNull final MSQATrackerUtil tracker) {
         mActivity = activity;
         mScopes = scopes;
@@ -54,7 +54,7 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
                     consumer.onSuccess(iSignInClientApplication);
                 }
             })
-                    .taskConvert(new AcquireCurrentTokenTask(mActivity, true, mScopes, null, mTracker))
+                    .taskConvert(new AcquireCurrentTokenTask(mActivity, true, mScopes, mTracker))
                     .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
         } else {
             return Task.create(new Task.ConsumerHolder<MSQAAccountInfo>() {

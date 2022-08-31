@@ -24,7 +24,8 @@ import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
 import java.util.List;
 
-public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication, Task<MSQAAccountInfo>> {
+public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication,
+        Task<MSQAAccountInfo>> {
 
     private final @NonNull
     Activity mActivity;
@@ -33,15 +34,12 @@ public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication
     private @NonNull
     final MSQATrackerUtil mTracker;
     private @NonNull
-    final List<String> mScopes;
-    private @Nullable
-    final String mLoginHint;
+    final String[] mScopes;
 
     public AcquireCurrentTokenTask(@NonNull final Activity activity, final boolean errorRetry,
-                                   @NonNull final List<String> scopes, @Nullable final String loginHint,
+                                   @NonNull final String[] scopes,
                                    @NonNull final MSQATrackerUtil tracker) {
         mTracker = tracker;
-        mLoginHint = loginHint;
         mScopes = scopes;
         mActivity = activity;
         mErrorRetry = errorRetry;
@@ -82,11 +80,12 @@ public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication
                         });
                         return;
                     }
-                    MSQALogger.getInstance().error(TAG, "acquire token silent catch an error, will start acquire " +
+                    MSQALogger.getInstance().error(TAG, "acquire token silent catch an error, " +
+                            "will start acquire " +
                             "token", exception);
                 }
                 mTracker.track(TAG, "request MSAL acquireToken api");
-                clientApplication.acquireToken(mActivity, iAccount, mScopes, mLoginHint,
+                clientApplication.acquireToken(mActivity, iAccount, mScopes,
                         new AuthenticationCallback() {
                             @Override
                             public void onCancel() {
@@ -120,7 +119,8 @@ public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication
                                         consumer.onError(exception);
                                     }
                                 });
-                                MSQALogger.getInstance().error(TAG, "acquire token catch an error acquire token",
+                                MSQALogger.getInstance().error(TAG, "acquire token catch an error" +
+                                                " acquire token",
                                         exception);
                             }
                         });
