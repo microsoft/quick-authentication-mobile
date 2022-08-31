@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MSQASignInException extends Exception {
 
-    private String mErrorCode;
+    private final String mErrorCode;
     private final List<Exception> mSuppressedException;
 
     public MSQASignInException() {
@@ -45,7 +45,7 @@ public class MSQASignInException extends Exception {
                                final Throwable throwable) {
         super(errorMessage, throwable);
         mErrorCode = errorCode;
-        this.mSuppressedException = new ArrayList();
+        this.mSuppressedException = new ArrayList<>();
     }
 
     public void addSuppressedException(Exception e) {
@@ -89,7 +89,8 @@ public class MSQASignInException extends Exception {
             signInException = new MSQASignInException(MSQAErrorString.INTERRUPTED_ERROR,
                     exception.getMessage());
         } else {
-            signInException = new MSQASignInException(MSQAErrorString.UNEXPECTED_ERROR, exception.getMessage());
+            signInException = new MSQASignInException(MSQAErrorString.UNKNOWN_ERROR,
+                    exception.getMessage());
         }
         signInException.addSuppressedException(exception);
         return signInException;

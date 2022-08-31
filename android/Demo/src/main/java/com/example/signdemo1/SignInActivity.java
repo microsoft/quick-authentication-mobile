@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
@@ -77,7 +78,8 @@ public class SignInActivity extends Activity {
             mTokenResult.setText("");
             mSignInClient.acquireTokenSilent(scops, (iTokenResult, error) -> acquireToken());
         });
-        msAcquireTokenSilentButton.setOnClickListener(v -> mSignInClient.acquireTokenSilent(scops, (iTokenResult,
+        msAcquireTokenSilentButton.setOnClickListener(v -> mSignInClient.acquireTokenSilent(scops
+                , (iTokenResult,
                                                                                                     error) -> {
             /**
              * If acquireTokenSilent() returns an error that requires an interaction
@@ -106,7 +108,7 @@ public class SignInActivity extends Activity {
 
     private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
         if (accountInfo != null) {
-            mUserPhoto.setImageBitmap(accountInfo.getPhoto());
+            mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getPhoto()));
             String userInfo = "MicrosoftAccountInfo{" +
                     ", fullName='" + accountInfo.getFullName() + '\'' +
                     ", userName='" + accountInfo.getUserName() + '\'' +
