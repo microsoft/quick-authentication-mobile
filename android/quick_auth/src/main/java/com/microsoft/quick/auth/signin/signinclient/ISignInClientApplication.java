@@ -16,7 +16,7 @@ import java.util.List;
 public interface ISignInClientApplication {
     void signIn(@NonNull final Activity activity,
                 @Nullable final String loginHint,
-                @NonNull final List<String> scopes,
+                @NonNull final String[] scopes,
                 @NonNull final AuthenticationCallback callback
     );
 
@@ -25,12 +25,11 @@ public interface ISignInClientApplication {
 
     @WorkerThread
     IAuthenticationResult acquireTokenSilent(@NonNull IAccount account,
-                                             @NonNull final List<String> scopes) throws Exception;
+                                             @NonNull final String[] scopes) throws Exception;
 
     void acquireToken(@NonNull final Activity activity,
                       @Nullable IAccount account,
-                      @NonNull final List<String> scopes,
-                      @Nullable final String loginHint,
+                      @NonNull final String[] scopes,
                       @NonNull final AuthenticationCallback callback
     );
 

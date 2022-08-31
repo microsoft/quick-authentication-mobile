@@ -63,7 +63,7 @@ public interface SignInClient {
      *                         scopes can be found in{@link MSQASignInScope}.
      * @param completeListener A callback to be invoked when token get finished.
      */
-    void acquireTokenSilent(@NonNull final List<String> scopes,
+    void acquireTokenSilent(@NonNull final String[] scopes,
                             @NonNull final OnCompleteListener<TokenResult> completeListener);
 
     /**
@@ -74,6 +74,6 @@ public interface SignInClient {
      *                         the supported scopes can be found in{@link MSQASignInScope}.
      * @param completeListener A callback to be invoked when token get finished.
      */
-    void acquireToken(@NonNull final Activity activity, @NonNull final List<String> scopes,
+    void acquireToken(@NonNull final Activity activity, @NonNull final String[] scopes,
                       @NonNull final OnCompleteListener<TokenResult> completeListener);
 }

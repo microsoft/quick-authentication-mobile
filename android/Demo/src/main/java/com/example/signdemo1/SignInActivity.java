@@ -36,7 +36,7 @@ public class SignInActivity extends Activity {
 
     private SignInClient mSignInClient;
     private SignInButtonSettingPop pop;
-    private List<String> scops;
+    private String[] scops;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,8 +52,7 @@ public class SignInActivity extends Activity {
         mTokenResult = findViewById(R.id.tv_token_result);
         msAcquireTokenButton = findViewById(R.id.ms_acquire_token_button);
         msAcquireTokenSilentButton = findViewById(R.id.ms_acquire_token_silent_button);
-        scops = new ArrayList<>();
-        scops.add("user.read");
+        scops = new String[]{"user.read"};
 
         mSignInClient = MSQASignInClient.sharedInstance();
         mSignInButton.setSignInCallback(this, (accountInfo, error) -> {

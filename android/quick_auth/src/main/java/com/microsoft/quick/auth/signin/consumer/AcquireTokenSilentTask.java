@@ -17,12 +17,12 @@ import java.util.List;
 public class AcquireTokenSilentTask implements Convert<ISignInClientApplication,
         TokenResult> {
     private @NonNull
-    final List<String> mScopes;
+    final String[] mScopes;
     private @NonNull
     final MSQATrackerUtil mTracker;
     private static final String TAG = AcquireTokenSilentTask.class.getSimpleName();
 
-    public AcquireTokenSilentTask(@NonNull final List<String> scopes,
+    public AcquireTokenSilentTask(@NonNull final String[] scopes,
                                   @NonNull final MSQATrackerUtil tracker) {
         mScopes = scopes;
         mTracker = tracker;
