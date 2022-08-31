@@ -11,14 +11,12 @@ import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.ThreadSwitcher;
 import com.microsoft.quick.auth.signin.task.Switchers;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
-
-import java.util.List;
 
 public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAccountInfo>> {
 
@@ -41,6 +39,7 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
     public Task<MSQAAccountInfo> convert(@NonNull final ISignInClientApplication iSignInClientApplication) throws Exception {
         IAccount iAccount = null;
         try {
+            mTracker.track(TAG, "start sign in task");
             iAccount = iSignInClientApplication.getCurrentAccount();
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,11 +50,12 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
 
                 @Override
                 public void start(@NonNull Consumer<? super ISignInClientApplication> consumer) {
+                    mTracker.track(TAG, "has account info, will request the current token directly");
                     consumer.onSuccess(iSignInClientApplication);
                 }
             })
                     .taskConvert(new AcquireCurrentTokenTask(mActivity, true, mScopes, mTracker))
-                    .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
+                    .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
         } else {
             return Task.create(new Task.ConsumerHolder<MSQAAccountInfo>() {
                 @Override
@@ -103,7 +103,7 @@ public class SignInTask implements Convert<ISignInClientApplication, Task<MSQAAc
                             });
                 }
             })
-                    .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
+                    .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
         }
     }
 }

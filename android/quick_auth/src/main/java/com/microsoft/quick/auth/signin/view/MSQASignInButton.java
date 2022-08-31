@@ -1,6 +1,5 @@
 package com.microsoft.quick.auth.signin.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -67,11 +66,12 @@ public class MSQASignInButton extends FrameLayout {
         mSignInContainer = findViewById(R.id.ms_sign_in_button_container);
         mSignInIcon = findViewById(R.id.ms_sign_in_icon);
         mSignInText = findViewById(R.id.ms_sign_in_text);
-        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
+        mContainerDefaultWidth =
+                getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick();
+                onButtonClick();
             }
         });
     }
@@ -96,8 +96,10 @@ public class MSQASignInButton extends FrameLayout {
     }
 
     /**
-     * @param activity           Activity that is used as the parent activity for launching sign in page.
-     * @param onCompleteListener A callback to be invoked when sign in success and will return sign in account info.
+     * @param activity           Activity that is used as the parent activity for launching sign
+     *                           in page.
+     * @param onCompleteListener A callback to be invoked when sign in success and will return
+     *                           sign in account info.
      */
     public void setSignInCallback(@NonNull Activity activity,
                                   @NonNull OnCompleteListener<AccountInfo> onCompleteListener) {
@@ -147,7 +149,6 @@ public class MSQASignInButton extends FrameLayout {
         return this;
     }
 
-    @SuppressLint("RtlHardcoded")
     private void updateButtonView() {
         if (mSignInIcon == null || mSignInText == null) return;
         if (mButtonType == ButtonType.ICON) {
@@ -204,7 +205,7 @@ public class MSQASignInButton extends FrameLayout {
         }
     }
 
-    private void onItemClick() {
+    private void onButtonClick() {
         if (mActivity != null && mListener != null) {
             MSQASignInClient.sharedInstance().signIn(mActivity, mListener);
         }
@@ -223,7 +224,8 @@ public class MSQASignInButton extends FrameLayout {
     }
 
     private int getButtonViewWidth() {
-        mContainerDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
+        mContainerDefaultWidth =
+                getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         if (layoutParams == null) return mContainerDefaultWidth;
         if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {

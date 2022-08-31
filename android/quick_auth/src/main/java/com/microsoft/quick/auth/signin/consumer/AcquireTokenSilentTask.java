@@ -12,8 +12,6 @@ import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
 
-import java.util.List;
-
 public class AcquireTokenSilentTask implements Convert<ISignInClientApplication,
         TokenResult> {
     private @NonNull

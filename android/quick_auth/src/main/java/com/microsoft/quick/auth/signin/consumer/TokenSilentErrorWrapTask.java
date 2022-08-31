@@ -27,8 +27,8 @@ public class TokenSilentErrorWrapTask implements Convert<Exception, Task<TokenRe
             public void start(@NonNull Consumer<? super TokenResult> consumer) {
                 Exception silentException = exception;
                 if (exception instanceof MsalUiRequiredException) {
-                    mTracker.track(TAG, "token silent error instanceof MsalUiRequiredException, will return wrap " +
-                            "error");
+                    mTracker.track(TAG, "token silent error instanceof MsalUiRequiredException, " +
+                            "will return wrap error");
                     silentException =
                             new MSQAUiRequiredException(((MsalUiRequiredException) exception).getErrorCode(),
                                     exception.getMessage());

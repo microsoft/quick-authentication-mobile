@@ -3,7 +3,6 @@ package com.microsoft.quick.auth.signin.consumer;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
@@ -15,14 +14,12 @@ import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.ThreadSwitcher;
 import com.microsoft.quick.auth.signin.task.Switchers;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
-
-import java.util.List;
 
 public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication,
         Task<MSQAAccountInfo>> {
@@ -47,6 +44,7 @@ public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication
 
     @Override
     public Task<MSQAAccountInfo> convert(@NonNull final ISignInClientApplication clientApplication) throws Exception {
+        mTracker.track(TAG, "start get current token task");
         final IAccount iAccount = clientApplication.getCurrentAccount();
         if (iAccount == null) {
             mTracker.track(TAG,
@@ -126,6 +124,6 @@ public class AcquireCurrentTokenTask implements Convert<ISignInClientApplication
                         });
             }
         })
-                .taskScheduleOn(DirectToThreadSwitcher.directToIOWhenCreateInMain());
+                .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
     }
 }
