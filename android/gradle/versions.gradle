@@ -15,7 +15,7 @@ ext {
     coreLibraryDesugaringVersion = "1.0.9"
 
     // Libraries
-    msalSDKVersion = "4.0.1"
+    msalSDKVersion = "3.0.2"
     kotlinVersion = "1.8.0"
     recyclerviewVersion = "1.2.1"
     androidxTestRunnerVersion = "1.2.0"

@@ -35,12 +35,11 @@ import java.util.List;
 
 public final class MSQASignInClient implements SignInClient {
     private static final String TAG = MSQASignInClient.class.getSimpleName();
-    private final List<String> mScopes;
+    private final String[] mScopes;
     private volatile ISignInClientHolder mClientHolder;
 
     private MSQASignInClient() {
-        mScopes = new ArrayList<>();
-        mScopes.add(MSQASignInScope.READ);
+        mScopes = new String[]{MSQASignInScope.READ};
     }
 
     private static class SingletonHolder {
@@ -155,7 +154,7 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("getCurrentSignInAccount");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .taskConvert(new AcquireCurrentTokenTask(activity, false, mScopes, null, tracker))
+                .taskConvert(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
                 .convert(new AcquireUserIdTask(tracker))
                 .convert(new AcquireUserPhotoTask(tracker))
                 .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
@@ -187,7 +186,7 @@ public final class MSQASignInClient implements SignInClient {
     }
 
     @Override
-    public void acquireToken(@NonNull final Activity activity, @NonNull final List<String> scopes,
+    public void acquireToken(@NonNull final Activity activity, @NonNull final String[] scopes,
                              @NonNull final OnCompleteListener<TokenResult> completeListener) {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireToken");
@@ -216,7 +215,7 @@ public final class MSQASignInClient implements SignInClient {
     }
 
     @Override
-    public void acquireTokenSilent(@NonNull final List<String> scopes,
+    public void acquireTokenSilent(@NonNull final String[] scopes,
                                    @NonNull final OnCompleteListener<TokenResult> completeListener) {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireTokenSilent");
