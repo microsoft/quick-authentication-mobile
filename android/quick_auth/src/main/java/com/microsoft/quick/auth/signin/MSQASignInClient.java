@@ -18,6 +18,7 @@ import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
+import com.microsoft.quick.auth.signin.error.MSQACancelException;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.ILogger;
@@ -26,12 +27,9 @@ import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.signinclient.ISignInClientHolder;
 import com.microsoft.quick.auth.signin.signinclient.SingleApplicationHolder;
 import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.DirectToThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
 import com.microsoft.quick.auth.signin.consumer.AcquireClientApplicationTask;
 import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class MSQASignInClient implements SignInClient {
     private static final String TAG = MSQASignInClient.class.getSimpleName();
@@ -50,7 +48,9 @@ public final class MSQASignInClient implements SignInClient {
         return MSQASignInClient.SingletonHolder.sInstance;
     }
 
-    public void setSignInOptions(Context context, final MQASignInOptions signInOptions) {
+    public synchronized void setSignInOptions(@NonNull Context context,
+                                              final @NonNull MQASignInOptions signInOptions) {
+        if (mClientHolder != null) return;
         mClientHolder = new SingleApplicationHolder(context, signInOptions.getConfigResourceId());
         MSQALogger.getInstance().init(context);
         setEnableLogcatLog(signInOptions.isEnableLogcatLog());
@@ -86,7 +86,8 @@ public final class MSQASignInClient implements SignInClient {
      *                       designated
      *                       places.
      */
-    public void setExternalLogger(final @NonNull ILogger externalLogger) {
+    public void setExternalLogger(final ILogger externalLogger) {
+        if (externalLogger == null) return;
         MSQALogger.getInstance().setExternalLogger(externalLogger);
     }
 
@@ -99,7 +100,7 @@ public final class MSQASignInClient implements SignInClient {
                 .taskConvert(new SignInTask(activity, mScopes, tracker))
                 .convert(new AcquireUserIdTask(tracker))
                 .convert(new AcquireUserPhotoTask(tracker))
-                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .nextTaskSchedulerOn(DirectThreadSwitcher.directToMainWhenCreateInMain())
                 .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccount) {
@@ -116,34 +117,36 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onCancel() {
                         tracker.track(TAG, "inner request signIn api cancel");
+                        completeListener.onComplete(null, MSQACancelException.create());
                     }
                 });
     }
 
 
     @Override
-    public void signOut(@NonNull final OnCompleteListener<Boolean> callback) {
+    public void signOut(@NonNull final OnCompleteListener<Boolean> completeListener) {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("signOut");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
                 .convert(new SignOutTask(tracker))
-                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .nextTaskSchedulerOn(DirectThreadSwitcher.directToMainWhenCreateInMain())
                 .start(new Consumer<Boolean>() {
                     @Override
                     public void onSuccess(Boolean b) {
                         tracker.track(TAG, "inner request signOut api result=" + b);
-                        callback.onComplete(b, null);
+                        completeListener.onComplete(b, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
                         tracker.track(TAG, "inner request signOut api error:" + t);
-                        callback.onComplete(false, MSQASignInException.create(t));
+                        completeListener.onComplete(false, MSQASignInException.create(t));
                     }
 
                     @Override
                     public void onCancel() {
                         tracker.track(TAG, "inner request signOut api cancel");
+                        completeListener.onComplete(null, MSQACancelException.create());
                     }
                 });
     }
@@ -157,7 +160,7 @@ public final class MSQASignInClient implements SignInClient {
                 .taskConvert(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
                 .convert(new AcquireUserIdTask(tracker))
                 .convert(new AcquireUserPhotoTask(tracker))
-                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .nextTaskSchedulerOn(DirectThreadSwitcher.directToMainWhenCreateInMain())
                 .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccountInfo) {
@@ -181,6 +184,7 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onCancel() {
                         tracker.track(TAG, "inner request getCurrentSignInAccount api cancel");
+                        completeListener.onComplete(null, MSQACancelException.create());
                     }
                 });
     }
@@ -191,8 +195,8 @@ public final class MSQASignInClient implements SignInClient {
         ISignInClientHolder signClient = mClientHolder;
         final MSQATrackerUtil tracker = new MSQATrackerUtil("acquireToken");
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
-                .taskConvert(new AcquireTokenTask(activity, scopes, null, tracker))
-                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .taskConvert(new AcquireTokenTask(activity, scopes, tracker))
+                .nextTaskSchedulerOn(DirectThreadSwitcher.directToMainWhenCreateInMain())
                 .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
@@ -210,6 +214,7 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onCancel() {
                         tracker.track(TAG, "inner request acquireToken api cancel");
+                        completeListener.onComplete(null, MSQACancelException.create());
                     }
                 });
     }
@@ -222,7 +227,7 @@ public final class MSQASignInClient implements SignInClient {
         AcquireClientApplicationTask.getApplicationTask(signClient, tracker)
                 .convert(new AcquireTokenSilentTask(scopes, tracker))
                 .errorConvert(new TokenSilentErrorWrapTask(tracker))
-                .nextTaskSchedulerOn(DirectToThreadSwitcher.directToMainWhenCreateInMain())
+                .nextTaskSchedulerOn(DirectThreadSwitcher.directToMainWhenCreateInMain())
                 .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
@@ -240,6 +245,7 @@ public final class MSQASignInClient implements SignInClient {
                     @Override
                     public void onCancel() {
                         tracker.track(TAG, "inner request acquireTokenSilent api cancel");
+                        completeListener.onComplete(null, MSQACancelException.create());
                     }
                 });
     }

@@ -24,8 +24,8 @@ public interface AccountInfo {
     String getId();
 
     /**
-     * @return User photo bitmap
+     * @return User photo base64 encoded data.
      */
     @Nullable
-    Bitmap getPhoto();
+    String getPhoto();
 }

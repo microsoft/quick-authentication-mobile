@@ -38,8 +38,10 @@ public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
             microsoftAccount.setId(jsonObject.optString("id"));
             mTracker.track(TAG, "request graph api to get account info success");
         } else {
-            MSQALogger.getInstance().error(TAG, "request account with graph api return empty result error", null);
-            mTracker.track(TAG, "request graph api to get account info error: return empty result error");
+            MSQALogger.getInstance().error(TAG, "request account with graph api return empty " +
+                    "result error", null);
+            mTracker.track(TAG, "request graph api to get account info error: return empty result" +
+                    " error");
             throw new MSQASignInException(MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
                     MSQAErrorString.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
         }

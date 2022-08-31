@@ -13,7 +13,7 @@ public class MSQAAccountInfo implements AccountInfo {
     private String mFullName;
     private String mUserName;
     private String mId;
-    private Bitmap mUserPhoto;
+    private String mUserPhoto;
     private IAccount mIAccount;
 
     @NonNull
@@ -41,11 +41,11 @@ public class MSQAAccountInfo implements AccountInfo {
 
     @Nullable
     @Override
-    public Bitmap getPhoto() {
+    public String getPhoto() {
         return mUserPhoto;
     }
 
-    public void setUserPhoto(Bitmap userPhoto) {
+    public void setUserPhoto(String userPhoto) {
         this.mUserPhoto = userPhoto;
     }
 
