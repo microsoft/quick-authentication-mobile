@@ -93,6 +93,8 @@
   [SampleAppDelegate setCurrentViewController:[SampleLoginViewController
                                                   sharedViewController]];
 }
+
+
 - (IBAction)fetchTokenSilent:(id)sender {
   [MSQASignIn.sharedInstance
       acquireTokenSilentWithScopes:@[ @"User.Read" ]
