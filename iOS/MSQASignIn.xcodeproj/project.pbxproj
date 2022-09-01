@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */; };
+		29A71EC828BF548900A449D9 /* Pods_MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */; };
+		29A71EC928BF548900A449D9 /* Pods_MSQASignIn.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		29A71ECC28BF556D00A449D9 /* Pods_MSQASignIn.framework in Resources */ = {isa = PBXBuildFile; fileRef = 29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */; };
+		29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC397028A6551300699274 /* MSQASignIn_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 292FB4D528B755D000E846A5 /* MSQASignInButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC394428A63F6E00699274 /* MSQASignIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993A28AB86850029F4FB /* MSQAAccountData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29E06DDC28B8C6B8003D558A /* MSQASignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DC396D28A64EFF00699274 /* MSQASignIn.m */; };
+		29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		29E06DDE28B8C6B8003D558A /* MSQAPhotoFetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 29F7C82728B32DB1003FF9F2 /* MSQAPhotoFetcher.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		29E06DDF28B8C6B8003D558A /* MSQAPhotoFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */; };
+		29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */ = {isa = PBXBuildFile; fileRef = 29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */; };
+		29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 292FB4D628B755D000E846A5 /* MSQASignInButton.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		29A71ECA28BF548900A449D9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				29A71EC928BF548900A449D9 /* Pods_MSQASignIn.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		24962992F81A856753ED96CB /* Pods-MSQASignIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignIn.release.xcconfig"; path = "Target Support Files/Pods-MSQASignIn/Pods-MSQASignIn.release.xcconfig"; sourceTree = "<group>"; };
+		2900BB6628AA5A800025CF91 /* Podfile.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Podfile.md; sourceTree = "<group>"; };
+		292FB4D528B755D000E846A5 /* MSQASignInButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInButton.h; sourceTree = "<group>"; };
+		292FB4D628B755D000E846A5 /* MSQASignInButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignInButton.m; sourceTree = "<group>"; };
+		2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAConfiguration.h; sourceTree = "<group>"; };
+		2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAConfiguration.m; sourceTree = "<group>"; };
+		29A9925C28BF52FD00C2F474 /* MSAL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSAL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29A9926428BF53BB00C2F474 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_MSQASignIn.framework; path = "../../Library/Developer/Xcode/DerivedData/MQASignIn-awsapmvimhyqyhgaqztbskkqntbz/Build/Products/Debug-iphonesimulator/Pods_MSQASignIn.framework"; sourceTree = "<group>"; };
+		29A9926628BF53C900C2F474 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = "../../Library/Developer/Xcode/DerivedData/MQASignIn-awsapmvimhyqyhgaqztbskkqntbz/Build/Products/Debug-iphonesimulator/MSAL/MSAL.framework"; sourceTree = "<group>"; };
+		29AD993A28AB86850029F4FB /* MSQAAccountData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountData.h; sourceTree = "<group>"; };
+		29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountData.m; sourceTree = "<group>"; };
+		29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountData_Private.h; sourceTree = "<group>"; };
+		29DC394428A63F6E00699274 /* MSQASignIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn.h; sourceTree = "<group>"; };
+		29DC394528A63F6E00699274 /* MSQASignIn.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MSQASignIn.docc; sourceTree = "<group>"; };
+		29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSQASignInTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29DC396D28A64EFF00699274 /* MSQASignIn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignIn.m; sourceTree = "<group>"; };
+		29DC397028A6551300699274 /* MSQASignIn_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn_Private.h; sourceTree = "<group>"; };
+		29E06DD128B8C695003D558A /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29F7C82728B32DB1003FF9F2 /* MSQAPhotoFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAPhotoFetcher.h; sourceTree = "<group>"; };
+		29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAPhotoFetcher.m; sourceTree = "<group>"; };
+		6D6EB6F9946EC7CCED87709B /* Pods-MQASignIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQASignIn.debug.xcconfig"; path = "Target Support Files/Pods-MQASignIn/Pods-MQASignIn.debug.xcconfig"; sourceTree = "<group>"; };
+		75DF8F37E45BF9ECF33EA396 /* Pods-MSQASignIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignIn.debug.xcconfig"; path = "Target Support Files/Pods-MSQASignIn/Pods-MSQASignIn.debug.xcconfig"; sourceTree = "<group>"; };
+		A16B447A126B0F3789639B90 /* Pods-MQASignIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQASignIn.release.xcconfig"; path = "Target Support Files/Pods-MQASignIn/Pods-MQASignIn.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		29DC394828A63F6E00699274 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29E06DCE28B8C695003D558A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29A71EC828BF548900A449D9 /* Pods_MSQASignIn.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		29DC393728A63F6E00699274 = {
+			isa = PBXGroup;
+			children = (
+				29A9926628BF53C900C2F474 /* MSAL.framework */,
+				29A9926428BF53BB00C2F474 /* Pods_MSQASignIn.framework */,
+				29DC394328A63F6E00699274 /* MSQASignIn */,
+				29DC394228A63F6E00699274 /* Products */,
+				6BAD592ECC605B3C63738355 /* Pods */,
+				999B8D8628C207D0C0D40B64 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		29DC394228A63F6E00699274 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */,
+				29E06DD128B8C695003D558A /* MSQASignIn.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29DC394328A63F6E00699274 /* MSQASignIn */ = {
+			isa = PBXGroup;
+			children = (
+				29DC396F28A653A500699274 /* public */,
+				29DC396C28A6498100699274 /* src */,
+				29DC394528A63F6E00699274 /* MSQASignIn.docc */,
+				2900BB6628AA5A800025CF91 /* Podfile.md */,
+			);
+			path = MSQASignIn;
+			sourceTree = "<group>";
+		};
+		29DC396C28A6498100699274 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
+				29DC396D28A64EFF00699274 /* MSQASignIn.m */,
+				29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */,
+				2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */,
+				29F7C82728B32DB1003FF9F2 /* MSQAPhotoFetcher.h */,
+				29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */,
+				29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */,
+				292FB4D628B755D000E846A5 /* MSQASignInButton.m */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		29DC396F28A653A500699274 /* public */ = {
+			isa = PBXGroup;
+			children = (
+				292FB4D528B755D000E846A5 /* MSQASignInButton.h */,
+				2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */,
+				29DC394428A63F6E00699274 /* MSQASignIn.h */,
+				29AD993A28AB86850029F4FB /* MSQAAccountData.h */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
+		6BAD592ECC605B3C63738355 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6D6EB6F9946EC7CCED87709B /* Pods-MQASignIn.debug.xcconfig */,
+				A16B447A126B0F3789639B90 /* Pods-MQASignIn.release.xcconfig */,
+				75DF8F37E45BF9ECF33EA396 /* Pods-MSQASignIn.debug.xcconfig */,
+				24962992F81A856753ED96CB /* Pods-MSQASignIn.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		999B8D8628C207D0C0D40B64 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */,
+				29A9925C28BF52FD00C2F474 /* MSAL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		29E06DCC28B8C695003D558A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */,
+				29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */,
+				2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */,
+				29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */,
+				29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */,
+				29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */,
+				29E06DDE28B8C6B8003D558A /* MSQAPhotoFetcher.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		29DC394A28A63F6E00699274 /* MSQASignInTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29DC395828A63F6E00699274 /* Build configuration list for PBXNativeTarget "MSQASignInTests" */;
+			buildPhases = (
+				29DC394728A63F6E00699274 /* Sources */,
+				29DC394828A63F6E00699274 /* Frameworks */,
+				29DC394928A63F6E00699274 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MSQASignInTests;
+			productName = MQASignInTests;
+			productReference = 29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		29E06DD028B8C695003D558A /* MSQASignIn */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29E06DD528B8C695003D558A /* Build configuration list for PBXNativeTarget "MSQASignIn" */;
+			buildPhases = (
+				2AFC43B3DB2EB76B7F588147 /* [CP] Check Pods Manifest.lock */,
+				29E06DCC28B8C695003D558A /* Headers */,
+				29E06DCD28B8C695003D558A /* Sources */,
+				29E06DCE28B8C695003D558A /* Frameworks */,
+				29E06DCF28B8C695003D558A /* Resources */,
+				29A71ECA28BF548900A449D9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MSQASignIn;
+			productName = MQASignIn;
+			productReference = 29E06DD128B8C695003D558A /* MSQASignIn.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29DC393828A63F6E00699274 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					29DC394A28A63F6E00699274 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					29E06DD028B8C695003D558A = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 29DC393B28A63F6E00699274 /* Build configuration list for PBXProject "MSQASignIn" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 29DC393728A63F6E00699274;
+			productRefGroup = 29DC394228A63F6E00699274 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				29DC394A28A63F6E00699274 /* MSQASignInTests */,
+				29E06DD028B8C695003D558A /* MSQASignIn */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		29DC394928A63F6E00699274 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29E06DCF28B8C695003D558A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29A71ECC28BF556D00A449D9 /* Pods_MSQASignIn.framework in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2AFC43B3DB2EB76B7F588147 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MSQASignIn-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		29DC394728A63F6E00699274 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29E06DCD28B8C695003D558A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29E06DDC28B8C6B8003D558A /* MSQASignIn.m in Sources */,
+				29E06DDF28B8C6B8003D558A /* MSQAPhotoFetcher.m in Sources */,
+				2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */,
+				29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */,
+				29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		29DC395328A63F6E00699274 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		29DC395428A63F6E00699274 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		29DC395928A63F6E00699274 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UBF8T346G9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MQASignInTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		29DC395A28A63F6E00699274 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = UBF8T346G9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MQASignInTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		29E06DD628B8C695003D558A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75DF8F37E45BF9ECF33EA396 /* Pods-MSQASignIn.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UBF8T346G9;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MQASignIn;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		29E06DD728B8C695003D558A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 24962992F81A856753ED96CB /* Pods-MSQASignIn.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UBF8T346G9;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MQASignIn;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		29DC393B28A63F6E00699274 /* Build configuration list for PBXProject "MSQASignIn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29DC395328A63F6E00699274 /* Debug */,
+				29DC395428A63F6E00699274 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29DC395828A63F6E00699274 /* Build configuration list for PBXNativeTarget "MSQASignInTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29DC395928A63F6E00699274 /* Debug */,
+				29DC395A28A63F6E00699274 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29E06DD528B8C695003D558A /* Build configuration list for PBXNativeTarget "MSQASignIn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29E06DD628B8C695003D558A /* Debug */,
+				29E06DD728B8C695003D558A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29DC393828A63F6E00699274 /* Project object */;
+}
