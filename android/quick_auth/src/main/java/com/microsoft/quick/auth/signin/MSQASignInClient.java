@@ -111,19 +111,19 @@ public final class MSQASignInClient implements SignInClient {
                 .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccount) {
-                        tracker.track(TAG, "inner request signIn api success");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request signIn api success", null);
                         completeListener.onComplete(microsoftAccount, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
-                        tracker.track(TAG, "inner request signIn api error:" + t.getMessage());
+                        tracker.track(TAG, LogLevel.ERROR, "inner request signIn api error", t);
                         completeListener.onComplete(null, MSQASignInError.create(t));
                     }
 
                     @Override
                     public void onCancel() {
-                        tracker.track(TAG, "inner request signIn api cancel");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request signIn api cancel", null);
                         completeListener.onComplete(null, MSQACancelError.create());
                     }
                 });
@@ -136,13 +136,13 @@ public final class MSQASignInClient implements SignInClient {
         mSignInClientApplication.signOut(new ISingleAccountPublicClientApplication.SignOutCallback() {
             @Override
             public void onSignOut() {
-                tracker.track(TAG, "inner request signOut api result= true");
+                tracker.track(TAG, LogLevel.VERBOSE, "inner request signOut api result= true", null);
                 completeListener.onComplete(true, null);
             }
 
             @Override
             public void onError(@NonNull MsalException exception) {
-                tracker.track(TAG, "inner request signOut api error:" + exception.getMessage());
+                tracker.track(TAG, LogLevel.ERROR, "inner request signOut api error", exception);
                 completeListener.onComplete(false, MSQASignInError.create(exception));
             }
         });
@@ -159,26 +159,25 @@ public final class MSQASignInClient implements SignInClient {
                 .start(new Consumer<MSQAAccountInfo>() {
                     @Override
                     public void onSuccess(MSQAAccountInfo microsoftAccountInfo) {
-                        tracker.track(TAG, "inner request getCurrentSignInAccount api success");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request getCurrentSignInAccount api success", null);
                         completeListener.onComplete(microsoftAccountInfo, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
                         if (t instanceof MSQASignInError && (MSQAErrorString.NO_CURRENT_ACCOUNT.equals(((MSQASignInError) t).getErrorCode()))) {
-                            tracker.track(TAG,
-                                    "inner request getCurrentSignInAccount api error:" + MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                            tracker.track(TAG, LogLevel.ERROR, "inner request getCurrentSignInAccount api error: no " +
+                                    "account signed", t);
                             completeListener.onComplete(null, null);
                         } else {
-                            tracker.track(TAG,
-                                    "inner request getCurrentSignInAccount api error:" + t.getMessage());
+                            tracker.track(TAG, LogLevel.ERROR, "inner request getCurrentSignInAccount api error", t);
                             completeListener.onComplete(null, MSQASignInError.create(t));
                         }
                     }
 
                     @Override
                     public void onCancel() {
-                        tracker.track(TAG, "inner request getCurrentSignInAccount api cancel");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request getCurrentSignInAccount api cancel", null);
                         completeListener.onComplete(null, MSQACancelError.create());
                     }
                 });
@@ -194,20 +193,19 @@ public final class MSQASignInClient implements SignInClient {
                 .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
-                        tracker.track(TAG, "inner request acquireToken api success");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request acquireToken api success", null);
                         completeListener.onComplete(tokenResult, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
-                        tracker.track(TAG,
-                                "inner request acquireToken api error:" + t.getMessage());
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request acquireToken api error", t);
                         completeListener.onComplete(null, MSQASignInError.create(t));
                     }
 
                     @Override
                     public void onCancel() {
-                        tracker.track(TAG, "inner request acquireToken api cancel");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request acquireToken api cancel", null);
                         completeListener.onComplete(null, MSQACancelError.create());
                     }
                 });
@@ -222,20 +220,19 @@ public final class MSQASignInClient implements SignInClient {
                 .start(new Consumer<TokenResult>() {
                     @Override
                     public void onSuccess(TokenResult tokenResult) {
-                        tracker.track(TAG, "inner request acquireTokenSilent api success");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request acquireTokenSilent api success", null);
                         completeListener.onComplete(tokenResult, null);
                     }
 
                     @Override
                     public void onError(Exception t) {
                         completeListener.onComplete(null, MSQASignInError.create(t));
-                        tracker.track(TAG,
-                                "inner request acquireTokenSilent api error:" + t.getMessage());
+                        tracker.track(TAG, LogLevel.ERROR, "inner request acquireTokenSilent api error", t);
                     }
 
                     @Override
                     public void onCancel() {
-                        tracker.track(TAG, "inner request acquireTokenSilent api cancel");
+                        tracker.track(TAG, LogLevel.VERBOSE, "inner request acquireTokenSilent api cancel", null);
                         completeListener.onComplete(null, MSQACancelError.create());
                     }
                 });

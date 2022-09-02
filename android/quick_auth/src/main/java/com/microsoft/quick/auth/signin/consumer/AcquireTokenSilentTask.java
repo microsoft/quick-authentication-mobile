@@ -10,6 +10,7 @@ import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQAUiRequiredError;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
@@ -39,7 +40,7 @@ public class AcquireTokenSilentTask implements Convert<IClientApplication,
             @Override
             public void start(@NonNull Consumer<? super TokenResult> consumer) {
                 try {
-                    mTracker.track(TAG, "start request MSAL api acquireTokenSilent");
+                    mTracker.track(TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
                     IAccount iAccount = clientApplication.getCurrentAccount();
                     if (iAccount == null)
                         throw new MSQASignInError(MSQAErrorString.NO_CURRENT_ACCOUNT,
@@ -50,8 +51,8 @@ public class AcquireTokenSilentTask implements Convert<IClientApplication,
                 } catch (Exception exception) {
                     Exception silentException = exception;
                     if (silentException instanceof MsalUiRequiredException) {
-                        mTracker.track(TAG, "token silent error instanceof MsalUiRequiredException, " +
-                                "will return wrap error");
+                        mTracker.track(TAG, LogLevel.ERROR, "token silent error instanceof MsalUiRequiredException " +
+                                "will return wrap error", null);
                         silentException =
                                 new MSQAUiRequiredError(((MsalUiRequiredException) exception).getErrorCode(),
                                         exception.getMessage());

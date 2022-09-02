@@ -2,14 +2,14 @@ package com.microsoft.quick.auth.signin.task;
 
 import androidx.annotation.NonNull;
 
-public class TaskFlatMap<T, R> extends Task<R> {
+public class TaskThen<T, R> extends Task<R> {
 
     private final @NonNull
     Task<T> mSource;
     private final @NonNull
     Convert<? super T, ? extends Task<? extends R>> mConverter;
 
-    public TaskFlatMap(@NonNull Task<T> source, @NonNull Convert<? super T, ? extends Task<?
+    public TaskThen(@NonNull Task<T> source, @NonNull Convert<? super T, ? extends Task<?
             extends R>> converter) {
         this.mSource = source;
         this.mConverter = converter;

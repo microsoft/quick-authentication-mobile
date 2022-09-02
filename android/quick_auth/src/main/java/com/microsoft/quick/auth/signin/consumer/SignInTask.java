@@ -10,6 +10,7 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -41,10 +42,10 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAAccountI
             public void start(@NonNull Consumer<? super Pair<Boolean, IAccount>> consumer) {
                 IAccount iAccount = null;
                 try {
-                    mTracker.track(TAG, "start sign in task");
+                    mTracker.track(TAG, LogLevel.VERBOSE, "start sign in task", null);
                     iAccount = iClientApplication.getCurrentAccount();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    mTracker.track(TAG, LogLevel.ERROR, "current account get error", e);
                 }
                 consumer.onSuccess(new Pair<>(iAccount != null, iAccount));
             }
@@ -59,13 +60,14 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAAccountI
                             return Task.create(new Task.ConsumerHolder<MSQAAccountInfo>() {
                                 @Override
                                 public void start(@NonNull final Consumer<? super MSQAAccountInfo> consumer) {
-                                    mTracker.track(TAG, "start request msal sign in api");
+                                    mTracker.track(TAG, LogLevel.VERBOSE, "start request msal sign in api", null);
                                     iClientApplication.signIn(mActivity, null, mScopes,
                                             new AuthenticationCallback() {
 
                                                 @Override
                                                 public void onSuccess(final IAuthenticationResult authenticationResult) {
-                                                    mTracker.track(TAG, "request msal sign in success");
+                                                    mTracker.track(TAG, LogLevel.VERBOSE, "request msal sign in " +
+                                                            "success", null);
                                                     MSQAAccountInfo account =
                                                             MSQAAccountInfo.getAccount(authenticationResult);
                                                     consumer.onSuccess(account);
@@ -73,15 +75,16 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAAccountI
 
                                                 @Override
                                                 public void onError(final MsalException exception) {
-                                                    mTracker.track(TAG,
-                                                            "request msal sign in error:" + exception.getMessage());
+                                                    mTracker.track(TAG, LogLevel.VERBOSE,
+                                                            "request msal sign in error", exception);
 
                                                     consumer.onError(exception);
                                                 }
 
                                                 @Override
                                                 public void onCancel() {
-                                                    mTracker.track(TAG, "request msal sign in cancel");
+                                                    mTracker.track(TAG, LogLevel.VERBOSE, "request msal sign in " +
+                                                            "cancel", null);
                                                     consumer.onCancel();
                                                 }
                                             });

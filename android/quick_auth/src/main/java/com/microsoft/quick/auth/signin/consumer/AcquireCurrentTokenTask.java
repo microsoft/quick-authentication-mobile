@@ -11,6 +11,7 @@ import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -44,52 +45,58 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication,
         return Task.create(new Task.ConsumerHolder<MSQAAccountInfo>() {
             @Override
             public void start(@NonNull final Consumer<? super MSQAAccountInfo> consumer) {
-                mTracker.track(TAG, "start get current token task");
+                mTracker.track(TAG, LogLevel.VERBOSE, "start get current token task", null);
                 // Get silent token first, if error will request token with acquireToken api
                 try {
                     final IAccount iAccount = clientApplication.getCurrentAccount();
                     if (iAccount == null) {
-                        mTracker.track(TAG,
-                                "get current account error:" + MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                        mTracker.track(TAG, LogLevel.ERROR,
+                                "get current account error no account signed", null);
                         throw new MSQASignInError(MSQAErrorString.NO_CURRENT_ACCOUNT,
                                 MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
                     }
-                    mTracker.track(TAG, "start request MSAL acquireTokenSilent api");
+                    mTracker.track(TAG, LogLevel.VERBOSE,
+                            "start request MSAL acquireTokenSilent api", null);
                     IAuthenticationResult authenticationResult =
                             clientApplication.acquireTokenSilent(iAccount, mScopes);
                     if (authenticationResult != null) {
-                        mTracker.track(TAG, "request MSAL acquireTokenSilent api success");
+                        mTracker.track(TAG, LogLevel.VERBOSE,
+                                "request MSAL acquireTokenSilent api success", null);
                         consumer.onSuccess(MSQAAccountInfo.getAccount(authenticationResult));
                         return;
                     }
                 } catch (final Exception exception) {
-                    mTracker.track(TAG,
-                            "request MSAL acquireTokenSilent api error:" + exception.getMessage());
+                    mTracker.track(TAG, LogLevel.ERROR,
+                            "request MSAL acquireTokenSilent api error", exception);
+
                     if (!mErrorRetry) {
                         consumer.onError(exception);
                         return;
                     }
                 }
-                mTracker.track(TAG, "request MSAL acquireToken api");
+                mTracker.track(TAG, LogLevel.VERBOSE,
+                        "request MSAL acquireToken api", null);
                 clientApplication.acquireToken(mActivity, mScopes,
                         new AuthenticationCallback() {
                             @Override
                             public void onCancel() {
-                                mTracker.track(TAG, "request MSAL acquireToken cancel");
+                                mTracker.track(TAG, LogLevel.VERBOSE,
+                                        "request MSAL acquireToken cancel", null);
                                 consumer.onCancel();
                             }
 
                             @Override
                             public void onSuccess(final IAuthenticationResult authenticationResult) {
-                                mTracker.track(TAG, "request MSAL acquireToken success");
+                                mTracker.track(TAG, LogLevel.VERBOSE,
+                                        "request MSAL acquireToken success", null);
                                 consumer.onSuccess(MSQAAccountInfo.getAccount(authenticationResult));
                             }
 
                             @Override
                             public void onError(final MsalException exception) {
-                                        mTracker.track(TAG,
-                                                "request MSAL acquireToken error:" + exception.getMessage());
-                                        consumer.onError(exception);
+                                mTracker.track(TAG, LogLevel.ERROR,
+                                        "request MSAL acquireToken error", exception);
+                                consumer.onError(exception);
                             }
                         });
             }

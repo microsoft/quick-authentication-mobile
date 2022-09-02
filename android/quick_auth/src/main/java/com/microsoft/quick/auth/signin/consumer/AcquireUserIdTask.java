@@ -11,6 +11,7 @@ import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MSQAAPIConstant;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -36,16 +37,16 @@ public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
             @Override
             protected void startActual(@NonNull Consumer<? super MSQAAccountInfo> consumer) {
                 try {
-                    mTracker.track(TAG, "start request graph api to get account info");
+                    mTracker.track(TAG, LogLevel.VERBOSE, "start request graph api to get account info", null);
                     HttpRequest httpRequest = getHttpRequest(msqaAccountInfo);
                     String result = HttpConnectionClient.request(httpRequest);
                     if (!TextUtils.isEmpty(result)) {
                         JSONObject jsonObject = new JSONObject(result);
                         msqaAccountInfo.setId(jsonObject.optString("id"));
-                        mTracker.track(TAG, "request graph api to get account info success");
+                        mTracker.track(TAG, LogLevel.VERBOSE, "request graph api to get account info success", null);
                     } else {
-                        mTracker.track(TAG, "request graph api to get account info error: return empty result" +
-                                " error");
+                        mTracker.track(TAG, LogLevel.VERBOSE, "request graph api to get account info error: return " +
+                                "empty result error", null);
                         throw new MSQASignInError(MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
                                 MSQAErrorString.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
                     }

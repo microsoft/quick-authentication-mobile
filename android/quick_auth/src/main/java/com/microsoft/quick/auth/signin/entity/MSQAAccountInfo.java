@@ -1,6 +1,7 @@
 package com.microsoft.quick.auth.signin.entity;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,10 +34,10 @@ public class MSQAAccountInfo implements AccountInfo {
         return mUserName;
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getId() {
-        return mId;
+        return !TextUtils.isEmpty(mId) ? mId : "";
     }
 
     @Nullable
@@ -78,7 +79,6 @@ public class MSQAAccountInfo implements AccountInfo {
         account.setAccessToken(authenticationResult.getAccessToken());
         IAccount iAccount = authenticationResult.getAccount();
         account.setIAccount(iAccount);
-        account.setId(account.getId());
         if (iAccount.getClaims() != null && iAccount.getClaims().containsKey("name")) {
             Object name = iAccount.getClaims().get("name");
             account.setFullName(name != null ? name.toString() : null);

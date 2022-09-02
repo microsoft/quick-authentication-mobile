@@ -2,6 +2,7 @@ package com.microsoft.quick.auth.signin.entity;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public interface AccountInfo {
@@ -20,7 +21,7 @@ public interface AccountInfo {
     /**
      * @return CID for MSA.
      */
-    @Nullable
+    @NonNull
     String getId();
 
     /**
