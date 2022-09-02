@@ -25,7 +25,7 @@ public class AcquireTokenSilentTask implements Convert<IClientApplication,
     final String[] mScopes;
     private @NonNull
     final MSQATracker mTracker;
-    private static final String TAG = AcquireTokenSilentTask.class.getSimpleName();
+    private static final String TAG = "AcquireTokenSilentTask";
 
     public AcquireTokenSilentTask(@NonNull final String[] scopes,
                                   @NonNull final MSQATracker tracker) {

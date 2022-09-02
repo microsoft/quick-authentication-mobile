@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.logger.ILogger;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
-public class MQASignInOptions {
+public class MSQASignInOptions {
     private final int mConfigResourceId;
     private final boolean mEnableLogcatLog;
     private final @Nullable
@@ -13,7 +13,7 @@ public class MQASignInOptions {
     private final @LogLevel
     int mLogLevel;
 
-    public MQASignInOptions(MQASignInOptions.Builder builder) {
+    public MSQASignInOptions(MSQASignInOptions.Builder builder) {
         mConfigResourceId = builder.mConfigResourceId;
         mEnableLogcatLog = builder.mEnableLogcatLog;
         mExternalLogger = builder.mExternalLogger;
@@ -69,8 +69,8 @@ public class MQASignInOptions {
             return this;
         }
 
-        public MQASignInOptions build() {
-            return new MQASignInOptions(this);
+        public MSQASignInOptions build() {
+            return new MSQASignInOptions(this);
         }
     }
 }

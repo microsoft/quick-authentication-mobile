@@ -8,8 +8,7 @@ import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
-import com.microsoft.quick.auth.signin.http.MSQAAPI;
-import com.microsoft.quick.auth.signin.logger.MSQALogger;
+import com.microsoft.quick.auth.signin.http.MSQAAPIConstant;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -24,7 +23,7 @@ import java.net.HttpURLConnection;
 
 public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
         Task<MSQAAccountInfo>> {
-    private static final String TAG = AcquireUserPhotoTask.class.getSimpleName();
+    private static final String TAG = "AcquireUserPhotoTask";
     private @NonNull
     final MSQATracker mTracker;
 
@@ -49,8 +48,6 @@ public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
                         mTracker.track(TAG, "request graph api to get user photo success");
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    MSQALogger.getInstance().error(TAG, "acquire photo api error", e);
                     mTracker.track(TAG, "request photo api error:" + e.getMessage());
                 } finally {
                     HttpConnectionClient.safeCloseStream(responseStream);
@@ -64,11 +61,11 @@ public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
 
     private static HttpRequest createRequest(MSQAAccountInfo microsoftAccountInfo) {
         return new HttpRequest.Builder()
-                .setUrl(MSQAAPI.MS_GRAPH_USER_PHOTO_LARGEST)
+                .setUrl(MSQAAPIConstant.MS_GRAPH_USER_PHOTO_LARGEST)
                 .setHttpMethod(HttpMethod.GET)
                 .addHeader("Content-Type", "image/jpg")
                 .addHeader("Authorization",
-                        MSQAAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccountInfo.getAccessToken())
+                        MSQAAPIConstant.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccountInfo.getAccessToken())
                 .builder();
     }
 
