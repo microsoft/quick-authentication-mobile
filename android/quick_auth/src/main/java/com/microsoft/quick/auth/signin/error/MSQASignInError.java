@@ -3,13 +3,10 @@ package com.microsoft.quick.auth.signin.error;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.internal.MsalUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MSQASignInError extends Exception {
 
     private final String mErrorCode;
-    private final List<Exception> mSuppressedException;
+    private Exception mSuppressedException;
 
     public MSQASignInError() {
         this(null);
@@ -45,17 +42,14 @@ public class MSQASignInError extends Exception {
                            final Throwable throwable) {
         super(errorMessage, throwable);
         mErrorCode = errorCode;
-        this.mSuppressedException = new ArrayList<>();
     }
 
-    public void addSuppressedException(Exception e) {
-        if (e != null) {
-            this.mSuppressedException.add(e);
-        }
+    public void setSuppressedException(Exception e) {
+        mSuppressedException = e;
     }
 
-    public List<Exception> getSuppressedException() {
-        return this.mSuppressedException;
+    public Exception getSuppressedException() {
+        return mSuppressedException;
     }
 
     /**
@@ -92,7 +86,7 @@ public class MSQASignInError extends Exception {
             signInException = new MSQASignInError(MSQAErrorString.UNKNOWN_ERROR,
                     exception.getMessage());
         }
-        signInException.addSuppressedException(exception);
+        signInException.setSuppressedException(exception);
         return signInException;
     }
 }

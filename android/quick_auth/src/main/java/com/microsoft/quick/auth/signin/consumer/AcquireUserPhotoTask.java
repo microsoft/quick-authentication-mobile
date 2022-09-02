@@ -9,6 +9,7 @@ import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MSQAAPIConstant;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -33,7 +34,7 @@ public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
 
     @Override
     public Task<MSQAAccountInfo> convert(@NonNull final MSQAAccountInfo msqaAccountInfo) throws Exception {
-        mTracker.track(TAG, "start request graph api to get user photo");
+        mTracker.track(TAG, LogLevel.VERBOSE, "start request graph api to get user photo", null);
         return new Task<MSQAAccountInfo>() {
             @Override
             protected void startActual(@NonNull Consumer<? super MSQAAccountInfo> consumer) {
@@ -45,10 +46,10 @@ public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
                         responseStream = conn.getInputStream();
                         byte[] bytes = readAllBytes(responseStream);
                         msqaAccountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
-                        mTracker.track(TAG, "request graph api to get user photo success");
+                        mTracker.track(TAG, LogLevel.VERBOSE, "request graph api to get user photo success", null);
                     }
                 } catch (Exception e) {
-                    mTracker.track(TAG, "request photo api error:" + e.getMessage());
+                    mTracker.track(TAG, LogLevel.ERROR, "request photo api error", e);
                 } finally {
                     HttpConnectionClient.safeCloseStream(responseStream);
                 }

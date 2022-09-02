@@ -24,9 +24,9 @@ public abstract class Task<T> {
             }
         });
     }
-    
+
     public <R> Task<R> then(@NonNull Convert<? super T, ? extends Task<? extends R>> mapper) {
-        return new TaskFlatMap<>(this, mapper);
+        return new TaskThen<>(this, mapper);
     }
 
     public Task<T> taskScheduleOn(ThreadSwitcher scheduler) {
