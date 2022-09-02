@@ -6,12 +6,12 @@ import com.microsoft.identity.client.internal.MsalUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MSQASignInException extends Exception {
+public class MSQASignInError extends Exception {
 
     private final String mErrorCode;
     private final List<Exception> mSuppressedException;
 
-    public MSQASignInException() {
+    public MSQASignInError() {
         this(null);
     }
 
@@ -20,29 +20,29 @@ public class MSQASignInException extends Exception {
      *
      * @param errorCode The error code contained in the exception.
      */
-    public MSQASignInException(final String errorCode) {
+    public MSQASignInError(final String errorCode) {
         this(errorCode, null);
     }
 
     /**
-     * Initiates the {@link MSQASignInException} with error code and error message.
+     * Initiates the {@link MSQASignInError} with error code and error message.
      *
      * @param errorCode    The error code contained in the exception.
      * @param errorMessage The error message contained in the exception.
      */
-    public MSQASignInException(final String errorCode, final String errorMessage) {
+    public MSQASignInError(final String errorCode, final String errorMessage) {
         this(errorCode, errorMessage, null);
     }
 
     /**
-     * Initiates the {@link MSQASignInException} with error code, error message and throwable.
+     * Initiates the {@link MSQASignInError} with error code, error message and throwable.
      *
      * @param errorCode    The error code contained in the exception.
      * @param errorMessage The error message contained in the exception.
      * @param throwable    The {@link Throwable} contains the cause for the exception.
      */
-    public MSQASignInException(final String errorCode, final String errorMessage,
-                               final Throwable throwable) {
+    public MSQASignInError(final String errorCode, final String errorMessage,
+                           final Throwable throwable) {
         super(errorMessage, throwable);
         mErrorCode = errorCode;
         this.mSuppressedException = new ArrayList<>();
@@ -59,7 +59,7 @@ public class MSQASignInException extends Exception {
     }
 
     /**
-     * @return The error code for the exception, could be null. {@link MSQASignInException} is
+     * @return The error code for the exception, could be null. {@link MSQASignInError} is
      * the top level base exception, for the constants value of all the error code.
      */
     public String getErrorCode() {
@@ -78,18 +78,18 @@ public class MSQASignInException extends Exception {
         return "";
     }
 
-    public static MSQASignInException create(Exception exception) {
-        if (exception instanceof MSQASignInException) return (MSQASignInException) exception;
+    public static MSQASignInError create(Exception exception) {
+        if (exception instanceof MSQASignInError) return (MSQASignInError) exception;
 
-        MSQASignInException signInException;
+        MSQASignInError signInException;
         if (exception instanceof MsalException) {
-            signInException = new MSQASignInException(((MsalException) exception).getErrorCode(),
+            signInException = new MSQASignInError(((MsalException) exception).getErrorCode(),
                     exception.getMessage());
         } else if (exception instanceof InterruptedException) {
-            signInException = new MSQASignInException(MSQAErrorString.INTERRUPTED_ERROR,
+            signInException = new MSQASignInError(MSQAErrorString.INTERRUPTED_ERROR,
                     exception.getMessage());
         } else {
-            signInException = new MSQASignInException(MSQAErrorString.UNKNOWN_ERROR,
+            signInException = new MSQASignInError(MSQAErrorString.UNKNOWN_ERROR,
                     exception.getMessage());
         }
         signInException.addSuppressedException(exception);

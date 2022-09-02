@@ -10,8 +10,12 @@ import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
 import com.microsoft.quick.auth.signin.http.MSQAAPI;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
+import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
-import com.microsoft.quick.auth.signin.util.MSQATrackerUtil;
+import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.task.Switchers;
+import com.microsoft.quick.auth.signin.task.Task;
+import com.microsoft.quick.auth.signin.util.MSQATracker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,37 +23,43 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 
 public class AcquireUserPhotoTask implements Convert<MSQAAccountInfo,
-        MSQAAccountInfo> {
+        Task<MSQAAccountInfo>> {
     private static final String TAG = AcquireUserPhotoTask.class.getSimpleName();
     private @NonNull
-    final MSQATrackerUtil mTracker;
+    final MSQATracker mTracker;
 
-    public AcquireUserPhotoTask(@NonNull MSQATrackerUtil tracker) {
+    public AcquireUserPhotoTask(@NonNull MSQATracker tracker) {
         mTracker = tracker;
     }
 
     @Override
-    public MSQAAccountInfo convert(@NonNull MSQAAccountInfo microsoftAccountInfo) {
+    public Task<MSQAAccountInfo> convert(@NonNull final MSQAAccountInfo msqaAccountInfo) throws Exception {
         mTracker.track(TAG, "start request graph api to get user photo");
-        InputStream responseStream = null;
-        try {
-            HttpURLConnection conn =
-                    HttpConnectionClient.createHttpURLConnection(createRequest(microsoftAccountInfo));
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                responseStream = conn.getInputStream();
-                byte[] bytes = readAllBytes(responseStream);
-                microsoftAccountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
-                mTracker.track(TAG, "request graph api to get user photo success");
+        return new Task<MSQAAccountInfo>() {
+            @Override
+            protected void startActual(@NonNull Consumer<? super MSQAAccountInfo> consumer) {
+                InputStream responseStream = null;
+                try {
+                    HttpURLConnection conn =
+                            HttpConnectionClient.createHttpURLConnection(createRequest(msqaAccountInfo));
+                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        responseStream = conn.getInputStream();
+                        byte[] bytes = readAllBytes(responseStream);
+                        msqaAccountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
+                        mTracker.track(TAG, "request graph api to get user photo success");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    MSQALogger.getInstance().error(TAG, "acquire photo api error", e);
+                    mTracker.track(TAG, "request photo api error:" + e.getMessage());
+                } finally {
+                    HttpConnectionClient.safeCloseStream(responseStream);
+                }
+                consumer.onSuccess(msqaAccountInfo);
             }
-            return microsoftAccountInfo;
-        } catch (Exception e) {
-            e.printStackTrace();
-            MSQALogger.getInstance().error(TAG, "acquire photo api error", e);
-            mTracker.track(TAG, "request photo api error:" + e.getMessage());
-        } finally {
-            HttpConnectionClient.safeCloseStream(responseStream);
         }
-        return microsoftAccountInfo;
+                .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
+                .nextTaskSchedulerOn(Switchers.mainThread());
     }
 
     private static HttpRequest createRequest(MSQAAccountInfo microsoftAccountInfo) {
