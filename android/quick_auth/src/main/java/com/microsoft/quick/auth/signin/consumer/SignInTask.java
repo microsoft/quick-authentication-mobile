@@ -25,7 +25,7 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAAccountI
     final String[] mScopes;
     private @NonNull
     final MSQATracker mTracker;
-    private static final String TAG = SignInTask.class.getSimpleName();
+    private static final String TAG = "SignInTask";
 
     public SignInTask(@NonNull final Activity activity, @NonNull String[] scopes,
                       @NonNull final MSQATracker tracker) {

@@ -22,7 +22,6 @@ public class SingleClientApplication implements IClientApplication {
     private final @NonNull
     ISingleAccountPublicClientApplication mSignClient;
     private final List<IAccount> mAccounts = new ArrayList<>();
-    private static final String TAG = SingleClientApplication.class.getSimpleName();
 
     public SingleClientApplication(@NonNull ISingleAccountPublicClientApplication signClient) {
         mSignClient = signClient;

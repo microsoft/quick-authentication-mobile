@@ -28,7 +28,7 @@ public class AcquireTokenTask implements Convert<IClientApplication,
     final String[] mScopes;
     private @NonNull
     final MSQATracker mTracker;
-    private static final String TAG = AcquireTokenTask.class.getSimpleName();
+    private static final String TAG = "AcquireTokenTask";
 
     public AcquireTokenTask(@NonNull final Activity activity, @NonNull final String[] scopes,
                             @NonNull final MSQATracker tracker) {

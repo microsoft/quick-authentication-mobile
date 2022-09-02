@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
-import com.microsoft.quick.auth.signin.MQASignInOptions;
+import com.microsoft.quick.auth.signin.MSQASignInOptions;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
@@ -46,7 +46,7 @@ public class IdTokenActivity extends Activity {
                         (iTokenResult, error) -> uploadSignInfo(iTokenResult, error));
             }
         });
-        MSQASignInClient.create(this, new MQASignInOptions.Builder()
+        MSQASignInClient.create(this, new MSQASignInOptions.Builder()
                 .setConfigResourceId(R.raw.auth_config_single_account)
                 .setEnableLogcatLog(true)
                 .setLogLevel(LogLevel.VERBOSE)

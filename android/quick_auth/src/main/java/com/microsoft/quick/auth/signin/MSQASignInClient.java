@@ -33,7 +33,7 @@ import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATracker;
 
 public final class MSQASignInClient implements SignInClient {
-    private static final String TAG = MSQASignInClient.class.getSimpleName();
+    private static final String TAG = "MSQASignInClient";
     private final String[] mScopes;
     private final @NonNull
     IClientApplication mSignInClientApplication;
@@ -44,7 +44,7 @@ public final class MSQASignInClient implements SignInClient {
     }
 
     public static void create(@NonNull final Context context,
-                              @NonNull final MQASignInOptions signInOptions,
+                              @NonNull final MSQASignInOptions signInOptions,
                               @NonNull final ClientCreatedListener listener) {
         PublicClientApplication.createSingleAccountPublicClientApplication(context.getApplicationContext(),
                 signInOptions.getConfigResourceId(),

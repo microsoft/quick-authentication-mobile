@@ -14,10 +14,9 @@ import androidx.annotation.Nullable;
 import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
-import com.microsoft.quick.auth.signin.MQASignInOptions;
+import com.microsoft.quick.auth.signin.MSQASignInOptions;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
-import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
@@ -57,8 +56,8 @@ public class SignInActivity extends Activity {
         msAcquireTokenButton = findViewById(R.id.ms_acquire_token_button);
         msAcquireTokenSilentButton = findViewById(R.id.ms_acquire_token_silent_button);
         scops = new String[]{"user.read"};
-        
-        MSQASignInClient.create(this, new MQASignInOptions.Builder()
+
+        MSQASignInClient.create(this, new MSQASignInOptions.Builder()
                 .setConfigResourceId(R.raw.auth_config_single_account)
                 .setEnableLogcatLog(true)
                 .setLogLevel(LogLevel.VERBOSE)

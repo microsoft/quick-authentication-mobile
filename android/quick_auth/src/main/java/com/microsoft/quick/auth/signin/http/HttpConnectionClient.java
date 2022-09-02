@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class HttpConnectionClient {
 
-    private static final String TAG = HttpConnectionClient.class.getSimpleName();
+    private static final String TAG = "HttpConnectionClient";
 
     @WorkerThread
     public static String request(@NonNull HttpRequest request) throws IOException,

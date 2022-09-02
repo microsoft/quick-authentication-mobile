@@ -11,7 +11,6 @@ import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import com.microsoft.quick.auth.signin.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -24,7 +23,7 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication,
 
     private final @NonNull
     Activity mActivity;
-    private static final String TAG = AcquireCurrentTokenTask.class.getSimpleName();
+    private static final String TAG = "AcquireCurrentTokenTask";
     private final boolean mErrorRetry;
     private @NonNull
     final MSQATracker mTracker;
@@ -64,15 +63,12 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication,
                         return;
                     }
                 } catch (final Exception exception) {
+                    mTracker.track(TAG,
+                            "request MSAL acquireTokenSilent api error:" + exception.getMessage());
                     if (!mErrorRetry) {
-                        mTracker.track(TAG,
-                                "request MSAL acquireTokenSilent api error:" + exception.getMessage());
-                                consumer.onError(exception);
+                        consumer.onError(exception);
                         return;
                     }
-                    MSQALogger.getInstance().error(TAG, "acquire token silent catch an error, " +
-                            "will start acquire " +
-                            "token", exception);
                 }
                 mTracker.track(TAG, "request MSAL acquireToken api");
                 clientApplication.acquireToken(mActivity, mScopes,
@@ -94,9 +90,6 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication,
                                         mTracker.track(TAG,
                                                 "request MSAL acquireToken error:" + exception.getMessage());
                                         consumer.onError(exception);
-                                MSQALogger.getInstance().error(TAG, "acquire token catch an error" +
-                                                " acquire token",
-                                        exception);
                             }
                         });
             }

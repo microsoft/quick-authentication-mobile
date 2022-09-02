@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
 public class MSQATracker {
-    private static final String TAG = MSQATracker.class.getSimpleName();
+    private static final String TAG = "MSQATracker";
     private final @NonNull
     String mFrom;
     private final long mCurrentTime;

@@ -10,8 +10,7 @@ import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.http.HttpConnectionClient;
 import com.microsoft.quick.auth.signin.http.HttpMethod;
 import com.microsoft.quick.auth.signin.http.HttpRequest;
-import com.microsoft.quick.auth.signin.http.MSQAAPI;
-import com.microsoft.quick.auth.signin.logger.MSQALogger;
+import com.microsoft.quick.auth.signin.http.MSQAAPIConstant;
 import com.microsoft.quick.auth.signin.task.Consumer;
 import com.microsoft.quick.auth.signin.task.Convert;
 import com.microsoft.quick.auth.signin.task.DirectThreadSwitcher;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
         Task<MSQAAccountInfo>> {
 
-    private static final String TAG = AcquireUserIdTask.class.getSimpleName();
+    private static final String TAG = "AcquireUserIdTask";
     private @NonNull
     final MSQATracker mTracker;
 
@@ -45,8 +44,6 @@ public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
                         msqaAccountInfo.setId(jsonObject.optString("id"));
                         mTracker.track(TAG, "request graph api to get account info success");
                     } else {
-                        MSQALogger.getInstance().error(TAG, "request account with graph api return empty " +
-                                "result error", null);
                         mTracker.track(TAG, "request graph api to get account info error: return empty result" +
                                 " error");
                         throw new MSQASignInError(MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
@@ -63,11 +60,11 @@ public class AcquireUserIdTask implements Convert<MSQAAccountInfo,
 
     private HttpRequest getHttpRequest(MSQAAccountInfo microsoftAccount) {
         return new HttpRequest.Builder()
-                .setUrl(MSQAAPI.MS_GRAPH_USER_INFO_PATH)
+                .setUrl(MSQAAPIConstant.MS_GRAPH_USER_INFO_PATH)
                 .setHttpMethod(HttpMethod.GET)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization",
-                        MSQAAPI.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccount.getAccessToken())
+                        MSQAAPIConstant.MS_GRAPH_TK_REQUEST_PREFIX + microsoftAccount.getAccessToken())
                 .builder();
     }
 }
