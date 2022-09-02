@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread;
 
 import com.microsoft.identity.common.java.AuthenticationConstants;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 
 import java.io.BufferedReader;
@@ -23,7 +23,7 @@ public class HttpConnectionClient {
 
     @WorkerThread
     public static String request(@NonNull HttpRequest request) throws IOException,
-            MSQASignInException {
+            MSQASignInError {
         InputStream responseStream = null;
         try {
             HttpURLConnection conn = HttpConnectionClient.createHttpURLConnection(request);
@@ -33,7 +33,7 @@ public class HttpConnectionClient {
                         HttpConnectionClient.convertStreamToString(responseStream);
             } else {
                 responseStream = conn.getErrorStream();
-                throw new MSQASignInException(MSQAErrorString.HTTP_REQUEST_ERROR,
+                throw new MSQASignInError(MSQAErrorString.HTTP_REQUEST_ERROR,
                         HttpConnectionClient.convertStreamToString(responseStream));
             }
         } finally {

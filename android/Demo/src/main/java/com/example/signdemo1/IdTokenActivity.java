@@ -6,15 +6,16 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.microsoft.quick.auth.signin.ClientCreatedListener;
+import com.microsoft.quick.auth.signin.MQASignInOptions;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.SignInClient;
-import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.TokenResult;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 
 public class IdTokenActivity extends Activity {
 
@@ -45,8 +46,25 @@ public class IdTokenActivity extends Activity {
                         (iTokenResult, error) -> uploadSignInfo(iTokenResult, error));
             }
         });
-        mSignInClient = MSQASignInClient.sharedInstance();
-        getCurrentInfo();
+        MSQASignInClient.create(this, new MQASignInOptions.Builder()
+                .setConfigResourceId(R.raw.auth_config_single_account)
+                .setEnableLogcatLog(true)
+                .setLogLevel(LogLevel.VERBOSE)
+                .setExternalLogger((logLevel, message) -> {
+                    // get log message in this
+                })
+                .build(), new ClientCreatedListener() {
+            @Override
+            public void onCreated(@NonNull MSQASignInClient client) {
+                mSignInClient = client;
+                getCurrentInfo();
+            }
+
+            @Override
+            public void onError(@NonNull MSQASignInError error) {
+                mTokenResult.setText("create sign in client error:" + error.getMessage());
+            }
+        });
     }
 
     private void uploadSignInfo(TokenResult tokenResult, Exception error) {
@@ -55,7 +73,6 @@ public class IdTokenActivity extends Activity {
         } else {
             mTokenResult.setText(error != null ? "request error:" + error.getMessage() : "");
         }
-        getCurrentInfo();
     }
 
     private void getCurrentInfo() {

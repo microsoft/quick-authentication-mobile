@@ -16,16 +16,17 @@ public abstract class Task<T> {
 
     protected abstract void startActual(@NonNull Consumer<? super T> consumer);
 
-    public <R> Task<R> convert(@NonNull Convert<? super T, ? extends R> mapper) {
-        return new TaskMap<>(this, mapper);
+    public static <T> Task<T> with(@NonNull final T value) {
+        return Task.create(new ConsumerHolder<T>() {
+            @Override
+            public void start(@NonNull Consumer<? super T> consumer) {
+                consumer.onSuccess(value);
+            }
+        });
     }
-
-    public <R> Task<R> taskConvert(@NonNull Convert<? super T, ? extends Task<? extends R>> mapper) {
+    
+    public <R> Task<R> then(@NonNull Convert<? super T, ? extends Task<? extends R>> mapper) {
         return new TaskFlatMap<>(this, mapper);
-    }
-
-    public Task<T> errorConvert(@NonNull Convert<? super Exception, ? extends Task<? extends T>> mapper) {
-        return new TaskError<>(this, mapper);
     }
 
     public Task<T> taskScheduleOn(ThreadSwitcher scheduler) {

@@ -10,13 +10,14 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
+import com.microsoft.identity.client.SilentAuthenticationCallback;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleClientApplication implements ISignInClientApplication {
+public class SingleClientApplication implements IClientApplication {
 
     private final @NonNull
     ISingleAccountPublicClientApplication mSignClient;
@@ -35,8 +36,13 @@ public class SingleClientApplication implements ISignInClientApplication {
     }
 
     @Override
-    public boolean signOut(@Nullable IAccount account) throws Exception {
+    public boolean signOut() throws Exception {
         return mSignClient.signOut();
+    }
+
+    @Override
+    public void signOut(@NonNull ISingleAccountPublicClientApplication.SignOutCallback callback) {
+        mSignClient.signOut(callback);
     }
 
     @Override
@@ -46,7 +52,13 @@ public class SingleClientApplication implements ISignInClientApplication {
     }
 
     @Override
-    public void acquireToken(@NonNull Activity activity, @Nullable IAccount account,
+    public void acquireTokenSilentAsync(@NonNull IAccount account, @NonNull String[] scopes,
+                                        @NonNull SilentAuthenticationCallback callback) {
+        mSignClient.acquireTokenSilentAsync(scopes, account.getAuthority(), callback);
+    }
+
+    @Override
+    public void acquireToken(@NonNull Activity activity,
                              @NonNull String[] scopes,
                              @NonNull AuthenticationCallback callback) {
         mSignClient.acquireToken(activity, scopes, callback);
@@ -60,6 +72,11 @@ public class SingleClientApplication implements ISignInClientApplication {
             return currentAccount.getCurrentAccount();
         }
         return null;
+    }
+
+    @Override
+    public void getCurrentAccountAsync(@NonNull ISingleAccountPublicClientApplication.CurrentAccountCallback callback) {
+        mSignClient.getCurrentAccountAsync(callback);
     }
 
     @Nullable

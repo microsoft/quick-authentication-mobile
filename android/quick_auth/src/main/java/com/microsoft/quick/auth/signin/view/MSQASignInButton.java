@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.R;
+import com.microsoft.quick.auth.signin.SignInClient;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.entity.AccountInfo;
 
@@ -43,6 +44,7 @@ public class MSQASignInButton extends FrameLayout {
     private TextView mSignInText;
     private int mContainerDefaultWidth;
     private Activity mActivity;
+    private MSQASignInClient mClient;
     private OnCompleteListener<AccountInfo> mListener;
 
     public MSQASignInButton(@NonNull Context context) {
@@ -101,9 +103,10 @@ public class MSQASignInButton extends FrameLayout {
      * @param onCompleteListener A callback to be invoked when sign in success and will return
      *                           sign in account info.
      */
-    public void setSignInCallback(@NonNull Activity activity,
+    public void setSignInCallback(@NonNull Activity activity, @NonNull MSQASignInClient client,
                                   @NonNull OnCompleteListener<AccountInfo> onCompleteListener) {
         mActivity = activity;
+        mClient = client;
         mListener = onCompleteListener;
     }
 
@@ -206,8 +209,8 @@ public class MSQASignInButton extends FrameLayout {
     }
 
     private void onButtonClick() {
-        if (mActivity != null && mListener != null) {
-            MSQASignInClient.sharedInstance().signIn(mActivity, mListener);
+        if (mActivity != null && mClient != null && mListener != null) {
+            mClient.signIn(mActivity, mListener);
         }
     }
 

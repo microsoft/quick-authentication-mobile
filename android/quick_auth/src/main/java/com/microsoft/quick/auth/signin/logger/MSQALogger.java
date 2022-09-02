@@ -10,16 +10,20 @@ import com.microsoft.identity.client.Logger;
 import com.microsoft.identity.common.java.util.StringUtil;
 import com.microsoft.identity.common.java.util.ThrowableUtil;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MSQALogger {
     private final MSQALogCatLogger MSQALogCatLogger;
     private ILogger mExternalLogger;
     private boolean mEnableLogcatLog;
     private @LogLevel
     int mLogLevel;
+    private AtomicBoolean mIsInitialized;
 
     private MSQALogger() {
         MSQALogCatLogger = new MSQALogCatLogger();
         mLogLevel = LogLevel.VERBOSE;
+        mIsInitialized = new AtomicBoolean(false);
     }
 
     private static class SingletonHolder {
@@ -44,6 +48,8 @@ public class MSQALogger {
     };
 
     public void init(Context context) {
+        if (mIsInitialized.get()) return;
+        mIsInitialized.set(true);
         // Disable Sdk android logcat log by default.
         Logger.getInstance().setEnableLogcatLog(false);
         Logger.getInstance().setLogLevel(Logger.LogLevel.VERBOSE);
