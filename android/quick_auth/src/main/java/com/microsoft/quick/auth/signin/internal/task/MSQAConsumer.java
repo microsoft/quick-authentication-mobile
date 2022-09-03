@@ -1,6 +1,6 @@
 package com.microsoft.quick.auth.signin.internal.task;
 
-public interface Consumer<T> {
+public interface MSQAConsumer<T> {
 
   void onSuccess(T t);
 

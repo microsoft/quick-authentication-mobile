@@ -12,13 +12,13 @@ import androidx.annotation.Nullable;
 import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
-import com.microsoft.quick.auth.signin.MSQASignInClient;
-import com.microsoft.quick.auth.signin.MSQASignInOptions;
 import com.microsoft.quick.auth.signin.ISignInClient;
 import com.microsoft.quick.auth.signin.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.MSQASignInClient;
+import com.microsoft.quick.auth.signin.MSQASignInOptions;
 import com.microsoft.quick.auth.signin.MSQATokenResult;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.error.MSQAUiRequiredError;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.view.MSQASignInButton;
 
@@ -85,7 +85,7 @@ public class SignInActivity extends Activity {
           }
 
           @Override
-          public void onError(@NonNull MSQASignInError error) {
+          public void onError(@NonNull MSQASignInException error) {
             mStatus.setText("create sign in client error:" + error.getMessage());
           }
         });
@@ -124,7 +124,7 @@ public class SignInActivity extends Activity {
                  * token. - you're introducing a new scope which the user has never consented for.
                  */
                 mTokenResult.setText("");
-                if (error instanceof MSQAUiRequiredError) {
+                if (error instanceof MSQAUiRequiredException) {
                   acquireToken();
                 } else {
                   updateTokenResult(iTokenResult, error);

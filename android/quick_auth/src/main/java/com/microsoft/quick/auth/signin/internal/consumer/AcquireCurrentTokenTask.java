@@ -6,18 +6,19 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 
-public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task<MSQAInnerAccountInfo>> {
+public class AcquireCurrentTokenTask
+    implements MSQATaskFunction<IClientApplication, MSQATask<MSQAAccountInfoInternal>> {
 
   private final @NonNull Activity mActivity;
   private static final String TAG = "AcquireCurrentTokenTask";
@@ -37,12 +38,13 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task
   }
 
   @Override
-  public Task<MSQAInnerAccountInfo> convert(@NonNull final IClientApplication clientApplication)
-      throws Exception {
-    return Task.create(
-            new Task.ConsumerHolder<MSQAInnerAccountInfo>() {
+  public MSQATask<MSQAAccountInfoInternal> apply(
+      @NonNull final IClientApplication clientApplication) {
+    return MSQATask.create(
+            new MSQATask.ConsumerHolder<MSQAAccountInfoInternal>() {
               @Override
-              public void start(@NonNull final Consumer<? super MSQAInnerAccountInfo> consumer) {
+              public void start(
+                  @NonNull final MSQAConsumer<? super MSQAAccountInfoInternal> consumer) {
                 mTracker.track(TAG, LogLevel.VERBOSE, "start get current token task", null);
                 // Get silent token first, if error will request token with acquireToken api
                 try {
@@ -50,7 +52,7 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task
                   if (iAccount == null) {
                     mTracker.track(
                         TAG, LogLevel.ERROR, "get current account error no account signed", null);
-                    throw new MSQASignInError(
+                    throw new MSQASignInException(
                         MSQAErrorString.NO_CURRENT_ACCOUNT,
                         MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
                   }
@@ -61,7 +63,7 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task
                   if (authenticationResult != null) {
                     mTracker.track(
                         TAG, LogLevel.VERBOSE, "request MSAL acquireTokenSilent api success", null);
-                    consumer.onSuccess(MSQAInnerAccountInfo.getAccount(authenticationResult));
+                    consumer.onSuccess(MSQAAccountInfoInternal.getAccount(authenticationResult));
                     return;
                   }
                 } catch (final Exception exception) {
@@ -89,7 +91,8 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task
                       public void onSuccess(final IAuthenticationResult authenticationResult) {
                         mTracker.track(
                             TAG, LogLevel.VERBOSE, "request MSAL acquireToken success", null);
-                        consumer.onSuccess(MSQAInnerAccountInfo.getAccount(authenticationResult));
+                        consumer.onSuccess(
+                            MSQAAccountInfoInternal.getAccount(authenticationResult));
                       }
 
                       @Override
@@ -101,6 +104,6 @@ public class AcquireCurrentTokenTask implements Convert<IClientApplication, Task
                     });
               }
             })
-        .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
+        .upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain());
   }
 }

@@ -7,16 +7,17 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 
-public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAccountInfo>> {
+public class SignInTask
+    implements MSQATaskFunction<IClientApplication, MSQATask<MSQAAccountInfoInternal>> {
 
   private @NonNull final Activity mActivity;
   private @NonNull final String[] mScopes;
@@ -33,12 +34,12 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAcc
   }
 
   @Override
-  public Task<MSQAInnerAccountInfo> convert(@NonNull final IClientApplication iClientApplication)
-      throws Exception {
-    return Task.create(
-            new Task.ConsumerHolder<Pair<Boolean, IAccount>>() {
+  public MSQATask<MSQAAccountInfoInternal> apply(
+      @NonNull final IClientApplication iClientApplication) {
+    return MSQATask.create(
+            new MSQATask.ConsumerHolder<Pair<Boolean, IAccount>>() {
               @Override
-              public void start(@NonNull Consumer<? super Pair<Boolean, IAccount>> consumer) {
+              public void start(@NonNull MSQAConsumer<? super Pair<Boolean, IAccount>> consumer) {
                 IAccount iAccount = null;
                 try {
                   mTracker.track(TAG, LogLevel.VERBOSE, "start sign in task", null);
@@ -50,19 +51,19 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAcc
               }
             })
         .then(
-            new Convert<Pair<Boolean, IAccount>, Task<MSQAInnerAccountInfo>>() {
+            new MSQATaskFunction<Pair<Boolean, IAccount>, MSQATask<MSQAAccountInfoInternal>>() {
               @Override
-              public Task<MSQAInnerAccountInfo> convert(
+              public MSQATask<MSQAAccountInfoInternal> apply(
                   @NonNull Pair<Boolean, IAccount> booleanIAccountPair) {
                 if (booleanIAccountPair.first) {
-                  return Task.with(iClientApplication)
+                  return MSQATask.with(iClientApplication)
                       .then(new AcquireCurrentTokenTask(mActivity, true, mScopes, mTracker));
                 } else {
-                  return Task.create(
-                      new Task.ConsumerHolder<MSQAInnerAccountInfo>() {
+                  return MSQATask.create(
+                      new MSQATask.ConsumerHolder<MSQAAccountInfoInternal>() {
                         @Override
                         public void start(
-                            @NonNull final Consumer<? super MSQAInnerAccountInfo> consumer) {
+                            @NonNull final MSQAConsumer<? super MSQAAccountInfoInternal> consumer) {
                           mTracker.track(
                               TAG, LogLevel.VERBOSE, "start request msal sign in api", null);
                           iClientApplication.signIn(
@@ -75,12 +76,9 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAcc
                                 public void onSuccess(
                                     final IAuthenticationResult authenticationResult) {
                                   mTracker.track(
-                                      TAG,
-                                      LogLevel.VERBOSE,
-                                      "request msal sign in " + "success",
-                                      null);
-                                  MSQAInnerAccountInfo account =
-                                      MSQAInnerAccountInfo.getAccount(authenticationResult);
+                                      TAG, LogLevel.VERBOSE, "request msal sign in success", null);
+                                  MSQAAccountInfoInternal account =
+                                      MSQAAccountInfoInternal.getAccount(authenticationResult);
                                   consumer.onSuccess(account);
                                 }
 
@@ -98,10 +96,7 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAcc
                                 @Override
                                 public void onCancel() {
                                   mTracker.track(
-                                      TAG,
-                                      LogLevel.VERBOSE,
-                                      "request msal sign in " + "cancel",
-                                      null);
+                                      TAG, LogLevel.VERBOSE, "request msal sign in cancel", null);
                                   consumer.onCancel();
                                 }
                               });
@@ -110,6 +105,6 @@ public class SignInTask implements Convert<IClientApplication, Task<MSQAInnerAcc
                 }
               }
             })
-        .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
+        .upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain());
   }
 }

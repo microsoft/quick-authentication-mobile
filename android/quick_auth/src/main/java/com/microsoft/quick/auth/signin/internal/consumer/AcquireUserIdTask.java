@@ -2,22 +2,23 @@ package com.microsoft.quick.auth.signin.internal.consumer;
 
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.internal.http.HttpConnectionClient;
-import com.microsoft.quick.auth.signin.internal.http.HttpMethod;
-import com.microsoft.quick.auth.signin.internal.http.HttpRequest;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quick.auth.signin.internal.http.MSQAAPIConstant;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpConnectionClient;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpMethod;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpRequest;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import org.json.JSONObject;
 
-public class AcquireUserIdTask implements Convert<MSQAInnerAccountInfo, Task<MSQAInnerAccountInfo>> {
+public class AcquireUserIdTask
+    implements MSQATaskFunction<MSQAAccountInfoInternal, MSQATask<MSQAAccountInfoInternal>> {
 
   private static final String TAG = "AcquireUserIdTask";
   private @NonNull final MSQATracker mTracker;
@@ -27,43 +28,44 @@ public class AcquireUserIdTask implements Convert<MSQAInnerAccountInfo, Task<MSQ
   }
 
   @Override
-  public Task<MSQAInnerAccountInfo> convert(@NonNull final MSQAInnerAccountInfo msqaAccountInfo)
-      throws Exception {
-    return new Task<MSQAInnerAccountInfo>() {
+  public MSQATask<MSQAAccountInfoInternal> apply(
+      @NonNull final MSQAAccountInfoInternal accountInfo) {
+    return new MSQATask<MSQAAccountInfoInternal>() {
       @Override
-      protected void startActual(@NonNull Consumer<? super MSQAInnerAccountInfo> consumer) {
+      protected void subscribeActual(
+          @NonNull MSQAConsumer<? super MSQAAccountInfoInternal> consumer) {
         try {
           mTracker.track(
               TAG, LogLevel.VERBOSE, "start request graph api to get account info", null);
-          HttpRequest httpRequest = getHttpRequest(msqaAccountInfo);
-          String result = HttpConnectionClient.request(httpRequest);
+          MSQAHttpRequest httpRequest = getHttpRequest(accountInfo);
+          String result = MSQAHttpConnectionClient.request(httpRequest);
           if (!TextUtils.isEmpty(result)) {
             JSONObject jsonObject = new JSONObject(result);
-            msqaAccountInfo.setId(jsonObject.optString("id"));
+            accountInfo.setId(jsonObject.optString("id"));
             mTracker.track(
                 TAG, LogLevel.VERBOSE, "request graph api to get account info success", null);
           } else {
             mTracker.track(
                 TAG,
                 LogLevel.VERBOSE,
-                "request graph api to get account info error: return " + "empty result error",
+                "request graph api to get account info error: return empty result error",
                 null);
-            throw new MSQASignInError(
+            throw new MSQASignInException(
                 MSQAErrorString.HTTP_ACCOUNT_REQUEST_ERROR,
                 MSQAErrorString.HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE);
           }
-          consumer.onSuccess(msqaAccountInfo);
+          consumer.onSuccess(accountInfo);
         } catch (Exception e) {
           consumer.onError(e);
         }
       }
-    }.taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain());
+    }.upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain());
   }
 
-  private HttpRequest getHttpRequest(MSQAInnerAccountInfo microsoftAccount) {
-    return new HttpRequest.Builder()
+  private MSQAHttpRequest getHttpRequest(MSQAAccountInfoInternal microsoftAccount) {
+    return new MSQAHttpRequest.Builder()
         .setUrl(MSQAAPIConstant.MS_GRAPH_USER_INFO_PATH)
-        .setHttpMethod(HttpMethod.GET)
+        .setHttpMethod(MSQAHttpMethod.GET)
         .addHeader("Content-Type", "application/json")
         .addHeader(
             "Authorization",

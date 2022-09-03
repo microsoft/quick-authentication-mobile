@@ -4,15 +4,15 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpRequest {
+public class MSQAHttpRequest {
 
   private final String mUrl;
   private @NonNull final Map<String, String> mHeader;
-  private @HttpMethod final String mHttpMethod;
+  private @MSQAHttpMethod final String mHttpMethod;
   private final int mConnectTimeout;
   private final int mReadTimeout;
 
-  public HttpRequest(Builder builder) {
+  public MSQAHttpRequest(Builder builder) {
     mUrl = builder.mUrl;
     mHeader = builder.mHeader;
     mHttpMethod = builder.mHttpMethod;
@@ -44,7 +44,7 @@ public class HttpRequest {
   public static class Builder {
     private String mUrl;
     private @NonNull final Map<String, String> mHeader;
-    private @HttpMethod String mHttpMethod;
+    private @MSQAHttpMethod String mHttpMethod;
     private int mConnectTimeout;
     private int mReadTimeout;
 
@@ -64,7 +64,7 @@ public class HttpRequest {
       return this;
     }
 
-    public Builder setHttpMethod(@HttpMethod String httpMethod) {
+    public Builder setHttpMethod(@MSQAHttpMethod String httpMethod) {
       mHttpMethod = httpMethod;
       return this;
     }
@@ -79,8 +79,8 @@ public class HttpRequest {
       return this;
     }
 
-    public HttpRequest builder() {
-      return new HttpRequest(this);
+    public MSQAHttpRequest builder() {
+      return new MSQAHttpRequest(this);
     }
   }
 }

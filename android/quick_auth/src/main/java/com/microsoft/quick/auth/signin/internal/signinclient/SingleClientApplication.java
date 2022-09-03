@@ -10,7 +10,7 @@ import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
 import com.microsoft.quick.auth.signin.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,9 +83,9 @@ public class SingleClientApplication implements IClientApplication {
   @Nullable
   @Override
   public IAccount getAccount(@NonNull MSQAAccountInfo accountInfo) throws Exception {
-    if (accountInfo instanceof MSQAInnerAccountInfo
-        && ((MSQAInnerAccountInfo) accountInfo).getIAccount() != null) {
-      return ((MSQAInnerAccountInfo) accountInfo).getIAccount();
+    if (accountInfo instanceof MSQAAccountInfoInternal
+        && ((MSQAAccountInfoInternal) accountInfo).getIAccount() != null) {
+      return ((MSQAAccountInfoInternal) accountInfo).getIAccount();
     }
     return null;
   }

@@ -8,11 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
+import com.microsoft.quick.auth.signin.ISignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInOptions;
-import com.microsoft.quick.auth.signin.ISignInClient;
 import com.microsoft.quick.auth.signin.MSQATokenResult;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
 public class IdTokenActivity extends Activity {
@@ -66,7 +66,7 @@ public class IdTokenActivity extends Activity {
           }
 
           @Override
-          public void onError(@NonNull MSQASignInError error) {
+          public void onError(@NonNull MSQASignInException error) {
             mTokenResult.setText("create sign in client error:" + error.getMessage());
           }
         });
