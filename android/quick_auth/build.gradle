@@ -1,7 +1,21 @@
 plugins {
     id 'com.android.library'
+    id 'com.diffplug.spotless'
 }
-apply from: '../gradle/maven-release-aar.gradle'
+//apply from: '../gradle/maven-release-aar.gradle'
+
+// check code style: gradle spotlessJavaCheck
+// use code style: gradle spotlessJavaApply
+spotless {
+    java {
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude '**/signdemo1/**'
+        }
+        googleJavaFormat()
+    }
+}
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion

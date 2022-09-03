@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
-
 import androidx.annotation.NonNull;
-
 import com.example.signdemo1.R;
 import com.microsoft.quick.auth.signin.view.ButtonLogoAlignment;
 import com.microsoft.quick.auth.signin.view.ButtonShape;
@@ -22,104 +20,107 @@ import com.microsoft.quick.auth.signin.view.MSQASignInButton;
 
 public class SignInButtonSettingPop extends PopupWindow {
 
-    private final @NonNull
-    Context mContext;
-    private final @NonNull
-    MSQASignInButton mSignInButton;
-    private RadioGroup mTypeRadioGroup;
-    private RadioGroup mThemeRadioGroup;
-    private RadioGroup mSizeRadioGroup;
-    private RadioGroup mTextRadioGroup;
-    private RadioGroup mShapeRadioGroup;
-    private RadioGroup mAlignmentRadioGroup;
+  private final @NonNull Context mContext;
+  private final @NonNull MSQASignInButton mSignInButton;
+  private RadioGroup mTypeRadioGroup;
+  private RadioGroup mThemeRadioGroup;
+  private RadioGroup mSizeRadioGroup;
+  private RadioGroup mTextRadioGroup;
+  private RadioGroup mShapeRadioGroup;
+  private RadioGroup mAlignmentRadioGroup;
 
-    public SignInButtonSettingPop(@NonNull Context context, @NonNull MSQASignInButton signInButton) {
-        super(context);
-        mContext = context;
-        mSignInButton = signInButton;
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_sign_in_button_setting, null);
-        init(view);
+  public SignInButtonSettingPop(@NonNull Context context, @NonNull MSQASignInButton signInButton) {
+    super(context);
+    mContext = context;
+    mSignInButton = signInButton;
+    View view = LayoutInflater.from(context).inflate(R.layout.pop_sign_in_button_setting, null);
+    init(view);
 
-        setContentView(view);
-        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        setFocusable(true);
-        setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setAnimationStyle(R.style.pw_bottom_anim_style);
-    }
+    setContentView(view);
+    setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+    setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+    setFocusable(true);
+    setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    setAnimationStyle(R.style.pw_bottom_anim_style);
+  }
 
-    private void init(View rootView) {
-        initRadioGroup(rootView);
-        rootView.setOnClickListener(v -> dismiss());
-        rootView.findViewById(R.id.setting_container).setOnClickListener(v -> {
-        });
-    }
+  private void init(View rootView) {
+    initRadioGroup(rootView);
+    rootView.setOnClickListener(v -> dismiss());
+    rootView.findViewById(R.id.setting_container).setOnClickListener(v -> {});
+  }
 
-    private void initRadioGroup(View rootView) {
-        mTypeRadioGroup = rootView.findViewById(R.id.sign_button_type_radio_group);
-        mThemeRadioGroup = rootView.findViewById(R.id.sign_button_theme_radio_group);
-        mSizeRadioGroup = rootView.findViewById(R.id.sign_button_size_radio_group);
-        mTextRadioGroup = rootView.findViewById(R.id.sign_button_text_radio_group);
-        mShapeRadioGroup = rootView.findViewById(R.id.sign_button_shape_radio_group);
-        mAlignmentRadioGroup = rootView.findViewById(R.id.sign_button_logo_alignment_radio_group);
-        mTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            mSignInButton.setButtonType(checkedId == R.id.standard ? ButtonType.STANDARD :
-                    ButtonType.ICON);
+  private void initRadioGroup(View rootView) {
+    mTypeRadioGroup = rootView.findViewById(R.id.sign_button_type_radio_group);
+    mThemeRadioGroup = rootView.findViewById(R.id.sign_button_theme_radio_group);
+    mSizeRadioGroup = rootView.findViewById(R.id.sign_button_size_radio_group);
+    mTextRadioGroup = rootView.findViewById(R.id.sign_button_text_radio_group);
+    mShapeRadioGroup = rootView.findViewById(R.id.sign_button_shape_radio_group);
+    mAlignmentRadioGroup = rootView.findViewById(R.id.sign_button_logo_alignment_radio_group);
+    mTypeRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          mSignInButton.setButtonType(
+              checkedId == R.id.standard ? ButtonType.STANDARD : ButtonType.ICON);
         });
-        mThemeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            mSignInButton.setButtonTheme(checkedId == R.id.filled_light ? ButtonTheme.LIGHT :
-                    ButtonTheme.DARK);
+    mThemeRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          mSignInButton.setButtonTheme(
+              checkedId == R.id.filled_light ? ButtonTheme.LIGHT : ButtonTheme.DARK);
         });
-        mSizeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.size_small:
-                    mSignInButton.setButtonSize(ButtonSize.SMALL);
-                    break;
-                case R.id.size_medium:
-                    mSignInButton.setButtonSize(ButtonSize.MEDIUM);
-                    break;
-                default:
-                    mSignInButton.setButtonSize(ButtonSize.LARGE);
-                    break;
-            }
+    mSizeRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          switch (checkedId) {
+            case R.id.size_small:
+              mSignInButton.setButtonSize(ButtonSize.SMALL);
+              break;
+            case R.id.size_medium:
+              mSignInButton.setButtonSize(ButtonSize.MEDIUM);
+              break;
+            default:
+              mSignInButton.setButtonSize(ButtonSize.LARGE);
+              break;
+          }
         });
-        mTextRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            int text = ButtonText.SIGN_IN_WITH;
-            switch (checkedId) {
-                case R.id.signup_with:
-                    text = ButtonText.SIGNUP_WITH;
-                    break;
-                case R.id.signin:
-                    text = ButtonText.SIGNIN;
-                    break;
-                case R.id.continue_with:
-                    text = ButtonText.CONTINUE_WITH;
-                    break;
-            }
-            mSignInButton.setButtonText(text);
+    mTextRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          int text = ButtonText.SIGN_IN_WITH;
+          switch (checkedId) {
+            case R.id.signup_with:
+              text = ButtonText.SIGNUP_WITH;
+              break;
+            case R.id.signin:
+              text = ButtonText.SIGNIN;
+              break;
+            case R.id.continue_with:
+              text = ButtonText.CONTINUE_WITH;
+              break;
+          }
+          mSignInButton.setButtonText(text);
         });
-        mShapeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.rounded:
-                    mSignInButton.setButtonShape(ButtonShape.ROUNDED);
-                    break;
-                case R.id.pill:
-                    mSignInButton.setButtonShape(ButtonShape.PILL);
-                    break;
-                default:
-                    mSignInButton.setButtonShape(ButtonShape.RECTANGULAR);
-                    break;
-            }
+    mShapeRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          switch (checkedId) {
+            case R.id.rounded:
+              mSignInButton.setButtonShape(ButtonShape.ROUNDED);
+              break;
+            case R.id.pill:
+              mSignInButton.setButtonShape(ButtonShape.PILL);
+              break;
+            default:
+              mSignInButton.setButtonShape(ButtonShape.RECTANGULAR);
+              break;
+          }
         });
-        mAlignmentRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.center:
-                    mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.CENTER);
-                    break;
-                default:
-                    mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.LEFT);
-                    break;
-            }
+    mAlignmentRadioGroup.setOnCheckedChangeListener(
+        (group, checkedId) -> {
+          switch (checkedId) {
+            case R.id.center:
+              mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.CENTER);
+              break;
+            default:
+              mSignInButton.setButtonLogoAlignment(ButtonLogoAlignment.LEFT);
+              break;
+          }
         });
-    }
+  }
 }
