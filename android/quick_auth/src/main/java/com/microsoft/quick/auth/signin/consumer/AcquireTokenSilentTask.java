@@ -1,7 +1,6 @@
 package com.microsoft.quick.auth.signin.consumer;
 
 import androidx.annotation.NonNull;
-
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
@@ -19,49 +18,55 @@ import com.microsoft.quick.auth.signin.task.Switchers;
 import com.microsoft.quick.auth.signin.task.Task;
 import com.microsoft.quick.auth.signin.util.MSQATracker;
 
-public class AcquireTokenSilentTask implements Convert<IClientApplication,
-        Task<TokenResult>> {
+public class AcquireTokenSilentTask implements Convert<IClientApplication, Task<TokenResult>> {
 
-    private @NonNull
-    final String[] mScopes;
-    private @NonNull
-    final MSQATracker mTracker;
-    private static final String TAG = "AcquireTokenSilentTask";
+  private @NonNull final String[] mScopes;
+  private @NonNull final MSQATracker mTracker;
+  private static final String TAG = "AcquireTokenSilentTask";
 
-    public AcquireTokenSilentTask(@NonNull final String[] scopes,
-                                  @NonNull final MSQATracker tracker) {
-        mScopes = scopes;
-        mTracker = tracker;
-    }
+  public AcquireTokenSilentTask(
+      @NonNull final String[] scopes, @NonNull final MSQATracker tracker) {
+    mScopes = scopes;
+    mTracker = tracker;
+  }
 
-    @Override
-    public Task<TokenResult> convert(@NonNull final IClientApplication clientApplication) throws Exception {
-        return Task.create(new Task.ConsumerHolder<TokenResult>() {
-            @Override
-            public void start(@NonNull Consumer<? super TokenResult> consumer) {
+  @Override
+  public Task<TokenResult> convert(@NonNull final IClientApplication clientApplication)
+      throws Exception {
+    return Task.create(
+            new Task.ConsumerHolder<TokenResult>() {
+              @Override
+              public void start(@NonNull Consumer<? super TokenResult> consumer) {
                 try {
-                    mTracker.track(TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
-                    IAccount iAccount = clientApplication.getCurrentAccount();
-                    if (iAccount == null)
-                        throw new MSQASignInError(MSQAErrorString.NO_CURRENT_ACCOUNT,
-                                MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
-                    IAuthenticationResult result = clientApplication.acquireTokenSilent(iAccount,
-                            mScopes);
-                    consumer.onSuccess(new MSQASignInTokenResult(result));
+                  mTracker.track(
+                      TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
+                  IAccount iAccount = clientApplication.getCurrentAccount();
+                  if (iAccount == null)
+                    throw new MSQASignInError(
+                        MSQAErrorString.NO_CURRENT_ACCOUNT,
+                        MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+                  IAuthenticationResult result =
+                      clientApplication.acquireTokenSilent(iAccount, mScopes);
+                  consumer.onSuccess(new MSQASignInTokenResult(result));
                 } catch (Exception exception) {
-                    Exception silentException = exception;
-                    if (silentException instanceof MsalUiRequiredException) {
-                        mTracker.track(TAG, LogLevel.ERROR, "token silent error instanceof MsalUiRequiredException " +
-                                "will return wrap error", null);
-                        silentException =
-                                new MSQAUiRequiredError(((MsalUiRequiredException) exception).getErrorCode(),
-                                        exception.getMessage());
-                    }
-                    consumer.onError(silentException);
+                  Exception silentException = exception;
+                  if (silentException instanceof MsalUiRequiredException) {
+                    mTracker.track(
+                        TAG,
+                        LogLevel.ERROR,
+                        "token silent error instanceof MsalUiRequiredException "
+                            + "will return wrap error",
+                        null);
+                    silentException =
+                        new MSQAUiRequiredError(
+                            ((MsalUiRequiredException) exception).getErrorCode(),
+                            exception.getMessage());
+                  }
+                  consumer.onError(silentException);
                 }
-            }
-        })
-                .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
-                .nextTaskSchedulerOn(Switchers.mainThread());
-    }
+              }
+            })
+        .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
+        .nextTaskSchedulerOn(Switchers.mainThread());
+  }
 }

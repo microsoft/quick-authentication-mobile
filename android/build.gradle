@@ -21,6 +21,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:$gradleVersion"
         // This only for demo app to test kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        // Code formatting tool
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:6.10.0"
     }
 }
 

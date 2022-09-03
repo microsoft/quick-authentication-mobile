@@ -1,6 +1,18 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.diffplug.spotless'
+}
+
+spotless {
+    java {
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude '**/quick/auth/**'
+            exclude '**/quick_auth/**'
+        }
+        googleJavaFormat()
+    }
 }
 
 android {
