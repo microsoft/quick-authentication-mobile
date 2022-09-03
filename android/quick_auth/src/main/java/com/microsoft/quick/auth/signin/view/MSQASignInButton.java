@@ -17,10 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.microsoft.quick.auth.signin.MSQAAccountInfo;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.R;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
-import com.microsoft.quick.auth.signin.MSQAAccountInfo;
 
 public class MSQASignInButton extends FrameLayout {
 

@@ -3,12 +3,12 @@ package com.microsoft.quick.auth.signin.error;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.internal.MsalUtils;
 
-public class MSQASignInError extends Exception {
+public class MSQASignInException extends Exception {
 
   private final String mErrorCode;
   private Exception mSuppressedException;
 
-  public MSQASignInError() {
+  public MSQASignInException() {
     this(null);
   }
 
@@ -17,28 +17,28 @@ public class MSQASignInError extends Exception {
    *
    * @param errorCode The error code contained in the exception.
    */
-  public MSQASignInError(final String errorCode) {
+  public MSQASignInException(final String errorCode) {
     this(errorCode, null);
   }
 
   /**
-   * Initiates the {@link MSQASignInError} with error code and error message.
+   * Initiates the {@link MSQASignInException} with error code and error message.
    *
    * @param errorCode The error code contained in the exception.
    * @param errorMessage The error message contained in the exception.
    */
-  public MSQASignInError(final String errorCode, final String errorMessage) {
+  public MSQASignInException(final String errorCode, final String errorMessage) {
     this(errorCode, errorMessage, null);
   }
 
   /**
-   * Initiates the {@link MSQASignInError} with error code, error message and throwable.
+   * Initiates the {@link MSQASignInException} with error code, error message and throwable.
    *
    * @param errorCode The error code contained in the exception.
    * @param errorMessage The error message contained in the exception.
    * @param throwable The {@link Throwable} contains the cause for the exception.
    */
-  public MSQASignInError(
+  public MSQASignInException(
       final String errorCode, final String errorMessage, final Throwable throwable) {
     super(errorMessage, throwable);
     mErrorCode = errorCode;
@@ -53,7 +53,7 @@ public class MSQASignInError extends Exception {
   }
 
   /**
-   * @return The error code for the exception, could be null. {@link MSQASignInError} is the top
+   * @return The error code for the exception, could be null. {@link MSQASignInException} is the top
    *     level base exception, for the constants value of all the error code.
    */
   public String getErrorCode() {
@@ -71,18 +71,20 @@ public class MSQASignInError extends Exception {
     return "";
   }
 
-  public static MSQASignInError create(Exception exception) {
-    if (exception instanceof MSQASignInError) return (MSQASignInError) exception;
+  public static MSQASignInException create(Exception exception) {
+    if (exception instanceof MSQASignInException) return (MSQASignInException) exception;
 
-    MSQASignInError signInException;
+    MSQASignInException signInException;
     if (exception instanceof MsalException) {
       signInException =
-          new MSQASignInError(((MsalException) exception).getErrorCode(), exception.getMessage());
+          new MSQASignInException(
+              ((MsalException) exception).getErrorCode(), exception.getMessage());
     } else if (exception instanceof InterruptedException) {
       signInException =
-          new MSQASignInError(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
+          new MSQASignInException(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
     } else {
-      signInException = new MSQASignInError(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
+      signInException =
+          new MSQASignInException(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
     }
     signInException.setSuppressedException(exception);
     return signInException;

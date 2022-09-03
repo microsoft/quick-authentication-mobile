@@ -1,13 +1,13 @@
 package com.microsoft.quick.auth.signin.internal.task;
 
-import com.microsoft.quick.auth.signin.internal.util.TaskExecutorUtil;
+import com.microsoft.quick.auth.signin.internal.util.MSQATaskExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class IOThreadSwitcher implements ThreadSwitcher {
+public class MSQAIOThreadSwitcher implements MSQAThreadSwitcher {
   private final ThreadPoolExecutor mExecutor;
 
-  public IOThreadSwitcher() {
-    mExecutor = TaskExecutorUtil.io();
+  public MSQAIOThreadSwitcher() {
+    mExecutor = MSQATaskExecutor.io();
   }
 
   @Override

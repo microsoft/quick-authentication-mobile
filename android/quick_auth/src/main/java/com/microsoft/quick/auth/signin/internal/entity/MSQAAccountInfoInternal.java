@@ -7,7 +7,7 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.quick.auth.signin.MSQAAccountInfo;
 
-public class MSQAInnerAccountInfo implements MSQAAccountInfo {
+public class MSQAAccountInfoInternal implements MSQAAccountInfo {
   private String mAccessToken;
   private String mFullName;
   private String mUserName;
@@ -72,8 +72,8 @@ public class MSQAInnerAccountInfo implements MSQAAccountInfo {
     this.mIAccount = account;
   }
 
-  public static MSQAInnerAccountInfo getAccount(IAuthenticationResult authenticationResult) {
-    MSQAInnerAccountInfo account = new MSQAInnerAccountInfo();
+  public static MSQAAccountInfoInternal getAccount(IAuthenticationResult authenticationResult) {
+    MSQAAccountInfoInternal account = new MSQAAccountInfoInternal();
     account.setAccessToken(authenticationResult.getAccessToken());
     IAccount iAccount = authenticationResult.getAccount();
     account.setIAccount(iAccount);

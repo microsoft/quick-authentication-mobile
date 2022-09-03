@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import com.microsoft.identity.common.java.AuthenticationConstants;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -15,32 +15,33 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-public class HttpConnectionClient {
+public class MSQAHttpConnectionClient {
 
   private static final String TAG = "HttpConnectionClient";
 
   @WorkerThread
-  public static String request(@NonNull HttpRequest request) throws IOException, MSQASignInError {
+  public static String request(@NonNull MSQAHttpRequest request)
+      throws IOException, MSQASignInException {
     InputStream responseStream = null;
     try {
-      HttpURLConnection conn = HttpConnectionClient.createHttpURLConnection(request);
+      HttpURLConnection conn = MSQAHttpConnectionClient.createHttpURLConnection(request);
       responseStream = conn.getInputStream();
       if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
         return responseStream == null
             ? ""
-            : HttpConnectionClient.convertStreamToString(responseStream);
+            : MSQAHttpConnectionClient.convertStreamToString(responseStream);
       } else {
         responseStream = conn.getErrorStream();
-        throw new MSQASignInError(
+        throw new MSQASignInException(
             MSQAErrorString.HTTP_REQUEST_ERROR,
-            HttpConnectionClient.convertStreamToString(responseStream));
+            MSQAHttpConnectionClient.convertStreamToString(responseStream));
       }
     } finally {
-      HttpConnectionClient.safeCloseStream(responseStream);
+      MSQAHttpConnectionClient.safeCloseStream(responseStream);
     }
   }
 
-  public static HttpURLConnection createHttpURLConnection(@NonNull HttpRequest request)
+  public static HttpURLConnection createHttpURLConnection(@NonNull MSQAHttpRequest request)
       throws IOException {
     URL url = new URL(request.getUrl());
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();

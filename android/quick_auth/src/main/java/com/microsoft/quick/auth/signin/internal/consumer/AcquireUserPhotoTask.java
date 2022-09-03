@@ -2,24 +2,25 @@ package com.microsoft.quick.auth.signin.internal.consumer;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
-import com.microsoft.quick.auth.signin.internal.http.HttpConnectionClient;
-import com.microsoft.quick.auth.signin.internal.http.HttpMethod;
-import com.microsoft.quick.auth.signin.internal.http.HttpRequest;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quick.auth.signin.internal.http.MSQAAPIConstant;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Switchers;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpConnectionClient;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpMethod;
+import com.microsoft.quick.auth.signin.internal.http.MSQAHttpRequest;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQASwitchers;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
-public class AcquireUserPhotoTask implements Convert<MSQAInnerAccountInfo, Task<MSQAInnerAccountInfo>> {
+public class AcquireUserPhotoTask
+    implements MSQATaskFunction<MSQAAccountInfoInternal, MSQATask<MSQAAccountInfoInternal>> {
   private static final String TAG = "AcquireUserPhotoTask";
   private @NonNull final MSQATracker mTracker;
 
@@ -28,38 +29,39 @@ public class AcquireUserPhotoTask implements Convert<MSQAInnerAccountInfo, Task<
   }
 
   @Override
-  public Task<MSQAInnerAccountInfo> convert(@NonNull final MSQAInnerAccountInfo msqaAccountInfo)
-      throws Exception {
+  public MSQATask<MSQAAccountInfoInternal> apply(
+      @NonNull final MSQAAccountInfoInternal accountInfo) {
     mTracker.track(TAG, LogLevel.VERBOSE, "start request graph api to get user photo", null);
-    return new Task<MSQAInnerAccountInfo>() {
+    return new MSQATask<MSQAAccountInfoInternal>() {
       @Override
-      protected void startActual(@NonNull Consumer<? super MSQAInnerAccountInfo> consumer) {
+      protected void subscribeActual(
+          @NonNull MSQAConsumer<? super MSQAAccountInfoInternal> consumer) {
         InputStream responseStream = null;
         try {
           HttpURLConnection conn =
-              HttpConnectionClient.createHttpURLConnection(createRequest(msqaAccountInfo));
+              MSQAHttpConnectionClient.createHttpURLConnection(createRequest(accountInfo));
           if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
             responseStream = conn.getInputStream();
             byte[] bytes = readAllBytes(responseStream);
-            msqaAccountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
+            accountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
             mTracker.track(
                 TAG, LogLevel.VERBOSE, "request graph api to get user photo success", null);
           }
         } catch (Exception e) {
           mTracker.track(TAG, LogLevel.ERROR, "request photo api error", e);
         } finally {
-          HttpConnectionClient.safeCloseStream(responseStream);
+          MSQAHttpConnectionClient.safeCloseStream(responseStream);
         }
-        consumer.onSuccess(msqaAccountInfo);
+        consumer.onSuccess(accountInfo);
       }
-    }.taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
-        .nextTaskSchedulerOn(Switchers.mainThread());
+    }.upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain())
+        .downStreamSchedulerOn(MSQASwitchers.mainThread());
   }
 
-  private static HttpRequest createRequest(MSQAInnerAccountInfo microsoftAccountInfo) {
-    return new HttpRequest.Builder()
+  private static MSQAHttpRequest createRequest(MSQAAccountInfoInternal microsoftAccountInfo) {
+    return new MSQAHttpRequest.Builder()
         .setUrl(MSQAAPIConstant.MS_GRAPH_USER_PHOTO_LARGEST)
-        .setHttpMethod(HttpMethod.GET)
+        .setHttpMethod(MSQAHttpMethod.GET)
         .addHeader("Content-Type", "image/jpg")
         .addHeader(
             "Authorization",

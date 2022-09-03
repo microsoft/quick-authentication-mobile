@@ -6,20 +6,21 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.internal.entity.MSQASignInTokenResult;
 import com.microsoft.quick.auth.signin.MSQATokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.internal.entity.MSQATokenResultInternal;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Switchers;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQASwitchers;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 
-public class AcquireTokenTask implements Convert<IClientApplication, Task<MSQATokenResult>> {
+public class AcquireTokenTask
+    implements MSQATaskFunction<IClientApplication, MSQATask<MSQATokenResult>> {
   private @NonNull final Activity mActivity;
   private @NonNull final String[] mScopes;
   private @NonNull final MSQATracker mTracker;
@@ -35,12 +36,11 @@ public class AcquireTokenTask implements Convert<IClientApplication, Task<MSQATo
   }
 
   @Override
-  public Task<MSQATokenResult> convert(@NonNull final IClientApplication iClientApplication)
-      throws Exception {
-    return Task.create(
-            new Task.ConsumerHolder<MSQATokenResult>() {
+  public MSQATask<MSQATokenResult> apply(@NonNull final IClientApplication iClientApplication) {
+    return MSQATask.create(
+            new MSQATask.ConsumerHolder<MSQATokenResult>() {
               @Override
-              public void start(@NonNull final Consumer<? super MSQATokenResult> consumer) {
+              public void start(@NonNull final MSQAConsumer<? super MSQATokenResult> consumer) {
                 mTracker.track(TAG, LogLevel.VERBOSE, "start request MSAL acquireToken api", null);
                 IAccount iAccount = null;
                 try {
@@ -51,7 +51,7 @@ public class AcquireTokenTask implements Convert<IClientApplication, Task<MSQATo
                 // If no signed account, return error.
                 if (iAccount == null) {
                   consumer.onError(
-                      new MSQASignInError(
+                      new MSQASignInException(
                           MSQAErrorString.NO_CURRENT_ACCOUNT,
                           MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE));
                   return;
@@ -70,26 +70,20 @@ public class AcquireTokenTask implements Convert<IClientApplication, Task<MSQATo
                       @Override
                       public void onSuccess(final IAuthenticationResult authenticationResult) {
                         mTracker.track(
-                            TAG,
-                            LogLevel.VERBOSE,
-                            "request MSAL acquireToken api " + "success",
-                            null);
-                        consumer.onSuccess(new MSQASignInTokenResult(authenticationResult));
+                            TAG, LogLevel.VERBOSE, "request MSAL acquireToken api success", null);
+                        consumer.onSuccess(new MSQATokenResultInternal(authenticationResult));
                       }
 
                       @Override
                       public void onError(final MsalException exception) {
                         mTracker.track(
-                            TAG,
-                            LogLevel.ERROR,
-                            "request MSAL acquireToken api " + "error",
-                            exception);
+                            TAG, LogLevel.ERROR, "request MSAL acquireToken api error", exception);
                         consumer.onError(exception);
                       }
                     });
               }
             })
-        .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
-        .nextTaskSchedulerOn(Switchers.mainThread());
+        .upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain())
+        .downStreamSchedulerOn(MSQASwitchers.mainThread());
   }
 }

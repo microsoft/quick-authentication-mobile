@@ -2,25 +2,25 @@ package com.microsoft.quick.auth.signin.internal.task;
 
 import androidx.annotation.NonNull;
 
-public class TaskCreate<T> extends Task<T> {
+public class MSQATaskCreate<T> extends MSQATask<T> {
 
   private final @NonNull ConsumerHolder<T> mSource;
 
-  public TaskCreate(@NonNull ConsumerHolder<T> source) {
+  public MSQATaskCreate(@NonNull ConsumerHolder<T> source) {
     this.mSource = source;
   }
 
   @Override
-  protected void startActual(@NonNull Consumer<? super T> consumer) {
-    CreateConsumer<T> parent = new CreateConsumer<>(consumer);
+  protected void subscribeActual(@NonNull MSQAConsumer<? super T> consumer) {
+    MSQATaskCreateConsumer<T> parent = new MSQATaskCreateConsumer<>(consumer);
     mSource.start(parent);
   }
 
-  static class CreateConsumer<T> implements Consumer<T> {
+  static class MSQATaskCreateConsumer<T> implements MSQAConsumer<T> {
 
-    private final @NonNull Consumer<? super T> mDownStream;
+    private final @NonNull MSQAConsumer<? super T> mDownStream;
 
-    public CreateConsumer(@NonNull Consumer<? super T> consumer) {
+    public MSQATaskCreateConsumer(@NonNull MSQAConsumer<? super T> consumer) {
       mDownStream = consumer;
     }
 

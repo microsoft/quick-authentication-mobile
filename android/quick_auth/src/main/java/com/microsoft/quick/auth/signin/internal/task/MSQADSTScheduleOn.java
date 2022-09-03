@@ -2,28 +2,28 @@ package com.microsoft.quick.auth.signin.internal.task;
 
 import androidx.annotation.NonNull;
 
-public class ConsumerScheduleOn<T> extends Task<T> {
+public class MSQADSTScheduleOn<T> extends MSQATask<T> {
 
-  private final @NonNull Task<T> mTask;
-  private final @NonNull ThreadSwitcher mScheduler;
+  private final @NonNull MSQATask<T> mTask;
+  private final @NonNull MSQAThreadSwitcher mSwitcher;
 
-  public ConsumerScheduleOn(@NonNull Task<T> task, @NonNull ThreadSwitcher scheduler) {
+  public MSQADSTScheduleOn(@NonNull MSQATask<T> task, @NonNull MSQAThreadSwitcher switcher) {
     this.mTask = task;
-    this.mScheduler = scheduler;
+    this.mSwitcher = switcher;
   }
 
   @Override
-  protected void startActual(@NonNull Consumer<? super T> consumer) {
-    mTask.start(new ScheduleOnConsumer<>(mScheduler, consumer));
+  protected void subscribeActual(@NonNull MSQAConsumer<? super T> consumer) {
+    mTask.subscribe(new MSQADSTScheduleOnConsumer<>(mSwitcher, consumer));
   }
 
-  static final class ScheduleOnConsumer<T> implements Consumer<T> {
+  static final class MSQADSTScheduleOnConsumer<T> implements MSQAConsumer<T> {
 
-    private final @NonNull ThreadSwitcher mSwitcher;
-    private final @NonNull Consumer<? super T> mDownStreamConsumer;
+    private final @NonNull MSQAThreadSwitcher mSwitcher;
+    private final @NonNull MSQAConsumer<? super T> mDownStreamConsumer;
 
-    public ScheduleOnConsumer(
-        @NonNull ThreadSwitcher switcher, @NonNull Consumer<? super T> consumer) {
+    public MSQADSTScheduleOnConsumer(
+        @NonNull MSQAThreadSwitcher switcher, @NonNull MSQAConsumer<? super T> consumer) {
       this.mSwitcher = switcher;
       this.mDownStreamConsumer = consumer;
     }

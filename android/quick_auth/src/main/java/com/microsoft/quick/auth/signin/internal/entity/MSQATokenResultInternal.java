@@ -4,15 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.quick.auth.signin.MSQATokenResult;
-
 import java.util.Date;
 import java.util.UUID;
 
-public class MSQASignInTokenResult implements MSQATokenResult {
+public class MSQATokenResultInternal implements MSQATokenResult {
 
   private final @NonNull IAuthenticationResult mAuthenticationResult;
 
-  public MSQASignInTokenResult(@NonNull IAuthenticationResult authenticationResult) {
+  public MSQATokenResultInternal(@NonNull IAuthenticationResult authenticationResult) {
     mAuthenticationResult = authenticationResult;
   }
 
