@@ -8,29 +8,27 @@ import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
-import com.microsoft.quick.auth.signin.consumer.AcquireCurrentTokenTask;
-import com.microsoft.quick.auth.signin.consumer.AcquireTokenSilentTask;
-import com.microsoft.quick.auth.signin.consumer.AcquireTokenTask;
-import com.microsoft.quick.auth.signin.consumer.AcquireUserIdTask;
-import com.microsoft.quick.auth.signin.consumer.AcquireUserPhotoTask;
-import com.microsoft.quick.auth.signin.consumer.SignInTask;
-import com.microsoft.quick.auth.signin.entity.AccountInfo;
-import com.microsoft.quick.auth.signin.entity.MSQAAccountInfo;
-import com.microsoft.quick.auth.signin.entity.MSQASignInScope;
-import com.microsoft.quick.auth.signin.entity.TokenResult;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireCurrentTokenTask;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireTokenSilentTask;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireTokenTask;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireUserIdTask;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireUserPhotoTask;
+import com.microsoft.quick.auth.signin.internal.consumer.SignInTask;
+import com.microsoft.quick.auth.signin.internal.entity.MSQAInnerAccountInfo;
+import com.microsoft.quick.auth.signin.internal.entity.MSQASignInScope;
 import com.microsoft.quick.auth.signin.error.MSQACancelError;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.logger.ILogger;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 import com.microsoft.quick.auth.signin.logger.MSQALogger;
-import com.microsoft.quick.auth.signin.signinclient.IClientApplication;
-import com.microsoft.quick.auth.signin.signinclient.SingleClientApplication;
-import com.microsoft.quick.auth.signin.task.Consumer;
-import com.microsoft.quick.auth.signin.task.Task;
-import com.microsoft.quick.auth.signin.util.MSQATracker;
+import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
+import com.microsoft.quick.auth.signin.internal.signinclient.SingleClientApplication;
+import com.microsoft.quick.auth.signin.internal.task.Consumer;
+import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
 
-public final class MSQASignInClient implements SignInClient {
+public final class MSQASignInClient implements ISignInClient {
   private static final String TAG = "MSQASignInClient";
   private final String[] mScopes;
   private final @NonNull IClientApplication mSignInClientApplication;
@@ -99,16 +97,16 @@ public final class MSQASignInClient implements SignInClient {
 
   @Override
   public void signIn(
-      @NonNull Activity activity, @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull Activity activity, @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker("signIn");
     Task.with(mSignInClientApplication)
         .then(new SignInTask(activity, mScopes, tracker))
         .then(new AcquireUserIdTask(tracker))
         .then(new AcquireUserPhotoTask(tracker))
         .start(
-            new Consumer<MSQAAccountInfo>() {
+            new Consumer<MSQAInnerAccountInfo>() {
               @Override
-              public void onSuccess(MSQAAccountInfo microsoftAccount) {
+              public void onSuccess(MSQAInnerAccountInfo microsoftAccount) {
                 tracker.track(TAG, LogLevel.VERBOSE, "inner request signIn api success", null);
                 completeListener.onComplete(microsoftAccount, null);
               }
@@ -149,16 +147,16 @@ public final class MSQASignInClient implements SignInClient {
   @Override
   public void getCurrentSignInAccount(
       @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker("getCurrentSignInAccount");
     Task.with(mSignInClientApplication)
         .then(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
         .then(new AcquireUserIdTask(tracker))
         .then(new AcquireUserPhotoTask(tracker))
         .start(
-            new Consumer<MSQAAccountInfo>() {
+            new Consumer<MSQAInnerAccountInfo>() {
               @Override
-              public void onSuccess(MSQAAccountInfo microsoftAccountInfo) {
+              public void onSuccess(MSQAInnerAccountInfo microsoftAccountInfo) {
                 tracker.track(
                     TAG,
                     LogLevel.VERBOSE,
@@ -201,15 +199,15 @@ public final class MSQASignInClient implements SignInClient {
   public void acquireToken(
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<TokenResult> completeListener) {
+      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker("acquireToken");
 
     Task.with(mSignInClientApplication)
         .then(new AcquireTokenTask(activity, scopes, tracker))
         .start(
-            new Consumer<TokenResult>() {
+            new Consumer<MSQATokenResult>() {
               @Override
-              public void onSuccess(TokenResult tokenResult) {
+              public void onSuccess(MSQATokenResult tokenResult) {
                 tracker.track(
                     TAG, LogLevel.VERBOSE, "inner request acquireToken api success", null);
                 completeListener.onComplete(tokenResult, null);
@@ -232,14 +230,14 @@ public final class MSQASignInClient implements SignInClient {
   @Override
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<TokenResult> completeListener) {
+      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker("acquireTokenSilent");
     Task.with(mSignInClientApplication)
         .then(new AcquireTokenSilentTask(scopes, tracker))
         .start(
-            new Consumer<TokenResult>() {
+            new Consumer<MSQATokenResult>() {
               @Override
-              public void onSuccess(TokenResult tokenResult) {
+              public void onSuccess(MSQATokenResult tokenResult) {
                 tracker.track(
                     TAG, LogLevel.VERBOSE, "inner request acquireTokenSilent api success", null);
                 completeListener.onComplete(tokenResult, null);

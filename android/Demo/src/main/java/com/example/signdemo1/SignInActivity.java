@@ -14,9 +14,9 @@ import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInOptions;
-import com.microsoft.quick.auth.signin.SignInClient;
-import com.microsoft.quick.auth.signin.entity.AccountInfo;
-import com.microsoft.quick.auth.signin.entity.TokenResult;
+import com.microsoft.quick.auth.signin.ISignInClient;
+import com.microsoft.quick.auth.signin.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.MSQATokenResult;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.error.MSQAUiRequiredError;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
@@ -35,7 +35,7 @@ public class SignInActivity extends Activity {
   private View msAcquireTokenSilentButton;
   private ViewGroup mRootView;
 
-  private SignInClient mSignInClient;
+  private ISignInClient mSignInClient;
   private SignInButtonSettingPop pop;
   private String[] scops;
 
@@ -139,7 +139,7 @@ public class SignInActivity extends Activity {
         this, scops, (tokenResult, error) -> updateTokenResult(tokenResult, error));
   }
 
-  private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
+  private void uploadSignInfo(MSQAAccountInfo accountInfo, Exception error) {
     if (accountInfo != null) {
       mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getPhoto()));
       String userInfo =
@@ -175,7 +175,7 @@ public class SignInActivity extends Activity {
     mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);
   }
 
-  private void updateTokenResult(TokenResult tokenResult, Exception error) {
+  private void updateTokenResult(MSQATokenResult tokenResult, Exception error) {
     mTokenResult.setText(
         tokenResult != null
             ? tokenResult.getAccessToken()

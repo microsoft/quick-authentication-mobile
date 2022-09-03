@@ -48,6 +48,7 @@ public class MSQALogger {
     mIsInitialized.set(true);
     // Disable Sdk android logcat log by default.
     Logger.getInstance().setEnableLogcatLog(false);
+    Logger.getInstance().setEnablePII(false);
     Logger.getInstance().setLogLevel(Logger.LogLevel.VERBOSE);
     try {
       Logger.getInstance().setExternalLogger(innerLogger);
