@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import com.microsoft.quick.auth.signin.ClientCreatedListener;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInOptions;
-import com.microsoft.quick.auth.signin.SignInClient;
-import com.microsoft.quick.auth.signin.entity.TokenResult;
+import com.microsoft.quick.auth.signin.ISignInClient;
+import com.microsoft.quick.auth.signin.MSQATokenResult;
 import com.microsoft.quick.auth.signin.error.MSQASignInError;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
@@ -22,7 +22,7 @@ public class IdTokenActivity extends Activity {
   private boolean mSilentToken;
   private Button mSignInButton;
 
-  private SignInClient mSignInClient;
+  private ISignInClient mSignInClient;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class IdTokenActivity extends Activity {
         });
   }
 
-  private void uploadSignInfo(TokenResult tokenResult, Exception error) {
+  private void uploadSignInfo(MSQATokenResult tokenResult, Exception error) {
     if (tokenResult != null) {
       mTokenResult.setText("request success, token= " + tokenResult.getAccessToken());
     } else {
