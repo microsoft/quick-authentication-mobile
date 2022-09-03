@@ -1,7 +1,7 @@
 package com.microsoft.quick.auth.signin.callback;
 
 import androidx.annotation.Nullable;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 
 public interface OnCompleteListener<TResult> {
   /**
@@ -10,5 +10,5 @@ public interface OnCompleteListener<TResult> {
    * @param result the finished result. Can be null
    * @param error the finished error. Can be null
    */
-  void onComplete(@Nullable TResult result, @Nullable MSQASignInError error);
+  void onComplete(@Nullable TResult result, @Nullable MSQASignInException error);
 }

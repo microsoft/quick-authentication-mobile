@@ -4,21 +4,22 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
-import com.microsoft.quick.auth.signin.internal.entity.MSQASignInTokenResult;
 import com.microsoft.quick.auth.signin.MSQATokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
-import com.microsoft.quick.auth.signin.error.MSQAUiRequiredError;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
+import com.microsoft.quick.auth.signin.internal.entity.MSQATokenResultInternal;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
-import com.microsoft.quick.auth.signin.internal.task.Consumer;
-import com.microsoft.quick.auth.signin.internal.task.Convert;
-import com.microsoft.quick.auth.signin.internal.task.DirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.Switchers;
-import com.microsoft.quick.auth.signin.internal.task.Task;
+import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
+import com.microsoft.quick.auth.signin.internal.task.MSQASwitchers;
+import com.microsoft.quick.auth.signin.internal.task.MSQATask;
+import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
+import com.microsoft.quick.auth.signin.logger.LogLevel;
 
-public class AcquireTokenSilentTask implements Convert<IClientApplication, Task<MSQATokenResult>> {
+public class AcquireTokenSilentTask
+    implements MSQATaskFunction<IClientApplication, MSQATask<MSQATokenResult>> {
 
   private @NonNull final String[] mScopes;
   private @NonNull final MSQATracker mTracker;
@@ -31,34 +32,33 @@ public class AcquireTokenSilentTask implements Convert<IClientApplication, Task<
   }
 
   @Override
-  public Task<MSQATokenResult> convert(@NonNull final IClientApplication clientApplication)
-      throws Exception {
-    return Task.create(
-            new Task.ConsumerHolder<MSQATokenResult>() {
+  public MSQATask<MSQATokenResult> apply(@NonNull final IClientApplication clientApplication) {
+    return MSQATask.create(
+            new MSQATask.ConsumerHolder<MSQATokenResult>() {
               @Override
-              public void start(@NonNull Consumer<? super MSQATokenResult> consumer) {
+              public void start(@NonNull MSQAConsumer<? super MSQATokenResult> consumer) {
                 try {
                   mTracker.track(
                       TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
                   IAccount iAccount = clientApplication.getCurrentAccount();
                   if (iAccount == null)
-                    throw new MSQASignInError(
+                    throw new MSQASignInException(
                         MSQAErrorString.NO_CURRENT_ACCOUNT,
                         MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
                   IAuthenticationResult result =
                       clientApplication.acquireTokenSilent(iAccount, mScopes);
-                  consumer.onSuccess(new MSQASignInTokenResult(result));
+                  consumer.onSuccess(new MSQATokenResultInternal(result));
                 } catch (Exception exception) {
                   Exception silentException = exception;
+                  // wrapper silent MSAL UI thread and expose new thread for developers
                   if (silentException instanceof MsalUiRequiredException) {
                     mTracker.track(
                         TAG,
                         LogLevel.ERROR,
-                        "token silent error instanceof MsalUiRequiredException "
-                            + "will return wrap error",
+                        "token silent error instanceof MsalUiRequiredException will return wrap error",
                         null);
                     silentException =
-                        new MSQAUiRequiredError(
+                        new MSQAUiRequiredException(
                             ((MsalUiRequiredException) exception).getErrorCode(),
                             exception.getMessage());
                   }
@@ -66,7 +66,7 @@ public class AcquireTokenSilentTask implements Convert<IClientApplication, Task<
                 }
               }
             })
-        .taskScheduleOn(DirectThreadSwitcher.directToIOWhenCreateInMain())
-        .nextTaskSchedulerOn(Switchers.mainThread());
+        .upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain())
+        .downStreamSchedulerOn(MSQASwitchers.mainThread());
   }
 }

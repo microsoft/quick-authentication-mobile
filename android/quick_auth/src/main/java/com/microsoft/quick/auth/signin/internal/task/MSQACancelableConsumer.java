@@ -2,12 +2,12 @@ package com.microsoft.quick.auth.signin.internal.task;
 
 import androidx.annotation.NonNull;
 
-public class CancelableConsumer<T> implements Consumer<T>, Disposable {
+public class MSQACancelableConsumer<T> implements MSQAConsumer<T>, MSQADisposable {
   private final Object mLock = new Object();
   private volatile boolean mIsCanceled;
-  private final Consumer<? super T> mConsumer;
+  private final MSQAConsumer<? super T> mConsumer;
 
-  public CancelableConsumer(@NonNull Consumer<? super T> consumer) {
+  public MSQACancelableConsumer(@NonNull MSQAConsumer<? super T> consumer) {
     mConsumer = consumer;
   }
 

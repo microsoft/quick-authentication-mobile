@@ -2,7 +2,7 @@ package com.microsoft.quick.auth.signin.internal.task;
 
 import androidx.annotation.NonNull;
 
-public interface Convert<T, R> {
+public interface MSQATaskFunction<T, R> {
   /**
    * Convert the input value to other value.
    *
@@ -10,5 +10,5 @@ public interface Convert<T, R> {
    * @return the output value
    * @throws Exception on error
    */
-  R convert(@NonNull T t) throws Exception;
+  R apply(@NonNull T t) throws Exception;
 }

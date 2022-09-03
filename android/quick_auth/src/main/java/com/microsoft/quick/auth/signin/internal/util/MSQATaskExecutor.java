@@ -7,12 +7,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class TaskExecutorUtil {
-  private static final Executor MAIN_THREAD = new TaskExecutorUtil.Main();
+public class MSQATaskExecutor {
+  private static final Executor MAIN_THREAD = new MSQATaskExecutor.Main();
   private static final ThreadPoolExecutor BACKGROUND_THREAD =
       (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
-  private TaskExecutorUtil() {}
+  private MSQATaskExecutor() {}
 
   public static Executor main() {
     return MAIN_THREAD;

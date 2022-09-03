@@ -6,16 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 @StringDef({
-  HttpMethod.GET,
-  HttpMethod.HEAD,
-  HttpMethod.PUT,
-  HttpMethod.POST,
-  HttpMethod.OPTIONS,
-  HttpMethod.PATCH,
-  HttpMethod.DELETE,
-  HttpMethod.TRACE
+  MSQAHttpMethod.GET,
+  MSQAHttpMethod.HEAD,
+  MSQAHttpMethod.PUT,
+  MSQAHttpMethod.POST,
+  MSQAHttpMethod.OPTIONS,
+  MSQAHttpMethod.PATCH,
+  MSQAHttpMethod.DELETE,
+  MSQAHttpMethod.TRACE
 })
-public @interface HttpMethod {
+public @interface MSQAHttpMethod {
   String GET = "GET";
   String HEAD = "HEAD";
   String PUT = "PUT";

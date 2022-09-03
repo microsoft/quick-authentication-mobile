@@ -1,7 +1,7 @@
 package com.microsoft.quick.auth.signin;
 
 import androidx.annotation.NonNull;
-import com.microsoft.quick.auth.signin.error.MSQASignInError;
+import com.microsoft.quick.auth.signin.error.MSQASignInException;
 
 public interface ClientCreatedListener {
   /**
@@ -16,5 +16,5 @@ public interface ClientCreatedListener {
    *
    * @param error Error for creating a client
    */
-  void onError(@NonNull MSQASignInError error);
+  void onError(@NonNull MSQASignInException error);
 }
