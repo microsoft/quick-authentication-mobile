@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
-import com.microsoft.quick.auth.signin.MSQATokenResult;
+import com.microsoft.quick.auth.signin.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
@@ -19,7 +19,7 @@ import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
 public class AcquireTokenSilentTask
-    implements MSQATaskFunction<IClientApplication, MSQATask<MSQATokenResult>> {
+    implements MSQATaskFunction<IClientApplication, MSQATask<TokenResult>> {
 
   private @NonNull final String[] mScopes;
   private @NonNull final MSQATracker mTracker;
@@ -32,11 +32,11 @@ public class AcquireTokenSilentTask
   }
 
   @Override
-  public MSQATask<MSQATokenResult> apply(@NonNull final IClientApplication clientApplication) {
+  public MSQATask<TokenResult> apply(@NonNull final IClientApplication clientApplication) {
     return MSQATask.create(
-            new MSQATask.ConsumerHolder<MSQATokenResult>() {
+            new MSQATask.ConsumerHolder<TokenResult>() {
               @Override
-              public void start(@NonNull MSQAConsumer<? super MSQATokenResult> consumer) {
+              public void start(@NonNull MSQAConsumer<? super TokenResult> consumer) {
                 try {
                   mTracker.track(
                       TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);

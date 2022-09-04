@@ -102,7 +102,7 @@ public final class MSQASignInClient implements ISignInClient {
   @Override
   public void signIn(
       @NonNull Activity activity,
-      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "signIn");
     MSQATask.with(mSignInClientApplication)
         .then(new SignInTask(activity, mScopes, tracker))
@@ -152,7 +152,7 @@ public final class MSQASignInClient implements ISignInClient {
   @Override
   public void getCurrentSignInAccount(
       @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "getCurrentSignInAccount");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
@@ -204,15 +204,15 @@ public final class MSQASignInClient implements ISignInClient {
   public void acquireToken(
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
+      @NonNull final OnCompleteListener<TokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "acquireToken");
 
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireTokenTask(activity, scopes, tracker))
         .subscribe(
-            new MSQAConsumer<MSQATokenResult>() {
+            new MSQAConsumer<TokenResult>() {
               @Override
-              public void onSuccess(MSQATokenResult tokenResult) {
+              public void onSuccess(TokenResult tokenResult) {
                 tracker.track(
                     TAG, LogLevel.VERBOSE, "inner request acquireToken api success", null);
                 completeListener.onComplete(tokenResult, null);
@@ -235,14 +235,14 @@ public final class MSQASignInClient implements ISignInClient {
   @Override
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
+      @NonNull final OnCompleteListener<TokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "acquireTokenSilent");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireTokenSilentTask(scopes, tracker))
         .subscribe(
-            new MSQAConsumer<MSQATokenResult>() {
+            new MSQAConsumer<TokenResult>() {
               @Override
-              public void onSuccess(MSQATokenResult tokenResult) {
+              public void onSuccess(TokenResult tokenResult) {
                 tracker.track(
                     TAG, LogLevel.VERBOSE, "inner request acquireTokenSilent api success", null);
                 completeListener.onComplete(tokenResult, null);

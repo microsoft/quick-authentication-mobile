@@ -3,7 +3,7 @@ package com.microsoft.quick.auth.signin;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public interface MSQAAccountInfo {
+public interface AccountInfo {
   /**
    * @return User full name.
    */

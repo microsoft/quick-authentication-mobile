@@ -9,7 +9,7 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
-import com.microsoft.quick.auth.signin.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.AccountInfo;
 import java.util.List;
 
 public interface IClientApplication {
@@ -46,7 +46,7 @@ public interface IClientApplication {
       @NonNull ISingleAccountPublicClientApplication.CurrentAccountCallback callback);
 
   @Nullable
-  IAccount getAccount(@NonNull MSQAAccountInfo accountInfo) throws Exception;
+  IAccount getAccount(@NonNull AccountInfo accountInfo) throws Exception;
 
   /** Returns a List of {@link IAccount} objects for which this application has RefreshTokens. */
   @Nullable
