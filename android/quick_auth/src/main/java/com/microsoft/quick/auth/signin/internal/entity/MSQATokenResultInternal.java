@@ -3,11 +3,11 @@ package com.microsoft.quick.auth.signin.internal.entity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAuthenticationResult;
-import com.microsoft.quick.auth.signin.MSQATokenResult;
+import com.microsoft.quick.auth.signin.TokenResult;
 import java.util.Date;
 import java.util.UUID;
 
-public class MSQATokenResultInternal implements MSQATokenResult {
+public class MSQATokenResultInternal implements TokenResult {
 
   private final @NonNull IAuthenticationResult mAuthenticationResult;
 

@@ -5,9 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
-import com.microsoft.quick.auth.signin.MSQAAccountInfo;
+import com.microsoft.quick.auth.signin.AccountInfo;
 
-public class MSQAAccountInfoInternal implements MSQAAccountInfo {
+public class MSQAAccountInfoInternal implements AccountInfo {
   private String mAccessToken;
   private String mFullName;
   private String mUserName;

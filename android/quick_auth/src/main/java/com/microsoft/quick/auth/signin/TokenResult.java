@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /** Information about account token. */
-public interface MSQATokenResult {
+public interface TokenResult {
   /**
    * @return The access token requested.
    */
