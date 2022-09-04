@@ -16,11 +16,11 @@ public interface ISignInClient {
    *
    * @param activity Activity that is used as the parent activity for launching sign in page.
    * @param completeListener A callback to be invoked when sign in success and will return sign in
-   *     account info {@link MSQAAccountInfo}.
+   *     account info {@link AccountInfo}.
    */
   void signIn(
       @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener);
+      @NonNull final OnCompleteListener<AccountInfo> completeListener);
 
   /**
    * Signs out the current the Account and Credentials (tokens).
@@ -36,11 +36,11 @@ public interface ISignInClient {
    *
    * @param activity Activity that is used as the parent activity for get sign account
    * @param completeListener A callback to be invoked when complete and will return sign in account
-   *     info {@link MSQAAccountInfo} if success
+   *     info {@link AccountInfo} if success
    */
   void getCurrentSignInAccount(
       @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener);
+      @NonNull final OnCompleteListener<AccountInfo> completeListener);
 
   /**
    * Perform acquire token silent call. If there is a valid access token in the cache, the sdk will
@@ -54,7 +54,7 @@ public interface ISignInClient {
    */
   void acquireTokenSilent(
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<MSQATokenResult> completeListener);
+      @NonNull final OnCompleteListener<TokenResult> completeListener);
 
   /**
    * Acquire token interactively, will pop-up webUI. Interactive flow will skip the cache lookup.
@@ -67,5 +67,5 @@ public interface ISignInClient {
   void acquireToken(
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<MSQATokenResult> completeListener);
+      @NonNull final OnCompleteListener<TokenResult> completeListener);
 }

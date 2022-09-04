@@ -6,7 +6,7 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quick.auth.signin.MSQATokenResult;
+import com.microsoft.quick.auth.signin.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.internal.entity.MSQATokenResultInternal;
@@ -20,7 +20,7 @@ import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
 public class AcquireTokenTask
-    implements MSQATaskFunction<IClientApplication, MSQATask<MSQATokenResult>> {
+    implements MSQATaskFunction<IClientApplication, MSQATask<TokenResult>> {
   private @NonNull final Activity mActivity;
   private @NonNull final String[] mScopes;
   private @NonNull final MSQATracker mTracker;
@@ -36,11 +36,11 @@ public class AcquireTokenTask
   }
 
   @Override
-  public MSQATask<MSQATokenResult> apply(@NonNull final IClientApplication iClientApplication) {
+  public MSQATask<TokenResult> apply(@NonNull final IClientApplication iClientApplication) {
     return MSQATask.create(
-            new MSQATask.ConsumerHolder<MSQATokenResult>() {
+            new MSQATask.ConsumerHolder<TokenResult>() {
               @Override
-              public void start(@NonNull final MSQAConsumer<? super MSQATokenResult> consumer) {
+              public void start(@NonNull final MSQAConsumer<? super TokenResult> consumer) {
                 mTracker.track(TAG, LogLevel.VERBOSE, "start request MSAL acquireToken api", null);
                 IAccount iAccount = null;
                 try {

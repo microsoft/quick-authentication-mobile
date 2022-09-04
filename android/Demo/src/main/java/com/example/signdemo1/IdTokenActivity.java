@@ -11,7 +11,7 @@ import com.microsoft.quick.auth.signin.ClientCreatedListener;
 import com.microsoft.quick.auth.signin.ISignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.MSQASignInOptions;
-import com.microsoft.quick.auth.signin.MSQATokenResult;
+import com.microsoft.quick.auth.signin.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
@@ -72,7 +72,7 @@ public class IdTokenActivity extends Activity {
         });
   }
 
-  private void uploadSignInfo(MSQATokenResult tokenResult, Exception error) {
+  private void uploadSignInfo(TokenResult tokenResult, Exception error) {
     if (tokenResult != null) {
       mTokenResult.setText("request success, token= " + tokenResult.getAccessToken());
     } else {
