@@ -308,25 +308,19 @@
                     android:text="button width setting"
                     android:textColor="@color/black"
                     android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <SeekBar
-                    android:id="@+id/progress"
+                    android:id="@+id/sign_button_width_progress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_toLeftOf="@+id/text1"
-                    android:max="200"
                     android:maxHeight="2dp"
                     android:minHeight="2dp"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="3dp"
                     android:progressDrawable="@drawable/bg_layer_progress"
                     android:thumb="@drawable/bg_shape_circle"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
             </LinearLayout>
 
         </ScrollView>

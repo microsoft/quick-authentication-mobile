@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import com.example.signdemo1.R;
 import com.microsoft.quick.auth.signin.view.ButtonLogoAlignment;
@@ -28,6 +29,7 @@ public class SignInButtonSettingPop extends PopupWindow {
   private RadioGroup mTextRadioGroup;
   private RadioGroup mShapeRadioGroup;
   private RadioGroup mAlignmentRadioGroup;
+  private SeekBar mSeekBar;
 
   public SignInButtonSettingPop(@NonNull Context context, @NonNull MSQASignInButton signInButton) {
     super(context);
@@ -46,8 +48,33 @@ public class SignInButtonSettingPop extends PopupWindow {
 
   private void init(View rootView) {
     initRadioGroup(rootView);
+    initSeekBar(rootView);
     rootView.setOnClickListener(v -> dismiss());
     rootView.findViewById(R.id.setting_container).setOnClickListener(v -> {});
+  }
+
+  private void initSeekBar(View rootView) {
+    mSeekBar = rootView.findViewById(R.id.sign_button_width_progress);
+    mSeekBar.post(
+        () -> {
+          mSeekBar.setMax(mSeekBar.getMeasuredWidth());
+          mSeekBar.setProgress(mSignInButton.getMeasuredWidth());
+        });
+    mSeekBar.setOnSeekBarChangeListener(
+        new SeekBar.OnSeekBarChangeListener() {
+          @Override
+          public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            ViewGroup.LayoutParams layoutParams = mSignInButton.getLayoutParams();
+            layoutParams.width = progress;
+            mSignInButton.setLayoutParams(layoutParams);
+          }
+
+          @Override
+          public void onStartTrackingTouch(SeekBar seekBar) {}
+
+          @Override
+          public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
   }
 
   private void initRadioGroup(View rootView) {
