@@ -1,6 +1,9 @@
 package com.microsoft.quick.auth.signin.internal.entity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
@@ -12,7 +15,9 @@ public class MSQAAccountInfoInternal implements AccountInfo {
   private String mFullName;
   private String mUserName;
   private String mId;
-  private String mUserPhoto;
+  private Bitmap mBitmapPhoto;
+  private String mBase64Photo;
+  private byte[] mUserPhotoBytes;
   private IAccount mIAccount;
 
   @NonNull
@@ -40,12 +45,24 @@ public class MSQAAccountInfoInternal implements AccountInfo {
 
   @Nullable
   @Override
-  public String getPhoto() {
-    return mUserPhoto;
+  public Bitmap getBitmapPhoto() {
+    if (mBitmapPhoto != null) return mBitmapPhoto;
+    if (mUserPhotoBytes == null) return null;
+    mBitmapPhoto = BitmapFactory.decodeByteArray(mUserPhotoBytes, 0, mUserPhotoBytes.length);
+    return mBitmapPhoto;
   }
 
-  public void setUserPhoto(String userPhoto) {
-    this.mUserPhoto = userPhoto;
+  @Nullable
+  @Override
+  public String getBase64Photo() {
+    if (mBase64Photo != null) return mBase64Photo;
+    if (mUserPhotoBytes == null) return null;
+    mBase64Photo = Base64.encodeToString(mUserPhotoBytes, Base64.NO_WRAP);
+    return mBase64Photo;
+  }
+
+  public void setUserPhoto(byte[] userPhoto) {
+    this.mUserPhotoBytes = userPhoto;
   }
 
   public void setAccessToken(String accessToken) {

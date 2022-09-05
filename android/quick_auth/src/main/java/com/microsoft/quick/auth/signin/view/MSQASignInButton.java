@@ -8,10 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +20,7 @@ import com.microsoft.quick.auth.signin.MSQASignInClient;
 import com.microsoft.quick.auth.signin.R;
 import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 
-public class MSQASignInButton extends FrameLayout {
+public class MSQASignInButton extends LinearLayout {
 
   private @ButtonTheme int mButtonTheme;
   private @ButtonLogoAlignment int mButtonLogoAlignment;
@@ -33,7 +31,7 @@ public class MSQASignInButton extends FrameLayout {
   private LinearLayout mSignInContainer;
   private ImageView mSignInIcon;
   private TextView mSignInText;
-  private int mContainerDefaultWidth;
+  private int mDefaultWidth;
   private Activity mActivity;
   private MSQASignInClient mClient;
   private OnCompleteListener<AccountInfo> mListener;
@@ -55,12 +53,18 @@ public class MSQASignInButton extends FrameLayout {
   }
 
   private void init(Context context) {
-    LayoutInflater.from(context).inflate(R.layout.msqa_view_sign_in_button, this, true);
-    mSignInContainer = findViewById(R.id.ms_sign_in_button_container);
-    mSignInIcon = findViewById(R.id.ms_sign_in_icon);
-    mSignInText = findViewById(R.id.ms_sign_in_text);
-    mContainerDefaultWidth =
-        getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
+    setGravity(Gravity.CENTER_VERTICAL);
+    setOrientation(HORIZONTAL);
+    mSignInIcon = new ImageView(context);
+    addView(mSignInIcon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    mSignInIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+    mSignInIcon.setImageDrawable(getResources().getDrawable(R.drawable.msqa_sign_in_button_icon));
+
+    mSignInText = new TextView(context);
+    addView(mSignInText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    mSignInContainer = this;
+
+    mDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
     setOnClickListener(
         new OnClickListener() {
           @Override
@@ -127,6 +131,7 @@ public class MSQASignInButton extends FrameLayout {
     if (mButtonSize == size) return this;
     mButtonSize = size;
     updateButtonView();
+    requestLayout();
     return this;
   }
 
@@ -141,6 +146,7 @@ public class MSQASignInButton extends FrameLayout {
     if (mButtonType == type) return this;
     mButtonType = type;
     updateButtonView();
+    requestLayout();
     return this;
   }
 
@@ -153,15 +159,6 @@ public class MSQASignInButton extends FrameLayout {
     }
     // set container
     mSignInContainer.setBackground(getContainerBackground());
-    ViewGroup.LayoutParams containerLayoutParams = mSignInContainer.getLayoutParams();
-    if (containerLayoutParams != null) {
-      int height = getButtonViewHeight();
-      int width = getButtonViewWidth();
-      containerLayoutParams.height = height;
-      containerLayoutParams.width =
-          mButtonType == ButtonType.ICON ? Math.min(width, height) : width;
-      mSignInContainer.setLayoutParams(containerLayoutParams);
-    }
     // set icon
     ViewGroup.LayoutParams iconLayoutParams = mSignInIcon.getLayoutParams();
     if (iconLayoutParams != null) {
@@ -217,36 +214,35 @@ public class MSQASignInButton extends FrameLayout {
     }
   }
 
-  private int getButtonViewHeight() {
-    ViewGroup.LayoutParams layoutParams = getLayoutParams();
-    if (layoutParams == null) return getContainerHeight();
-    if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-      return getContainerHeight();
-    } else if (layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-      return ViewGroup.LayoutParams.MATCH_PARENT;
-    } else {
-      return getContainerHeight();
-    }
-  }
-
-  private int getButtonViewWidth() {
-    mContainerDefaultWidth =
-        getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
-    ViewGroup.LayoutParams layoutParams = getLayoutParams();
-    if (layoutParams == null) return mContainerDefaultWidth;
-    if (layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-      return mContainerDefaultWidth;
-    } else if (layoutParams.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-      return ViewGroup.LayoutParams.MATCH_PARENT;
-    } else {
-      return mContainerDefaultWidth;
-    }
-  }
-
   @Override
-  public void setLayoutParams(ViewGroup.LayoutParams params) {
-    super.setLayoutParams(params);
-    updateButtonView();
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    int defaultHeight = getDefaultHeight();
+    if (mButtonType == ButtonType.ICON) {
+      setMeasuredDimension(defaultHeight, defaultHeight);
+    } else {
+      setMeasuredDimension(
+          measureDimension(mDefaultWidth, widthMeasureSpec),
+          measureDimension(defaultHeight, heightMeasureSpec));
+    }
+  }
+
+  private int measureDimension(int defaultSize, int measureSpec) {
+    int result = defaultSize;
+    int specMode = MeasureSpec.getMode(measureSpec);
+    int specSize = MeasureSpec.getSize(measureSpec);
+    switch (specMode) {
+      case MeasureSpec.UNSPECIFIED:
+        result = specSize;
+        break;
+      case MeasureSpec.EXACTLY:
+        result = specSize;
+        break;
+      case MeasureSpec.AT_MOST:
+        result = defaultSize;
+        break;
+    }
+    return result;
   }
 
   private Drawable getContainerBackground() {
@@ -289,7 +285,7 @@ public class MSQASignInButton extends FrameLayout {
     return getResources().getDimensionPixelSize(sizeResource);
   }
 
-  private int getContainerHeight() {
+  private int getDefaultHeight() {
     int heightResource = R.dimen.msqa_sign_in_button_height_large;
     if (mButtonSize == ButtonSize.SMALL) {
       heightResource = R.dimen.msqa_sign_in_button_height_small;

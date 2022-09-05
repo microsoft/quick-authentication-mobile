@@ -1,6 +1,5 @@
 package com.microsoft.quick.auth.signin.internal.consumer;
 
-import android.util.Base64;
 import androidx.annotation.NonNull;
 import com.microsoft.quick.auth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quick.auth.signin.internal.http.MSQAAPIConstant;
@@ -42,8 +41,7 @@ public class AcquireUserPhotoTask
               MSQAHttpConnectionClient.createHttpURLConnection(createRequest(accountInfo));
           if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
             responseStream = conn.getInputStream();
-            byte[] bytes = readAllBytes(responseStream);
-            accountInfo.setUserPhoto(Base64.encodeToString(bytes, Base64.NO_WRAP));
+            accountInfo.setUserPhoto(readAllBytes(responseStream));
             mTracker.track(
                 TAG, LogLevel.VERBOSE, "request graph api to get user photo success", null);
           }
