@@ -23,6 +23,7 @@
   ~ //  THE SOFTWARE.
   -->
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.SignDemo1" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

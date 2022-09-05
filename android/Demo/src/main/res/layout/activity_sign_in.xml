@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ //  Copyright (c) Microsoft Corporation.
   ~ //  All rights reserved.
   ~ //
@@ -52,44 +51,44 @@
         android:textSize="14sp" />
 
     <LinearLayout
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
 
-        <com.microsoft.quick.auth.signin.view.MSQASignInButton
+        <com.microsoft.quickauth.signin.view.MSQASignInButton
             android:id="@+id/ms_sign_button"
-            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:id="@+id/ms_sign_out_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/blue_grey_500"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
+            android:background="@color/blue_grey_500"
             android:padding="10dp"
-            android:visibility="gone"
             android:text="Sign Out"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/ms_acquire_token_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/blue_grey_500"
                 android:layout_gravity="center_horizontal"
+                android:background="@color/blue_grey_500"
                 android:padding="10dp"
                 android:text="Acquire Token"
                 android:textColor="@android:color/white"
@@ -99,9 +98,9 @@
                 android:id="@+id/ms_acquire_token_silent_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/blue_grey_500"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
+                android:background="@color/blue_grey_500"
                 android:padding="10dp"
                 android:text="Acquire Token Silent"
                 android:textColor="@android:color/white"
@@ -113,8 +112,8 @@
             android:id="@+id/ms_sign_button_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/blue_grey_500"
             android:layout_gravity="center_horizontal"
+            android:background="@color/blue_grey_500"
             android:padding="10dp"
             android:text="Click to setting sign in button style"
             android:textColor="@android:color/white"
@@ -123,14 +122,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_weight="3"
         android:id="@+id/ll_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginTop="20dp"
+        android:layout_weight="3"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/userPhoto"
@@ -152,11 +151,11 @@
 
         <TextView
             android:id="@+id/tv_token_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="10dp"
             android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:textColorHint="@android:color/white" />
 
     </LinearLayout>
 
