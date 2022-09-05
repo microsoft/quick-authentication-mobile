@@ -1,8 +1,11 @@
 package com.microsoft.quick.auth.signin.internal.consumer;
 
+import android.util.Pair;
 import androidx.annotation.NonNull;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
+import com.microsoft.identity.client.SilentAuthenticationCallback;
+import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.quick.auth.signin.TokenResult;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
@@ -11,15 +14,13 @@ import com.microsoft.quick.auth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quick.auth.signin.internal.entity.MSQATokenResultInternal;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
-import com.microsoft.quick.auth.signin.internal.task.MSQADirectThreadSwitcher;
-import com.microsoft.quick.auth.signin.internal.task.MSQASwitchers;
 import com.microsoft.quick.auth.signin.internal.task.MSQATask;
 import com.microsoft.quick.auth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
 import com.microsoft.quick.auth.signin.logger.LogLevel;
 
 public class AcquireTokenSilentTask
-    implements MSQATaskFunction<IClientApplication, MSQATask<TokenResult>> {
+    implements MSQATaskFunction<Pair<IClientApplication, IAccount>, MSQATask<TokenResult>> {
 
   private @NonNull final String[] mScopes;
   private @NonNull final MSQATracker mTracker;
@@ -32,41 +33,50 @@ public class AcquireTokenSilentTask
   }
 
   @Override
-  public MSQATask<TokenResult> apply(@NonNull final IClientApplication clientApplication) {
+  public MSQATask<TokenResult> apply(@NonNull final Pair<IClientApplication, IAccount> pair) {
     return MSQATask.create(
-            new MSQATask.ConsumerHolder<TokenResult>() {
-              @Override
-              public void start(@NonNull MSQAConsumer<? super TokenResult> consumer) {
-                try {
-                  mTracker.track(
-                      TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
-                  IAccount iAccount = clientApplication.getCurrentAccount();
-                  if (iAccount == null)
-                    throw new MSQASignInException(
-                        MSQAErrorString.NO_CURRENT_ACCOUNT,
-                        MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
-                  IAuthenticationResult result =
-                      clientApplication.acquireTokenSilent(iAccount, mScopes);
-                  consumer.onSuccess(new MSQATokenResultInternal(result));
-                } catch (Exception exception) {
-                  Exception silentException = exception;
-                  // wrapper silent MSAL UI thread and expose new thread for developers
-                  if (silentException instanceof MsalUiRequiredException) {
-                    mTracker.track(
-                        TAG,
-                        LogLevel.ERROR,
-                        "token silent error instanceof MsalUiRequiredException will return wrap error",
-                        null);
-                    silentException =
-                        new MSQAUiRequiredException(
-                            ((MsalUiRequiredException) exception).getErrorCode(),
-                            exception.getMessage());
+        new MSQATask.ConsumerHolder<TokenResult>() {
+          @Override
+          public void start(@NonNull final MSQAConsumer<? super TokenResult> consumer) {
+            mTracker.track(
+                TAG, LogLevel.VERBOSE, "start request MSAL api acquireTokenSilent", null);
+            IClientApplication clientApplication = pair.first;
+            IAccount iAccount = pair.second;
+            // If no signed account, return error.
+            if (iAccount == null) {
+              consumer.onError(
+                  new MSQASignInException(
+                      MSQAErrorString.NO_CURRENT_ACCOUNT,
+                      MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE));
+              return;
+            }
+            clientApplication.acquireTokenSilentAsync(
+                iAccount,
+                mScopes,
+                new SilentAuthenticationCallback() {
+                  @Override
+                  public void onSuccess(IAuthenticationResult authenticationResult) {
+                    consumer.onSuccess(new MSQATokenResultInternal(authenticationResult));
                   }
-                  consumer.onError(silentException);
-                }
-              }
-            })
-        .upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain())
-        .downStreamSchedulerOn(MSQASwitchers.mainThread());
+
+                  @Override
+                  public void onError(MsalException exception) {
+                    Exception silentException = exception;
+                    // wrapper silent MSAL UI thread and expose new thread for developers
+                    if (silentException instanceof MsalUiRequiredException) {
+                      mTracker.track(
+                          TAG,
+                          LogLevel.ERROR,
+                          "token silent error instanceof MsalUiRequiredException will return wrap error",
+                          null);
+                      silentException =
+                          new MSQAUiRequiredException(
+                              exception.getErrorCode(), exception.getMessage());
+                    }
+                    consumer.onError(silentException);
+                  }
+                });
+          }
+        });
   }
 }
