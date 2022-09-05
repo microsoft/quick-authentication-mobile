@@ -1,5 +1,6 @@
 package com.microsoft.quick.auth.signin;
 
+import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -23,8 +24,14 @@ public interface AccountInfo {
   String getId();
 
   /**
-   * @return User photo base64 encoded data.
+   * @return User photo bitmap data.
    */
   @Nullable
-  String getPhoto();
+  Bitmap getBitmapPhoto();
+
+  /**
+   * @return User photo base64 encode data, recommend low memory to use this method.
+   */
+  @Nullable
+  String getBase64Photo();
 }

@@ -11,6 +11,7 @@ import com.microsoft.quick.auth.signin.callback.OnCompleteListener;
 import com.microsoft.quick.auth.signin.error.MSQACancelException;
 import com.microsoft.quick.auth.signin.error.MSQAErrorString;
 import com.microsoft.quick.auth.signin.error.MSQASignInException;
+import com.microsoft.quick.auth.signin.internal.consumer.AcquireCurrentAccountTask;
 import com.microsoft.quick.auth.signin.internal.consumer.AcquireCurrentTokenTask;
 import com.microsoft.quick.auth.signin.internal.consumer.AcquireTokenSilentTask;
 import com.microsoft.quick.auth.signin.internal.consumer.AcquireTokenTask;
@@ -22,6 +23,7 @@ import com.microsoft.quick.auth.signin.internal.entity.MSQASignInScope;
 import com.microsoft.quick.auth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quick.auth.signin.internal.signinclient.SingleClientApplication;
 import com.microsoft.quick.auth.signin.internal.task.MSQAConsumer;
+import com.microsoft.quick.auth.signin.internal.task.MSQASwitchers;
 import com.microsoft.quick.auth.signin.internal.task.MSQATask;
 import com.microsoft.quick.auth.signin.internal.util.MSQATracker;
 import com.microsoft.quick.auth.signin.logger.ILogger;
@@ -101,13 +103,14 @@ public final class MSQASignInClient implements ISignInClient {
 
   @Override
   public void signIn(
-      @NonNull Activity activity,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull Activity activity, @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "signIn");
     MSQATask.with(mSignInClientApplication)
+        .then(new AcquireCurrentAccountTask(tracker))
         .then(new SignInTask(activity, mScopes, tracker))
         .then(new AcquireUserIdTask(tracker))
         .then(new AcquireUserPhotoTask(tracker))
+        .downStreamSchedulerOn(MSQASwitchers.mainThread())
         .subscribe(
             new MSQAConsumer<MSQAAccountInfoInternal>() {
               @Override
@@ -155,9 +158,11 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "getCurrentSignInAccount");
     MSQATask.with(mSignInClientApplication)
+        .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
         .then(new AcquireUserIdTask(tracker))
         .then(new AcquireUserPhotoTask(tracker))
+        .downStreamSchedulerOn(MSQASwitchers.mainThread())
         .subscribe(
             new MSQAConsumer<MSQAAccountInfoInternal>() {
               @Override
@@ -208,6 +213,7 @@ public final class MSQASignInClient implements ISignInClient {
     final MSQATracker tracker = new MSQATracker(mContext, "acquireToken");
 
     MSQATask.with(mSignInClientApplication)
+        .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireTokenTask(activity, scopes, tracker))
         .subscribe(
             new MSQAConsumer<TokenResult>() {
@@ -238,6 +244,7 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "acquireTokenSilent");
     MSQATask.with(mSignInClientApplication)
+        .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireTokenSilentTask(scopes, tracker))
         .subscribe(
             new MSQAConsumer<TokenResult>() {
