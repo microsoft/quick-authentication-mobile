@@ -35,7 +35,7 @@ android {
         release {
             minifyEnabled false
             debuggable false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'consumer-rules.pro'
             buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
         }
     }
