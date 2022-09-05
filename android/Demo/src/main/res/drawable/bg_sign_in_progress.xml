@@ -23,11 +23,27 @@
   ~ //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   ~ //  THE SOFTWARE.
   -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <translate
-        android:duration="300"
-        android:fromXDelta="0"
-        android:fromYDelta="1000"
-        android:toXDelta="0"
-        android:toYDelta="0" />
-</set>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="3dp" />
+            <solid android:color="#ECF0F1" />
+        </shape>
+    </item>
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners android:radius="3dp" />
+                <solid android:color="#C6CACE" />
+            </shape>
+        </clip>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="3dp" />
+                <solid android:color="#16BC5C" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>
