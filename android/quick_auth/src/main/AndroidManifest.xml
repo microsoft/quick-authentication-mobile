@@ -24,7 +24,7 @@
   ~ // THE SOFTWARE.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.microsoft.quick.auth.signin">
+    package="com.microsoft.quickauth.signin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

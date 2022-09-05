@@ -33,13 +33,13 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import com.example.signdemo1.R;
-import com.microsoft.quick.auth.signin.view.ButtonLogoAlignment;
-import com.microsoft.quick.auth.signin.view.ButtonShape;
-import com.microsoft.quick.auth.signin.view.ButtonSize;
-import com.microsoft.quick.auth.signin.view.ButtonText;
-import com.microsoft.quick.auth.signin.view.ButtonTheme;
-import com.microsoft.quick.auth.signin.view.ButtonType;
-import com.microsoft.quick.auth.signin.view.MSQASignInButton;
+import com.microsoft.quickauth.signin.view.ButtonLogoAlignment;
+import com.microsoft.quickauth.signin.view.ButtonShape;
+import com.microsoft.quickauth.signin.view.ButtonSize;
+import com.microsoft.quickauth.signin.view.ButtonText;
+import com.microsoft.quickauth.signin.view.ButtonTheme;
+import com.microsoft.quickauth.signin.view.ButtonType;
+import com.microsoft.quickauth.signin.view.MSQASignInButton;
 
 public class SignInButtonSettingPop extends PopupWindow {
 
