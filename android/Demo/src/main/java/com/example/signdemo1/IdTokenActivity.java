@@ -29,13 +29,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.microsoft.quick.auth.signin.ClientCreatedListener;
-import com.microsoft.quick.auth.signin.ISignInClient;
-import com.microsoft.quick.auth.signin.MSQASignInClient;
-import com.microsoft.quick.auth.signin.MSQASignInOptions;
-import com.microsoft.quick.auth.signin.TokenResult;
-import com.microsoft.quick.auth.signin.error.MSQASignInException;
-import com.microsoft.quick.auth.signin.logger.LogLevel;
+import com.microsoft.quickauth.signin.ClientCreatedListener;
+import com.microsoft.quickauth.signin.ISignInClient;
+import com.microsoft.quickauth.signin.MSQASignInClient;
+import com.microsoft.quickauth.signin.MSQASignInOptions;
+import com.microsoft.quickauth.signin.TokenResult;
+import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.logger.LogLevel;
 
 public class IdTokenActivity extends Activity {
 
