@@ -55,13 +55,18 @@ public class MSQASignInButton extends LinearLayout {
   private void init(Context context) {
     setGravity(Gravity.CENTER_VERTICAL);
     setOrientation(HORIZONTAL);
+    // add icon view
     mSignInIcon = new ImageView(context);
     addView(mSignInIcon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     mSignInIcon.setScaleType(ImageView.ScaleType.FIT_XY);
     mSignInIcon.setImageDrawable(getResources().getDrawable(R.drawable.msqa_sign_in_button_icon));
-
+    // add text view
     mSignInText = new TextView(context);
-    addView(mSignInText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    LayoutParams textLayoutParams =
+        new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    textLayoutParams.setMargins(
+        getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0, 0, 0);
+    addView(mSignInText, textLayoutParams);
     mSignInContainer = this;
 
     mDefaultWidth = getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_width);
@@ -172,28 +177,14 @@ public class MSQASignInButton extends LinearLayout {
     mSignInText.setText(getButtonText());
 
     // set alignment
-    LinearLayout.MarginLayoutParams buttonTextLayoutParams =
-        (MarginLayoutParams) mSignInText.getLayoutParams();
     ViewGroup.MarginLayoutParams iconViewLayoutParams =
         (MarginLayoutParams) mSignInIcon.getLayoutParams();
     if (mButtonType != ButtonType.ICON) {
       if (mButtonLogoAlignment == ButtonLogoAlignment.CENTER) {
-        buttonTextLayoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        buttonTextLayoutParams.setMargins(
-            getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding),
-            0,
-            0,
-            0);
         iconViewLayoutParams.setMargins(0, 0, 0, 0);
         mSignInText.setGravity(Gravity.CENTER);
         mSignInContainer.setGravity(Gravity.CENTER);
       } else {
-        buttonTextLayoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        buttonTextLayoutParams.setMargins(
-            getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding),
-            0,
-            0,
-            0);
         iconViewLayoutParams.setMargins(
             getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_icon_padding),
             0,
@@ -216,15 +207,19 @@ public class MSQASignInButton extends LinearLayout {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    int resultWidth;
+    int resultHeight;
     int defaultHeight = getDefaultHeight();
     if (mButtonType == ButtonType.ICON) {
-      setMeasuredDimension(defaultHeight, defaultHeight);
+      resultWidth = defaultHeight;
+      resultHeight = defaultHeight;
     } else {
-      setMeasuredDimension(
-          measureDimension(mDefaultWidth, widthMeasureSpec),
-          measureDimension(defaultHeight, heightMeasureSpec));
+      resultWidth = measureDimension(mDefaultWidth, widthMeasureSpec);
+      resultHeight = measureDimension(defaultHeight, heightMeasureSpec);
     }
+    super.onMeasure(
+        MeasureSpec.makeMeasureSpec(resultWidth, MeasureSpec.EXACTLY),
+        MeasureSpec.makeMeasureSpec(resultHeight, MeasureSpec.EXACTLY));
   }
 
   private int measureDimension(int defaultSize, int measureSpec) {
@@ -236,7 +231,8 @@ public class MSQASignInButton extends LinearLayout {
         result = specSize;
         break;
       case MeasureSpec.EXACTLY:
-        result = specSize;
+        // ensure view min size
+        result = Math.max(specSize, defaultSize);
         break;
       case MeasureSpec.AT_MOST:
         result = defaultSize;
