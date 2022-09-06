@@ -18,8 +18,3 @@
 
 ##---------------Begin: proguard configuration for QuickAuth  --------
 -keep class com.microsoft.quick.auth.signin.** { *; }
-
-# Prevent R8 from leaving Data object members always null
--keepclassmembers,allowobfuscation class * {
-  @com.google.gson.annotations.SerializedName <fields>;
-}
