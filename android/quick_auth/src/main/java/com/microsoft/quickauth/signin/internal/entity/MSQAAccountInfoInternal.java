@@ -33,19 +33,12 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.quickauth.signin.AccountInfo;
 
 public class MSQAAccountInfoInternal implements AccountInfo {
-  private String mAccessToken;
   private String mFullName;
   private String mUserName;
   private String mId;
   private Bitmap mBitmapPhoto;
   private String mBase64Photo;
   private byte[] mUserPhotoBytes;
-  private IAccount mIAccount;
-
-  @NonNull
-  public String getAccessToken() {
-    return mAccessToken;
-  }
 
   @Nullable
   @Override
@@ -87,10 +80,6 @@ public class MSQAAccountInfoInternal implements AccountInfo {
     this.mUserPhotoBytes = userPhoto;
   }
 
-  public void setAccessToken(String accessToken) {
-    this.mAccessToken = accessToken;
-  }
-
   public void setFullName(String fullName) {
     this.mFullName = fullName;
   }
@@ -103,19 +92,9 @@ public class MSQAAccountInfoInternal implements AccountInfo {
     this.mId = id;
   }
 
-  public IAccount getIAccount() {
-    return mIAccount;
-  }
-
-  public void setIAccount(IAccount account) {
-    this.mIAccount = account;
-  }
-
   public static MSQAAccountInfoInternal getAccount(IAuthenticationResult authenticationResult) {
     MSQAAccountInfoInternal account = new MSQAAccountInfoInternal();
-    account.setAccessToken(authenticationResult.getAccessToken());
     IAccount iAccount = authenticationResult.getAccount();
-    account.setIAccount(iAccount);
     if (iAccount.getClaims() != null && iAccount.getClaims().containsKey("name")) {
       Object name = iAccount.getClaims().get("name");
       account.setFullName(name != null ? name.toString() : null);

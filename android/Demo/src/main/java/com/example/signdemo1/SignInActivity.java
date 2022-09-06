@@ -92,7 +92,6 @@ public class SignInActivity extends Activity {
           public void onCreated(@NonNull MSQASignInClient client) {
             mSignInClient = client;
             getCurrentAccount();
-            mStatus.setText("sign in client created successfully.");
             mSignInButton.setSignInCallback(
                 SignInActivity.this,
                 client,
@@ -107,12 +106,12 @@ public class SignInActivity extends Activity {
 
           @Override
           public void onError(@NonNull MSQASignInException error) {
-            mStatus.setText("create sign in client error:" + error.getMessage());
+            mUserInfoResult.setText("create sign in client error:" + error.getMessage());
           }
         });
     mSignOutButton.setOnClickListener(
         v -> {
-          checkClient();
+          if (mSignInClient == null) return;
           mSignInClient.signOut((aBoolean, error) -> uploadSignInfo(null, error));
           updateTokenResult(null, null);
         });
@@ -131,7 +130,8 @@ public class SignInActivity extends Activity {
         });
     msAcquireTokenSilentButton.setOnClickListener(
         v -> {
-          checkClient();
+          if (mSignInClient == null) return;
+          mTokenResult.setText("");
           mSignInClient.acquireTokenSilent(
               scops,
               (iTokenResult, error) -> {
@@ -144,7 +144,6 @@ public class SignInActivity extends Activity {
                  * token for has a stricter set of requirement than your Single Sign-On refresh
                  * token. - you're introducing a new scope which the user has never consented for.
                  */
-                mTokenResult.setText("");
                 if (error instanceof MSQAUiRequiredException) {
                   acquireToken();
                 } else {
@@ -155,14 +154,13 @@ public class SignInActivity extends Activity {
   }
 
   private void acquireToken() {
-    checkClient();
     mSignInClient.acquireToken(
         this, scops, (tokenResult, error) -> updateTokenResult(tokenResult, error));
   }
 
   private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
     if (accountInfo != null) {
-      //      mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
+      // mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
       mUserPhoto.setImageBitmap(accountInfo.getBitmapPhoto());
       String userInfo =
           "MicrosoftAccountInfo{"
@@ -177,6 +175,7 @@ public class SignInActivity extends Activity {
               + '\''
               + '}';
       mUserInfoResult.setText(userInfo);
+      mTokenResult.setText("");
     } else {
       mUserPhoto.setImageBitmap(null);
       mUserInfoResult.setText(error != null ? "login error: " + error.getMessage() : "");
@@ -185,9 +184,12 @@ public class SignInActivity extends Activity {
   }
 
   private void getCurrentAccount() {
-    checkClient();
+    if (mSignInClient == null) return;
     mSignInClient.getCurrentSignInAccount(
-        this, (accountInfo, error) -> uploadSignInfo(accountInfo, error));
+        this,
+        (accountInfo, error) -> {
+          if (accountInfo != null) uploadSignInfo(accountInfo, error);
+        });
   }
 
   private void updateStatus(boolean signIn) {
@@ -202,12 +204,5 @@ public class SignInActivity extends Activity {
         tokenResult != null
             ? tokenResult.getAccessToken()
             : error != null ? "error:" + error.getMessage() : "");
-  }
-
-  private void checkClient() {
-    if (mSignInClient == null) {
-      mUserInfoResult.setText("MSQASignInClient Not yet initialized");
-      return;
-    }
   }
 }

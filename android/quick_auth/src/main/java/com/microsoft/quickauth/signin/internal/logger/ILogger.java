@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.internal.logger;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -36,5 +35,5 @@ public interface ILogger {
    * @param logLevel The Logger.LogLevel for the generated message.
    * @param message The detailed message.
    */
-  void log(@NonNull @LogLevel int logLevel, @Nullable String message);
+  void log(@LogLevel int logLevel, @Nullable String message);
 }
