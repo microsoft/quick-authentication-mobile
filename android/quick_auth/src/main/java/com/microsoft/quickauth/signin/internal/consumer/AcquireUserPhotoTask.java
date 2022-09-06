@@ -28,13 +28,12 @@ import com.microsoft.quickauth.signin.internal.http.MSQAAPIConstant;
 import com.microsoft.quickauth.signin.internal.http.MSQAHttpConnectionClient;
 import com.microsoft.quickauth.signin.internal.http.MSQAHttpMethod;
 import com.microsoft.quickauth.signin.internal.http.MSQAHttpRequest;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQADirectThreadSwitcher;
-import com.microsoft.quickauth.signin.internal.task.MSQASwitchers;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quickauth.signin.internal.util.MSQATracker;
-import com.microsoft.quickauth.signin.logger.LogLevel;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,8 +73,7 @@ public class AcquireUserPhotoTask
         }
         consumer.onSuccess(accountInfo);
       }
-    }.upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain())
-        .downStreamSchedulerOn(MSQASwitchers.mainThread());
+    }.upStreamScheduleOn(MSQADirectThreadSwitcher.directToIOWhenCreateInMain());
   }
 
   private static MSQAHttpRequest createRequest(MSQAAccountInfoInternal microsoftAccountInfo) {

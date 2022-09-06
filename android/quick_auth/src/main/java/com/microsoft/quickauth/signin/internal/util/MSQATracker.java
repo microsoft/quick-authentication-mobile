@@ -22,16 +22,16 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.internal.util;
 
-import static com.microsoft.quickauth.signin.logger.LogLevel.ERROR;
-import static com.microsoft.quickauth.signin.logger.LogLevel.INFO;
-import static com.microsoft.quickauth.signin.logger.LogLevel.VERBOSE;
-import static com.microsoft.quickauth.signin.logger.LogLevel.WARN;
+import static com.microsoft.quickauth.signin.internal.logger.LogLevel.ERROR;
+import static com.microsoft.quickauth.signin.internal.logger.LogLevel.INFO;
+import static com.microsoft.quickauth.signin.internal.logger.LogLevel.VERBOSE;
+import static com.microsoft.quickauth.signin.internal.logger.LogLevel.WARN;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
 import com.microsoft.quickauth.signin.R;
-import com.microsoft.quickauth.signin.logger.LogLevel;
-import com.microsoft.quickauth.signin.logger.MSQALogger;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
+import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
 
 public class MSQATracker {
   private static final String TAG = "MSQATracker";

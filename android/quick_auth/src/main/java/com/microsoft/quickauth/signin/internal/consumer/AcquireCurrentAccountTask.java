@@ -28,12 +28,12 @@ import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quickauth.signin.internal.util.MSQATracker;
-import com.microsoft.quickauth.signin.logger.LogLevel;
 
 public class AcquireCurrentAccountTask
     implements MSQATaskFunction<IClientApplication, MSQATask<Pair<IClientApplication, IAccount>>> {
