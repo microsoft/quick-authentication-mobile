@@ -34,12 +34,12 @@ import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQASignInException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quickauth.signin.internal.entity.MSQATokenResultInternal;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quickauth.signin.internal.util.MSQATracker;
-import com.microsoft.quickauth.signin.logger.LogLevel;
 
 public class AcquireTokenSilentTask
     implements MSQATaskFunction<Pair<IClientApplication, IAccount>, MSQATask<TokenResult>> {

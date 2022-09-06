@@ -40,7 +40,7 @@ import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.TokenResult;
 import com.microsoft.quickauth.signin.error.MSQASignInException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
-import com.microsoft.quickauth.signin.logger.LogLevel;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.view.MSQASignInButton;
 
 public class SignInActivity extends Activity {

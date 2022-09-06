@@ -25,6 +25,7 @@ package com.microsoft.quickauth.signin;
 import androidx.annotation.NonNull;
 import com.microsoft.quickauth.signin.error.MSQASignInException;
 
+/** Listener callback for asynchronous initialization of MSQASignInClient object. */
 public interface ClientCreatedListener {
   /**
    * Called once when the client object is successfully created.

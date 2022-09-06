@@ -46,13 +46,13 @@ public interface AccountInfo {
   String getId();
 
   /**
-   * @return User photo bitmap data.
+   * @return User photo int bitmap.
    */
   @Nullable
   Bitmap getBitmapPhoto();
 
   /**
-   * @return User photo base64 encode data, recommend low memory to use this method.
+   * @return User photo in Base64 format, recommend for low-memory devices.
    */
   @Nullable
   String getBase64Photo();
