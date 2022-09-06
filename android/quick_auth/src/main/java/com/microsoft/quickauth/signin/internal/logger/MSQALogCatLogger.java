@@ -20,21 +20,29 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.logger;
+package com.microsoft.quickauth.signin.internal.logger;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.util.Log;
+import com.microsoft.identity.client.ILoggerCallback;
+import com.microsoft.identity.client.Logger;
 
-/**
- * Interface for apps to configure the external logging and implement the callback to designate the
- * output of the log messages.
- */
-public interface ILogger {
-  /**
-   * Interface method for apps to hand off each log message as it's generated.
-   *
-   * @param logLevel The Logger.LogLevel for the generated message.
-   * @param message The detailed message.
-   */
-  void log(@NonNull @LogLevel int logLevel, @Nullable String message);
+public class MSQALogCatLogger implements ILoggerCallback {
+
+  @Override
+  public void log(String tag, Logger.LogLevel logLevel, String message, boolean containsPII) {
+    switch (logLevel) {
+      case ERROR:
+        Log.e(tag, message);
+        break;
+      case WARNING:
+        Log.w(tag, message);
+        break;
+      case INFO:
+        Log.i(tag, message);
+        break;
+      case VERBOSE:
+        Log.v(tag, message);
+        break;
+    }
+  }
 }

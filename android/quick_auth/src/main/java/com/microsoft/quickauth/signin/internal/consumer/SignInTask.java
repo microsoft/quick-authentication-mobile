@@ -30,13 +30,13 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQADirectThreadSwitcher;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
 import com.microsoft.quickauth.signin.internal.util.MSQATracker;
-import com.microsoft.quickauth.signin.logger.LogLevel;
 
 public class SignInTask
     implements MSQATaskFunction<

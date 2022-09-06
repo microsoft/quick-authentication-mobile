@@ -42,16 +42,19 @@ import com.microsoft.quickauth.signin.internal.consumer.AcquireUserPhotoTask;
 import com.microsoft.quickauth.signin.internal.consumer.SignInTask;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quickauth.signin.internal.entity.MSQASignInScope;
+import com.microsoft.quickauth.signin.internal.logger.ILogger;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
+import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
 import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.signinclient.SingleClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQASwitchers;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.util.MSQATracker;
-import com.microsoft.quickauth.signin.logger.ILogger;
-import com.microsoft.quickauth.signin.logger.LogLevel;
-import com.microsoft.quickauth.signin.logger.MSQALogger;
 
+/**
+ * This is the entry point for developer to create public native applications and make API calls.
+ */
 public final class MSQASignInClient implements ISignInClient {
   private static final String TAG = "MSQASignInClient";
   private final String[] mScopes;
@@ -65,6 +68,16 @@ public final class MSQASignInClient implements ISignInClient {
     mContext = context;
   }
 
+  /**
+   * This function will read the configurations from {@link MSQASignInOptions} to create the
+   * MSQASignInClient.
+   *
+   * @param context he sdk requires the application context to be passed in {@link
+   *     MSQASignInClient}. Cannot be null.
+   * @param signInOptions A configuration item for client initialization.
+   * @param listener A callback to be invoked when the object is successfully created. Cannot be
+   *     null.
+   */
   public static void create(
       @NonNull final Context context,
       @NonNull final MSQASignInOptions signInOptions,
@@ -233,7 +246,6 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
     final MSQATracker tracker = new MSQATracker(mContext, "acquireToken");
-
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireTokenTask(activity, scopes, tracker))

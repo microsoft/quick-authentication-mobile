@@ -23,13 +23,27 @@
 package com.microsoft.quickauth.signin;
 
 import androidx.annotation.Nullable;
-import com.microsoft.quickauth.signin.logger.ILogger;
-import com.microsoft.quickauth.signin.logger.LogLevel;
+import com.microsoft.quickauth.signin.internal.logger.ILogger;
+import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 
+/** Encapsulates the parameters passed to the create MSQASignInClient. */
 public class MSQASignInOptions {
+  /**
+   * The resource ID of the raw file containing the JSON configuration for the {@link
+   * MSQASignInClient}.
+   */
   private final int mConfigResourceId;
+  /** Set Enable/Disable the Android logcat logging. */
   private final boolean mEnableLogcatLog;
+  /**
+   * Configures external logging to configure a callback that the sdk will use to pass each log
+   * message.
+   */
   private final @Nullable ILogger mExternalLogger;
+  /**
+   * Set the log level for diagnostic purpose. By default, the sdk enables the verbose level
+   * logging.
+   */
   private final @LogLevel int mLogLevel;
 
   public MSQASignInOptions(MSQASignInOptions.Builder builder) {
@@ -39,19 +53,31 @@ public class MSQASignInOptions {
     mLogLevel = builder.mLogLevel;
   }
 
+  /**
+   * @return The resource ID of the raw file.
+   */
   public int getConfigResourceId() {
     return mConfigResourceId;
   }
 
+  /**
+   * @return If true enable logcat logging.
+   */
   public boolean isEnableLogcatLog() {
     return mEnableLogcatLog;
   }
 
+  /**
+   * @return external logging callback.
+   */
   @Nullable
   public ILogger getExternalLogger() {
     return mExternalLogger;
   }
 
+  /**
+   * @return The log level in {@link LogLevel}.
+   */
   public int getLogLevel() {
     return mLogLevel;
   }

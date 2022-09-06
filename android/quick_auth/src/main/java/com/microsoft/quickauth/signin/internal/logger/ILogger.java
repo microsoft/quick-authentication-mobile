@@ -20,17 +20,21 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.logger;
+package com.microsoft.quickauth.signin.internal.logger;
 
-import androidx.annotation.IntDef;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-@Retention(RetentionPolicy.SOURCE)
-@IntDef({LogLevel.VERBOSE, LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR})
-public @interface LogLevel {
-  int VERBOSE = 0;
-  int INFO = 1;
-  int WARN = 2;
-  int ERROR = 3;
+/**
+ * Interface for apps to configure the external logging and implement the callback to designate the
+ * output of the log messages.
+ */
+public interface ILogger {
+  /**
+   * Interface method for apps to hand off each log message as it's generated.
+   *
+   * @param logLevel The Logger.LogLevel for the generated message.
+   * @param message The detailed message.
+   */
+  void log(@NonNull @LogLevel int logLevel, @Nullable String message);
 }
