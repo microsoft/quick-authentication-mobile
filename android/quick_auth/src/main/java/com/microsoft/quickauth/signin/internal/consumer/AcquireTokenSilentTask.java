@@ -39,17 +39,17 @@ import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 
 public class AcquireTokenSilentTask
     implements MSQATaskFunction<Pair<IClientApplication, IAccount>, MSQATask<TokenResult>> {
 
   private @NonNull final String[] mScopes;
-  private @NonNull final MSQATracker mTracker;
+  private @NonNull final MSQATaskTracker mTracker;
   private static final String TAG = "AcquireTokenSilentTask";
 
   public AcquireTokenSilentTask(
-      @NonNull final String[] scopes, @NonNull final MSQATracker tracker) {
+      @NonNull final String[] scopes, @NonNull final MSQATaskTracker tracker) {
     mScopes = scopes;
     mTracker = tracker;
   }

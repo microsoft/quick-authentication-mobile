@@ -33,15 +33,15 @@ import com.microsoft.quickauth.signin.internal.signinclient.IClientApplication;
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 
 public class AcquireCurrentAccountTask
     implements MSQATaskFunction<IClientApplication, MSQATask<Pair<IClientApplication, IAccount>>> {
 
-  private @NonNull final MSQATracker mTracker;
+  private @NonNull final MSQATaskTracker mTracker;
   private static final String TAG = "AcquireCurrentAccountTask";
 
-  public AcquireCurrentAccountTask(@NonNull final MSQATracker tracker) {
+  public AcquireCurrentAccountTask(@NonNull final MSQATaskTracker tracker) {
     mTracker = tracker;
   }
 
