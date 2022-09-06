@@ -36,16 +36,16 @@ import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQADirectThreadSwitcher;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 import org.json.JSONObject;
 
 public class AcquireUserIdTask
     implements MSQATaskFunction<MSQAAccountInfoInternal, MSQATask<MSQAAccountInfoInternal>> {
 
   private static final String TAG = "AcquireUserIdTask";
-  private @NonNull final MSQATracker mTracker;
+  private @NonNull final MSQATaskTracker mTracker;
 
-  public AcquireUserIdTask(@NonNull MSQATracker tracker) {
+  public AcquireUserIdTask(@NonNull MSQATaskTracker tracker) {
     mTracker = tracker;
   }
 

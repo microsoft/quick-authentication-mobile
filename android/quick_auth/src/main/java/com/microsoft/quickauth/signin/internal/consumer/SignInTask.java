@@ -36,7 +36,7 @@ import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQADirectThreadSwitcher;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 
 public class SignInTask
     implements MSQATaskFunction<
@@ -44,13 +44,13 @@ public class SignInTask
 
   private @NonNull final Activity mActivity;
   private @NonNull final String[] mScopes;
-  private @NonNull final MSQATracker mTracker;
+  private @NonNull final MSQATaskTracker mTracker;
   private static final String TAG = "SignInTask";
 
   public SignInTask(
       @NonNull final Activity activity,
       @NonNull String[] scopes,
-      @NonNull final MSQATracker tracker) {
+      @NonNull final MSQATaskTracker tracker) {
     mActivity = activity;
     mScopes = scopes;
     mTracker = tracker;

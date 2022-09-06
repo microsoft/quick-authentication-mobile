@@ -25,7 +25,7 @@ package com.microsoft.quickauth.signin;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
-import com.microsoft.quickauth.signin.internal.entity.MSQASignInScope;
+import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 
 public interface ISignInClient {
   /**
@@ -71,7 +71,7 @@ public interface ISignInClient {
    * it fails the refresh, exception will be sent back via callback.
    *
    * @param scopes The non-null array of scopes to be requested for the access token, the supported
-   *     scopes can be found in{@link MSQASignInScope}.
+   *     scopes can be found in{@link MSQASignInScopeInternal}.
    * @param completeListener A callback to be invoked when token get finished.
    */
   void acquireTokenSilent(
@@ -83,7 +83,7 @@ public interface ISignInClient {
    *
    * @param activity Activity that is used as the parent activity for get token.
    * @param scopes The non-null array of scopes to be requested for the access token, the supported
-   *     scopes can be found in{@link MSQASignInScope}.
+   *     scopes can be found in{@link MSQASignInScopeInternal}.
    * @param completeListener A callback to be invoked when token get finished.
    */
   void acquireToken(

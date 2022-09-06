@@ -31,8 +31,6 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
-import com.microsoft.quickauth.signin.AccountInfo;
-import java.util.List;
 
 public interface IClientApplication {
   void signIn(
@@ -66,12 +64,4 @@ public interface IClientApplication {
 
   void getCurrentAccountAsync(
       @NonNull ISingleAccountPublicClientApplication.CurrentAccountCallback callback);
-
-  @Nullable
-  IAccount getAccount(@NonNull AccountInfo accountInfo) throws Exception;
-
-  /** Returns a List of {@link IAccount} objects for which this application has RefreshTokens. */
-  @Nullable
-  @WorkerThread
-  List<IAccount> getAccounts() throws Exception;
 }

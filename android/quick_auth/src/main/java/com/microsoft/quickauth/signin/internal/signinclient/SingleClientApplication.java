@@ -31,15 +31,9 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
-import com.microsoft.quickauth.signin.AccountInfo;
-import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SingleClientApplication implements IClientApplication {
-
   private final @NonNull ISingleAccountPublicClientApplication mSignClient;
-  private final List<IAccount> mAccounts = new ArrayList<>();
 
   public SingleClientApplication(@NonNull ISingleAccountPublicClientApplication signClient) {
     mSignClient = signClient;
@@ -100,26 +94,5 @@ public class SingleClientApplication implements IClientApplication {
   public void getCurrentAccountAsync(
       @NonNull ISingleAccountPublicClientApplication.CurrentAccountCallback callback) {
     mSignClient.getCurrentAccountAsync(callback);
-  }
-
-  @Nullable
-  @Override
-  public IAccount getAccount(@NonNull AccountInfo accountInfo) throws Exception {
-    if (accountInfo instanceof MSQAAccountInfoInternal
-        && ((MSQAAccountInfoInternal) accountInfo).getIAccount() != null) {
-      return ((MSQAAccountInfoInternal) accountInfo).getIAccount();
-    }
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public List<IAccount> getAccounts() throws Exception {
-    IAccount account = getCurrentAccount();
-    mAccounts.clear();
-    if (account != null) {
-      mAccounts.add(account);
-    }
-    return mAccounts;
   }
 }
