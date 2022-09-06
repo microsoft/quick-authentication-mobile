@@ -41,7 +41,7 @@ import com.microsoft.quickauth.signin.internal.consumer.AcquireUserIdTask;
 import com.microsoft.quickauth.signin.internal.consumer.AcquireUserPhotoTask;
 import com.microsoft.quickauth.signin.internal.consumer.SignInTask;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
-import com.microsoft.quickauth.signin.internal.entity.MSQASignInScope;
+import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 import com.microsoft.quickauth.signin.internal.logger.ILogger;
 import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
@@ -50,7 +50,7 @@ import com.microsoft.quickauth.signin.internal.signinclient.SingleClientApplicat
 import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQASwitchers;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 
 /**
  * This is the entry point for developer to create public native applications and make API calls.
@@ -63,7 +63,7 @@ public final class MSQASignInClient implements ISignInClient {
 
   private MSQASignInClient(
       Context context, @NonNull SingleClientApplication signInClientApplication) {
-    mScopes = new String[] {MSQASignInScope.READ};
+    mScopes = new String[] {MSQASignInScopeInternal.READ};
     mSignInClientApplication = signInClientApplication;
     mContext = context;
   }
@@ -139,7 +139,7 @@ public final class MSQASignInClient implements ISignInClient {
   @Override
   public void signIn(
       @NonNull Activity activity, @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    final MSQATracker tracker = new MSQATracker(mContext, "signIn");
+    final MSQATaskTracker tracker = new MSQATaskTracker(mContext, "signIn");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentAccountTask(tracker))
         .then(new SignInTask(activity, mScopes, tracker))
@@ -170,7 +170,7 @@ public final class MSQASignInClient implements ISignInClient {
 
   @Override
   public void signOut(@NonNull final OnCompleteListener<Boolean> completeListener) {
-    final MSQATracker tracker = new MSQATracker(mContext, "signOut");
+    final MSQATaskTracker tracker = new MSQATaskTracker(mContext, "signOut");
     mSignInClientApplication.signOut(
         new ISingleAccountPublicClientApplication.SignOutCallback() {
           @Override
@@ -191,7 +191,7 @@ public final class MSQASignInClient implements ISignInClient {
   public void getCurrentSignInAccount(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    final MSQATracker tracker = new MSQATracker(mContext, "getCurrentSignInAccount");
+    final MSQATaskTracker tracker = new MSQATaskTracker(mContext, "getCurrentSignInAccount");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireCurrentTokenTask(activity, false, mScopes, tracker))
@@ -245,7 +245,7 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
-    final MSQATracker tracker = new MSQATracker(mContext, "acquireToken");
+    final MSQATaskTracker tracker = new MSQATaskTracker(mContext, "acquireToken");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireTokenTask(activity, scopes, tracker))
@@ -276,7 +276,7 @@ public final class MSQASignInClient implements ISignInClient {
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
-    final MSQATracker tracker = new MSQATracker(mContext, "acquireTokenSilent");
+    final MSQATaskTracker tracker = new MSQATaskTracker(mContext, "acquireTokenSilent");
     MSQATask.with(mSignInClientApplication)
         .then(new AcquireCurrentAccountTask(tracker))
         .then(new AcquireTokenSilentTask(scopes, tracker))

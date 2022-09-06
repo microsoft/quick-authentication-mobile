@@ -27,8 +27,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({MSQASignInScope.READ, MSQASignInScope.READ_AND_WRITE})
-public @interface MSQASignInScope {
+@StringDef({MSQASignInScopeInternal.READ, MSQASignInScopeInternal.READ_AND_WRITE})
+public @interface MSQASignInScopeInternal {
   String READ = "user.read"; // Read only scope.
   String READ_AND_WRITE = "user.readwrite"; // Read and Write scope.
 }

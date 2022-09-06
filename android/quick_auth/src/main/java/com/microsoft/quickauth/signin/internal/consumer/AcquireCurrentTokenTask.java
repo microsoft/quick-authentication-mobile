@@ -38,7 +38,7 @@ import com.microsoft.quickauth.signin.internal.task.MSQAConsumer;
 import com.microsoft.quickauth.signin.internal.task.MSQADirectThreadSwitcher;
 import com.microsoft.quickauth.signin.internal.task.MSQATask;
 import com.microsoft.quickauth.signin.internal.task.MSQATaskFunction;
-import com.microsoft.quickauth.signin.internal.util.MSQATracker;
+import com.microsoft.quickauth.signin.internal.util.MSQATaskTracker;
 
 public class AcquireCurrentTokenTask
     implements MSQATaskFunction<
@@ -47,14 +47,14 @@ public class AcquireCurrentTokenTask
   private final @NonNull Activity mActivity;
   private static final String TAG = "AcquireCurrentTokenTask";
   private final boolean mSilentErrorRetry;
-  private @NonNull final MSQATracker mTracker;
+  private @NonNull final MSQATaskTracker mTracker;
   private @NonNull final String[] mScopes;
 
   public AcquireCurrentTokenTask(
       @NonNull final Activity activity,
       final boolean silentErrorRetry,
       @NonNull final String[] scopes,
-      @NonNull final MSQATracker tracker) {
+      @NonNull final MSQATaskTracker tracker) {
     mTracker = tracker;
     mScopes = scopes;
     mActivity = activity;

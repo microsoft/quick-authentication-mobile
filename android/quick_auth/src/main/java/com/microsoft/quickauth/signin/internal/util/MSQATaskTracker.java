@@ -33,12 +33,12 @@ import com.microsoft.quickauth.signin.R;
 import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
 
-public class MSQATracker {
+public class MSQATaskTracker {
   private static final String TAG = "MSQATracker";
   private final @NonNull String mFrom;
   private final String mTrackerFormatString;
 
-  public MSQATracker(@NonNull Context context, @NonNull String from) {
+  public MSQATaskTracker(@NonNull Context context, @NonNull String from) {
     mFrom = from;
     mTrackerFormatString = context.getString(R.string.msqa_tracker_format_string);
   }
