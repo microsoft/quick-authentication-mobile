@@ -32,10 +32,10 @@ import com.microsoft.identity.client.ICurrentAccountResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
 
-public class SingleClientApplication implements IClientApplication {
-  private final @NonNull ISingleAccountPublicClientApplication mSignClient;
+public class MSALSingleClientWrapper implements IClientApplication {
+  protected final @NonNull ISingleAccountPublicClientApplication mSignClient;
 
-  public SingleClientApplication(@NonNull ISingleAccountPublicClientApplication signClient) {
+  public MSALSingleClientWrapper(@NonNull ISingleAccountPublicClientApplication signClient) {
     mSignClient = signClient;
   }
 

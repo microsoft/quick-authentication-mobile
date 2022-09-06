@@ -36,7 +36,7 @@ public class MSQALogger {
   private ILogger mExternalLogger;
   private boolean mEnableLogcatLog;
   private @LogLevel int mLogLevel;
-  private AtomicBoolean mIsInitialized;
+  private final AtomicBoolean mIsInitialized;
 
   private MSQALogger() {
     MSQALogCatLogger = new MSQALogCatLogger();

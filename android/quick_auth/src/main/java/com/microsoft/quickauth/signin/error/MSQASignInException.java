@@ -111,4 +111,9 @@ public class MSQASignInException extends Exception {
     signInException.setSuppressedException(exception);
     return signInException;
   }
+
+  public static MSQASignInException createNoAccountException() {
+    return new MSQASignInException(
+        MSQAErrorString.NO_CURRENT_ACCOUNT, MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+  }
 }
