@@ -24,6 +24,7 @@ package com.microsoft.quickauth.signin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
@@ -33,7 +34,8 @@ import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
-import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.error.MSQAErrorString;
+import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 import com.microsoft.quickauth.signin.internal.entity.MSQATokenResultInternal;
 import com.microsoft.quickauth.signin.internal.logger.ILogger;
@@ -61,7 +63,7 @@ public final class MSQASignInClient implements ISignInClient {
    * This function will read the configurations from {@link MSQASignInOptions} to create the
    * MSQASignInClient.
    *
-   * @param context he sdk requires the application context to be passed in {@link
+   * @param context The sdk requires the application context to be passed in {@link
    *     MSQASignInClient}. Cannot be null.
    * @param signInOptions A configuration item for client initialization.
    * @param listener A callback to be invoked when the object is successfully created. Cannot be
@@ -71,6 +73,13 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final Context context,
       @NonNull final MSQASignInOptions signInOptions,
       @NonNull final ClientCreatedListener listener) {
+    if (isResourceExist(context, signInOptions.getConfigResourceId())) {
+      listener.onError(
+          new MSQAException(
+              MSQAErrorString.NO_CONFIGURATION_FILE_ERROR,
+              MSQAErrorString.NO_CONFIGURATION_FILE_ERROR_MESSAGE));
+      return;
+    }
     PublicClientApplication.createSingleAccountPublicClientApplication(
         context.getApplicationContext(),
         signInOptions.getConfigResourceId(),
@@ -88,7 +97,7 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(MsalException exception) {
-            listener.onError(MSQASignInException.create(exception));
+            listener.onError(MSQAException.create(exception));
           }
         });
   }
@@ -104,7 +113,7 @@ public final class MSQASignInClient implements ISignInClient {
   }
 
   /**
-   * Enable/Disable the Android logcat logging. By default, the sdk enables it.
+   * Enable/Disable the Android logcat logging. By default, the sdk disables it.
    *
    * @param enableLogcatLog True if enabling the logcat logging, false otherwise.
    */
@@ -143,7 +152,7 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            completeListener.onComplete(null, MSQASignInException.create(exception));
+            completeListener.onComplete(null, MSQAException.create(exception));
           }
         });
   }
@@ -159,13 +168,13 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            completeListener.onComplete(false, MSQASignInException.create(exception));
+            completeListener.onComplete(false, MSQAException.create(exception));
           }
         });
   }
 
   @Override
-  public void getCurrentSignInAccount(
+  public void getCurrentAccount(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     mSignInClient.getCurrentAccountAsync(
@@ -185,7 +194,7 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            completeListener.onComplete(null, MSQASignInException.create(exception));
+            completeListener.onComplete(null, MSQAException.create(exception));
           }
         });
   }
@@ -207,7 +216,7 @@ public final class MSQASignInClient implements ISignInClient {
                   @Override
                   public void onComplete(
                       @Nullable IAuthenticationResult iAuthenticationResult,
-                      @Nullable MSQASignInException error) {
+                      @Nullable MSQAException error) {
                     completeListener.onComplete(
                         iAuthenticationResult != null
                             ? new MSQATokenResultInternal(iAuthenticationResult)
@@ -228,7 +237,7 @@ public final class MSQASignInClient implements ISignInClient {
                   @Override
                   public void onComplete(
                       @Nullable IAuthenticationResult iAuthenticationResult,
-                      @Nullable MSQASignInException error) {
+                      @Nullable MSQAException error) {
                     completeListener.onComplete(
                         iAuthenticationResult != null
                             ? new MSQATokenResultInternal(iAuthenticationResult)
@@ -240,7 +249,7 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            completeListener.onComplete(null, MSQASignInException.create(exception));
+            completeListener.onComplete(null, MSQAException.create(exception));
           }
         });
   }
@@ -260,7 +269,7 @@ public final class MSQASignInClient implements ISignInClient {
                   @Override
                   public void onComplete(
                       @Nullable IAuthenticationResult iAuthenticationResult,
-                      @Nullable MSQASignInException error) {
+                      @Nullable MSQAException error) {
                     completeListener.onComplete(
                         iAuthenticationResult != null
                             ? new MSQATokenResultInternal(iAuthenticationResult)
@@ -280,7 +289,7 @@ public final class MSQASignInClient implements ISignInClient {
                   @Override
                   public void onComplete(
                       @Nullable IAuthenticationResult iAuthenticationResult,
-                      @Nullable MSQASignInException error) {
+                      @Nullable MSQAException error) {
                     completeListener.onComplete(
                         iAuthenticationResult != null
                             ? new MSQATokenResultInternal(iAuthenticationResult)
@@ -292,8 +301,25 @@ public final class MSQASignInClient implements ISignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            completeListener.onComplete(null, MSQASignInException.create(exception));
+            completeListener.onComplete(null, MSQAException.create(exception));
           }
         });
+  }
+
+  /**
+   * Check if the resource is exist.
+   *
+   * @param context Context that is used check resource.
+   * @param resId The resource ID in android which you want to check.
+   * @return true if resource is exist.
+   */
+  private static boolean isResourceExist(Context context, int resId) {
+    if (context != null) {
+      try {
+        return context.getResources().getResourceName(resId) != null;
+      } catch (Resources.NotFoundException ignore) {
+      }
+    }
+    return false;
   }
 }

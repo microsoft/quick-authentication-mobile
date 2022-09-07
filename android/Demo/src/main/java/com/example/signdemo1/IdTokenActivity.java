@@ -34,7 +34,7 @@ import com.microsoft.quickauth.signin.ISignInClient;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.TokenResult;
-import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.logger.LogLevel;
 
 public class IdTokenActivity extends Activity {
@@ -88,7 +88,7 @@ public class IdTokenActivity extends Activity {
           }
 
           @Override
-          public void onError(@NonNull MSQASignInException error) {
+          public void onError(@NonNull MSQAException error) {
             mTokenResult.setText("create sign in client error:" + error.getMessage());
           }
         });
@@ -103,6 +103,6 @@ public class IdTokenActivity extends Activity {
   }
 
   private void getCurrentInfo() {
-    mSignInClient.getCurrentSignInAccount(this, (accountInfo, error) -> {});
+    mSignInClient.getCurrentAccount(this, (accountInfo, error) -> {});
   }
 }
