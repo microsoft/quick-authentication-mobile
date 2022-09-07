@@ -23,7 +23,7 @@
 package com.microsoft.quickauth.signin.callback;
 
 import androidx.annotation.NonNull;
-import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.error.MSQAException;
 
 public interface OnFailureListener {
   /**
@@ -31,5 +31,5 @@ public interface OnFailureListener {
    *
    * @param error the error result.
    */
-  void onFailure(@NonNull MSQASignInException error);
+  void onFailure(@NonNull MSQAException error);
 }

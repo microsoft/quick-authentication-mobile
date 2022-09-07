@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.internal.logger.ILogger;
 import com.microsoft.quickauth.signin.internal.logger.LogLevel;
@@ -61,7 +62,7 @@ public class MSQASignInOptions {
   }
 
   /**
-   * @return If true enable logcat logging.
+   * @return true if enable logcat logging.
    */
   public boolean isEnableLogcatLog() {
     return mEnableLogcatLog;
@@ -97,16 +98,36 @@ public class MSQASignInOptions {
       return this;
     }
 
+    /**
+     * Set Enable/Disable the Android logcat logging.
+     *
+     * @param enableLogcatLog true will enable logcat logging.
+     * @return
+     */
     public Builder setEnableLogcatLog(boolean enableLogcatLog) {
       mEnableLogcatLog = enableLogcatLog;
       return this;
     }
 
-    public Builder setExternalLogger(ILogger externalLogger) {
+    /**
+     * Configures external logging to configure a callback that the sdk will use to pass each log
+     * message.
+     *
+     * @param externalLogger External logging callback.
+     * @return
+     */
+    public Builder setExternalLogger(@NonNull ILogger externalLogger) {
       mExternalLogger = externalLogger;
       return this;
     }
 
+    /**
+     * Set the log level for diagnostic purpose. By default, the sdk enables the verbose level
+     * logging.
+     *
+     * @param logLevel The log level in {@link LogLevel}.
+     * @return
+     */
     public Builder setLogLevel(@LogLevel int logLevel) {
       mLogLevel = logLevel;
       return this;

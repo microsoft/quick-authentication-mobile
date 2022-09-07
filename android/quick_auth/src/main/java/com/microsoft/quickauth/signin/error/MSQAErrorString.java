@@ -25,11 +25,11 @@ package com.microsoft.quickauth.signin.error;
 import com.microsoft.identity.client.exception.MsalClientException;
 
 public class MSQAErrorString {
-  /** No initialize sdk. */
-  public static final String NO_INITIALIZE = "no_initialize";
+  /** Configuration file does not exist. */
+  public static final String NO_CONFIGURATION_FILE_ERROR = "no_configuration_file_error";
 
-  public static final String NO_INITIALIZE_MESSAGE =
-      "Haven't initialize SDK, please initialize" + " first with MSQASignInClient class";
+  public static final String NO_CONFIGURATION_FILE_ERROR_MESSAGE =
+      "Configuration file does not exist.";
 
   /** No account currently signed in to SingleAccountPublicClientApplication */
   public static final String NO_CURRENT_ACCOUNT = MsalClientException.NO_CURRENT_ACCOUNT;

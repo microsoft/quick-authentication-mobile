@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin;
 
-import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -46,13 +45,7 @@ public interface AccountInfo {
   String getId();
 
   /**
-   * @return User photo int bitmap.
-   */
-  @Nullable
-  Bitmap getBitmapPhoto();
-
-  /**
-   * @return User photo in Base64 format, recommend for low-memory devices.
+   * @return User photo Base64 string data.
    */
   @Nullable
   String getBase64Photo();

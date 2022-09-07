@@ -23,7 +23,7 @@
 package com.microsoft.quickauth.signin.error;
 
 /** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQASignInException {
+public class MSQACancelException extends MSQAException {
   public MSQACancelException(String errorCode) {
     super(errorCode);
   }

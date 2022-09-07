@@ -23,7 +23,7 @@
 package com.microsoft.quickauth.signin.callback;
 
 import androidx.annotation.Nullable;
-import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.error.MSQAException;
 
 public interface OnCompleteListener<TResult> {
   /**
@@ -32,5 +32,5 @@ public interface OnCompleteListener<TResult> {
    * @param result the finished result. Can be null
    * @param error the finished error. Can be null
    */
-  void onComplete(@Nullable TResult result, @Nullable MSQASignInException error);
+  void onComplete(@Nullable TResult result, @Nullable MSQAException error);
 }

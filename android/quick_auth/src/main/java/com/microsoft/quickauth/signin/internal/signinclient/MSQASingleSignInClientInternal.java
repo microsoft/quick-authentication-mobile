@@ -24,6 +24,7 @@ package com.microsoft.quickauth.signin.internal.signinclient;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -37,7 +38,7 @@ import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQACancelException;
-import com.microsoft.quickauth.signin.error.MSQASignInException;
+import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quickauth.signin.internal.http.MSQAAPIConstant;
@@ -85,7 +86,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
 
             @Override
             public void onError(MsalException exception) {
-              completeListener.onComplete(null, MSQASignInException.create(exception));
+              completeListener.onComplete(null, MSQAException.create(exception));
             }
           });
     } else {
@@ -102,7 +103,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     // If no account in cache return error.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQASignInException.createNoAccountException());
+      completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
       // Start to request token silent.
       acquireTokenSilent(
@@ -111,7 +112,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
           new OnCompleteListener<IAuthenticationResult>() {
             @Override
             public void onComplete(
-                @Nullable IAuthenticationResult tokenResult, @Nullable MSQASignInException error) {
+                @Nullable IAuthenticationResult tokenResult, @Nullable MSQAException error) {
               if (tokenResult != null) {
                 getUserInfo(tokenResult, completeListener);
               } else if (silentTokenErrorRetry && error instanceof MSQAUiRequiredException) {
@@ -123,7 +124,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                       @Override
                       public void onComplete(
                           @Nullable IAuthenticationResult iAuthenticationResult,
-                          @Nullable MSQASignInException error) {
+                          @Nullable MSQAException error) {
                         if (iAuthenticationResult != null) {
                           getUserInfo(iAuthenticationResult, completeListener);
                         } else {
@@ -146,7 +147,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<IAuthenticationResult> completeListener) {
     // If no account in cache return error.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQASignInException.createNoAccountException());
+      completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
       acquireToken(
           activity,
@@ -155,7 +156,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             @Override
             public void onCancel() {
               MSQALogger.getInstance().warn(TAG, "get token canceled");
-              completeListener.onComplete(null, MSQASignInException.createNoAccountException());
+              completeListener.onComplete(null, MSQAException.createNoAccountException());
             }
 
             @Override
@@ -166,7 +167,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             @Override
             public void onError(MsalException exception) {
               MSQALogger.getInstance().error(TAG, "get token error", exception);
-              completeListener.onComplete(null, MSQASignInException.create(exception));
+              completeListener.onComplete(null, MSQAException.create(exception));
             }
           });
     }
@@ -178,7 +179,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<IAuthenticationResult> completeListener) {
     // If no account in cache return error.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQASignInException.createNoAccountException());
+      completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
       acquireTokenSilentAsync(
           iAccount,
@@ -198,7 +199,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                     new MSQAUiRequiredException(exception.getErrorCode(), exception.getMessage());
               }
               MSQALogger.getInstance().error(TAG, "get token silent error", exception);
-              completeListener.onComplete(null, MSQASignInException.create(silentException));
+              completeListener.onComplete(null, MSQAException.create(silentException));
             }
           });
     }
@@ -228,12 +229,13 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                           new Runnable() {
                             @Override
                             public void run() {
-                              completeListener.onComplete(null, MSQASignInException.create(e));
+                              completeListener.onComplete(null, MSQAException.create(e));
                             }
                           });
                   return;
                 }
                 // Start get user photo from graph api.
+
                 account.setUserPhoto(getUserPhoto(tokenResult));
                 // Post the callback running in the main thread.
                 MSQATaskExecutor.main()
@@ -249,9 +251,9 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
   }
 
   @WorkerThread
-  public byte[] getUserPhoto(@NonNull IAuthenticationResult tokenResult) {
+  public String getUserPhoto(@NonNull IAuthenticationResult tokenResult) {
     InputStream responseStream = null;
-    byte[] photoBytes = null;
+    String base64Photo = null;
     try {
       HttpURLConnection conn =
           MSQAHttpConnectionClient.createHttpURLConnection(
@@ -265,14 +267,15 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                   .builder());
       if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
         responseStream = conn.getInputStream();
-        photoBytes = readAllBytes(responseStream);
+        base64Photo = Base64.encodeToString(readAllBytes(responseStream), Base64.NO_WRAP);
       }
     } catch (Exception e) {
       MSQALogger.getInstance().error(TAG, "get user photo error", e);
     } finally {
       MSQAHttpConnectionClient.safeCloseStream(responseStream);
     }
-    return photoBytes;
+
+    return base64Photo;
   }
 
   @WorkerThread

@@ -25,12 +25,12 @@ package com.microsoft.quickauth.signin.error;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.internal.MsalUtils;
 
-public class MSQASignInException extends Exception {
+public class MSQAException extends Exception {
 
   private final String mErrorCode;
   private Exception mSuppressedException;
 
-  public MSQASignInException() {
+  public MSQAException() {
     this(null);
   }
 
@@ -39,28 +39,28 @@ public class MSQASignInException extends Exception {
    *
    * @param errorCode The error code contained in the exception.
    */
-  public MSQASignInException(final String errorCode) {
+  public MSQAException(final String errorCode) {
     this(errorCode, null);
   }
 
   /**
-   * Initiates the {@link MSQASignInException} with error code and error message.
+   * Initiates the {@link MSQAException} with error code and error message.
    *
    * @param errorCode The error code contained in the exception.
    * @param errorMessage The error message contained in the exception.
    */
-  public MSQASignInException(final String errorCode, final String errorMessage) {
+  public MSQAException(final String errorCode, final String errorMessage) {
     this(errorCode, errorMessage, null);
   }
 
   /**
-   * Initiates the {@link MSQASignInException} with error code, error message and throwable.
+   * Initiates the {@link MSQAException} with error code, error message and throwable.
    *
    * @param errorCode The error code contained in the exception.
    * @param errorMessage The error message contained in the exception.
    * @param throwable The {@link Throwable} contains the cause for the exception.
    */
-  public MSQASignInException(
+  public MSQAException(
       final String errorCode, final String errorMessage, final Throwable throwable) {
     super(errorMessage, throwable);
     mErrorCode = errorCode;
@@ -75,8 +75,8 @@ public class MSQASignInException extends Exception {
   }
 
   /**
-   * @return The error code for the exception, could be null. {@link MSQASignInException} is the top
-   *     level base exception, for the constants value of all the error code.
+   * @return The error code for the exception, could be null. {@link MSQAException} is the top level
+   *     base exception, for the constants value of all the error code.
    */
   public String getErrorCode() {
     return mErrorCode;
@@ -93,27 +93,25 @@ public class MSQASignInException extends Exception {
     return "";
   }
 
-  public static MSQASignInException create(Exception exception) {
-    if (exception instanceof MSQASignInException) return (MSQASignInException) exception;
+  public static MSQAException create(Exception exception) {
+    if (exception instanceof MSQAException) return (MSQAException) exception;
 
-    MSQASignInException signInException;
+    MSQAException signInException;
     if (exception instanceof MsalException) {
       signInException =
-          new MSQASignInException(
-              ((MsalException) exception).getErrorCode(), exception.getMessage());
+          new MSQAException(((MsalException) exception).getErrorCode(), exception.getMessage());
     } else if (exception instanceof InterruptedException) {
       signInException =
-          new MSQASignInException(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
+          new MSQAException(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
     } else {
-      signInException =
-          new MSQASignInException(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
+      signInException = new MSQAException(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
     }
     signInException.setSuppressedException(exception);
     return signInException;
   }
 
-  public static MSQASignInException createNoAccountException() {
-    return new MSQASignInException(
+  public static MSQAException createNoAccountException() {
+    return new MSQAException(
         MSQAErrorString.NO_CURRENT_ACCOUNT, MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
   }
 }
