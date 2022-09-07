@@ -60,7 +60,7 @@ public interface ISignInClient {
    * @param completeListener A callback to be invoked when complete and will return sign in account
    *     info {@link AccountInfo} if success
    */
-  void getCurrentSignInAccount(
+  void getCurrentAccount(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener);
 
