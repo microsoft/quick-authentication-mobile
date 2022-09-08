@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.ClientCreatedListener;
@@ -40,7 +41,7 @@ import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.TokenResult;
 import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
-import com.microsoft.quickauth.signin.internal.logger.LogLevel;
+import com.microsoft.quickauth.signin.logger.LogLevel;
 import com.microsoft.quickauth.signin.view.MSQASignInButton;
 
 public class SignInActivity extends Activity {
@@ -160,8 +161,7 @@ public class SignInActivity extends Activity {
 
   private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
     if (accountInfo != null) {
-      // mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
-      mUserPhoto.setImageBitmap(accountInfo.getBitmapPhoto());
+      mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
       String userInfo =
           "MicrosoftAccountInfo{"
               + ", fullName='"
@@ -175,7 +175,7 @@ public class SignInActivity extends Activity {
               + '\''
               + '}';
       mUserInfoResult.setText(userInfo);
-      mTokenResult.setText("");
+      mTokenResult.setText(accountInfo.getIdToken());
     } else {
       mUserPhoto.setImageBitmap(null);
       mUserInfoResult.setText(error != null ? "login error: " + error.getMessage() : "");

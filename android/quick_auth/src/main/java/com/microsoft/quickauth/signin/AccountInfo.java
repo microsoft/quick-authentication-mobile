@@ -45,6 +45,12 @@ public interface AccountInfo {
   String getId();
 
   /**
+   * @return MSA account access token.
+   */
+  @Nullable
+  String getIdToken();
+
+  /**
    * @return User photo Base64 string data.
    */
   @Nullable

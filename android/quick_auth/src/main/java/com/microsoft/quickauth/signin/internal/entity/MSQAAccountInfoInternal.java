@@ -34,6 +34,7 @@ public class MSQAAccountInfoInternal implements AccountInfo {
   private String mUserName;
   private String mId;
   private String mBase64Photo;
+  private String mIdToken;
 
   @Nullable
   @Override
@@ -55,6 +56,12 @@ public class MSQAAccountInfoInternal implements AccountInfo {
 
   @Nullable
   @Override
+  public String getIdToken() {
+    return mIdToken;
+  }
+
+  @Nullable
+  @Override
   public String getBase64Photo() {
     return mBase64Photo;
   }
@@ -65,6 +72,10 @@ public class MSQAAccountInfoInternal implements AccountInfo {
 
   public void setFullName(String fullName) {
     this.mFullName = fullName;
+  }
+
+  public void setIdToken(String idToken) {
+    this.mIdToken = idToken;
   }
 
   public void setUserName(String userName) {
@@ -83,6 +94,7 @@ public class MSQAAccountInfoInternal implements AccountInfo {
       account.setFullName(name != null ? name.toString() : null);
     }
     account.setUserName(iAccount.getUsername());
+    account.setIdToken(authenticationResult.getAccessToken());
     return account;
   }
 }

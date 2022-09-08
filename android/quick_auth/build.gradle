@@ -19,6 +19,7 @@ spotless {
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
@@ -36,6 +37,7 @@ android {
             minifyEnabled false
             debuggable false
             consumerProguardFiles 'consumer-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
         }
     }

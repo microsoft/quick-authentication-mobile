@@ -24,8 +24,8 @@ package com.microsoft.quickauth.signin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.microsoft.quickauth.signin.internal.logger.ILogger;
-import com.microsoft.quickauth.signin.internal.logger.LogLevel;
+import com.microsoft.quickauth.signin.logger.ILogger;
+import com.microsoft.quickauth.signin.logger.LogLevel;
 
 /** Encapsulates the parameters passed to the create MSQASignInClient. */
 public class MSQASignInOptions {

@@ -20,29 +20,17 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.logger;
+package com.microsoft.quickauth.signin.logger;
 
-import android.util.Log;
-import com.microsoft.identity.client.ILoggerCallback;
-import com.microsoft.identity.client.Logger;
+import androidx.annotation.IntDef;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public class MSQALogCatLogger implements ILoggerCallback {
-
-  @Override
-  public void log(String tag, Logger.LogLevel logLevel, String message, boolean containsPII) {
-    switch (logLevel) {
-      case ERROR:
-        Log.e(tag, message);
-        break;
-      case WARNING:
-        Log.w(tag, message);
-        break;
-      case INFO:
-        Log.i(tag, message);
-        break;
-      case VERBOSE:
-        Log.v(tag, message);
-        break;
-    }
-  }
+@Retention(RetentionPolicy.SOURCE)
+@IntDef({LogLevel.VERBOSE, LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR})
+public @interface LogLevel {
+  int VERBOSE = 0;
+  int INFO = 1;
+  int WARN = 2;
+  int ERROR = 3;
 }

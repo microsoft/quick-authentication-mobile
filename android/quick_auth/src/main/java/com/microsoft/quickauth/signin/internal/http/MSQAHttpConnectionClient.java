@@ -27,7 +27,7 @@ import androidx.annotation.WorkerThread;
 import com.microsoft.identity.common.java.AuthenticationConstants;
 import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQAException;
-import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
+import com.microsoft.quickauth.signin.internal.MSQALogger;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
