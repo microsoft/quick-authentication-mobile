@@ -40,8 +40,8 @@
 /// CID for MSA account.
 @property(nonatomic, readonly, nonnull) NSString *userId;
 
-/// The user's photo.
-@property(nonatomic, readonly, nullable) UIImage *photo;
+/// The user's photo in Base64.
+@property(nonatomic, readonly, nullable) NSString *photo;
 
 /// MSA account access token.
 @property(nonatomic, readonly, nullable) NSString *accessToken;

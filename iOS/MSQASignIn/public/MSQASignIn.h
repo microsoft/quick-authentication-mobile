@@ -41,16 +41,12 @@ typedef void (^MSQACompletionBlock)(MSQAAccountData *_Nullable account,
 /// This class signs the user in with Microsoft MSA account.
 @interface MSQASignIn : NSObject
 
-/// A shared `MSQASignIn` instance.
-@property(class, nonatomic, readonly) MSQASignIn *sharedInstance;
-
-/// Unavailable, use `sharedInstance` property to instantiate `MSQASignIn`.
-/// :nodoc:
-+ (instancetype)new NS_UNAVAILABLE;
-
-/// Unavailable, use `sharedInstance` property to instantiate `MSQASignIn`.
-/// :nodoc
-- (instancetype)init NS_UNAVAILABLE;
+/// Init the `MSQASignIn` with configuration.
+/// @param configuration The configuration used to init, which is type of
+/// `MSQAConfiguration`.
+/// @param error The error if the initialization fails.
+- (instancetype)initWithConfiguration:(MSQAConfiguration *)configuration
+                                error:(NSError *_Nullable *_Nullable)error;
 
 /// This method should be called from your `UIApplicationDelegate`'s
 /// `application:openURL:options` method.
@@ -96,12 +92,6 @@ typedef void (^MSQACompletionBlock)(MSQAAccountData *_Nullable account,
 /// @param completionBlock The block that is called on completion.
 - (void)signOutWithCompletionBlock:
     (void (^)(NSError *_Nullable error))completionBlock;
-
-/// Configures the `MSQASignIn` by the provided  `MQAConfiguration` object.
-/// @param configuration The configuration used for the `sharedInstance`
-/// @param error The  error if the operation fails.
-- (void)setConfiguration:(MSQAConfiguration *)configuration
-                   error:(NSError *_Nullable *_Nullable)error;
 
 // TODO(minggang): This declaration will be removed and use the one
 // in MSQASignIn_Private.h.

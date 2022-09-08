@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)fetchPhotoWithToken:(NSString *)token
                     completionBlock:
-                        (void (^)(UIImage *_Nullable photo,
+                        (void (^)(NSString *_Nullable photo,
                                   NSError *_Nullable error))completionBlock;
 
 @end

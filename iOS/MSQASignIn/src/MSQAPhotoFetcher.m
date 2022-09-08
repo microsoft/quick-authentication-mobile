@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)fetchPhotoWithToken:(NSString *)token
                     completionBlock:
-                        (void (^)(UIImage *_Nullable photo,
+                        (void (^)(NSString *_Nullable photo,
                                   NSError *_Nullable error))completionBlock {
   MSQAPhotoFetcher *fetcher = [MSQAPhotoFetcher new];
   fetcher->_token = token;
@@ -48,12 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSURL *)graphURLWithPath:(NSString *)path {
   NSString *urlString =
-      [NSString stringWithFormat:@"https://graph.microsoft.com/beta/%@", path];
+      [NSString stringWithFormat:@"https://graph.microsoft.com/v1.0/%@", path];
   return [NSURL URLWithString:urlString];
 }
 
 - (void)startInternalWithCompletionBlock:
-    (void (^)(UIImage *_Nullable photo,
+    (void (^)(NSString *_Nullable photo,
               NSError *_Nullable error))completionBlock {
   [self getJSON:@"me/photo"
       completionBlock:^(NSDictionary *json, NSError *error) {
@@ -68,8 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
                 completionBlock(nil, error);
                 return;
               }
-              UIImage *photo = [[UIImage alloc] initWithData:data];
-              completionBlock(photo, nil);
+              completionBlock(
+                  [data base64EncodedStringWithOptions:
+                            NSDataBase64EncodingEndLineWithLineFeed],
+                  nil);
             }];
       }];
 }

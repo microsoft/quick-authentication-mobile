@@ -32,4 +32,6 @@
 
 + (instancetype)sharedViewController;
 
+- (void)setMSQASignIn:(MSQASignIn *)msSignIn;
+
 @end

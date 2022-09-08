@@ -32,11 +32,9 @@
 #import "SampleLoginViewController.h"
 #import "SampleMainViewController.h"
 
-@interface SampleLoginViewController ()
-
-@end
-
-@implementation SampleLoginViewController
+@implementation SampleLoginViewController {
+  MSQASignIn *_msSignIn;
+}
 
 + (instancetype)sharedViewController {
   static SampleLoginViewController *s_controller = nil;
@@ -55,39 +53,39 @@
   [super viewDidLoad];
 
   // Switch to main view if already logged in.
-  [MSQASignIn.sharedInstance
-      getCurrentAccountWithCompletionBlock:^(MSQAAccountData *_Nullable account,
-                                             NSError *_Nullable error) {
-        if (account && !error) {
-          SampleMainViewController *controller =
-              [SampleMainViewController sharedViewController];
-          [controller setAccountInfo:account];
-          [SampleAppDelegate setCurrentViewController:controller];
-        }
-      }];
+  [_msSignIn getCurrentAccountWithCompletionBlock:^(
+                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+    if (account && !error) {
+      SampleMainViewController *controller =
+          [SampleMainViewController sharedViewController];
+      [controller setAccountInfo:account msSignIn:_msSignIn];
+      [SampleAppDelegate setCurrentViewController:controller];
+    }
+  }];
 }
 
 - (IBAction)signIn:(id)sender {
-  [MSQASignIn.sharedInstance
-      signInWithViewController:self
-               completionBlock:^(MSQAAccountData *_Nonnull account,
-                                 NSError *_Nonnull error) {
-                 SampleMainViewController *controller =
-                     [SampleMainViewController sharedViewController];
-                 [controller setAccountInfo:account];
-                 [SampleAppDelegate setCurrentViewController:controller];
-               }];
+  [_msSignIn signInWithViewController:self
+                      completionBlock:^(MSQAAccountData *_Nonnull account,
+                                        NSError *_Nonnull error) {
+                        SampleMainViewController *controller =
+                            [SampleMainViewController sharedViewController];
+                        [controller setAccountInfo:account msSignIn:_msSignIn];
+                        [SampleAppDelegate setCurrentViewController:controller];
+                      }];
 }
 
 - (IBAction)getCurrentButton:(id)sender {
-  [MSQASignIn.sharedInstance
-      getCurrentAccountWithCompletionBlock:^(MSQAAccountData *_Nullable account,
-                                             NSError *_Nullable error) {
-        SampleMainViewController *controller =
-            [SampleMainViewController sharedViewController];
-        [controller setAccountInfo:account];
-        [SampleAppDelegate setCurrentViewController:controller];
-      }];
+  [_msSignIn getCurrentAccountWithCompletionBlock:^(
+                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+    SampleMainViewController *controller =
+        [SampleMainViewController sharedViewController];
+    [controller setAccountInfo:account msSignIn:_msSignIn];
+    [SampleAppDelegate setCurrentViewController:controller];
+  }];
 }
 
+- (void)setMSQASignIn:(MSQASignIn *)msSignIn {
+  _msSignIn = msSignIn;
+}
 @end

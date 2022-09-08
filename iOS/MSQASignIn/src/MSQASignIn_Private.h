@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSQASignIn ()
 
+- (instancetype)initWithConfiguration:(MSQAConfiguration *)configuration
+                                error:(NSError *_Nullable *_Nullable)error;
+
 - (void)signInWithViewController:(UIViewController *)controller
                  completionBlock:(void (^)(MQAAccountData *account,
                                            NSError *error))completionBlock;

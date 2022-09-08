@@ -36,11 +36,23 @@
 @interface SampleAppDelegate () {
   UIViewController *_rootController;
   UIViewController *_currentController;
+  MSQASignIn *_msSignIn;
 }
 
 @end
 
 @implementation SampleAppDelegate
+
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    MSQAConfiguration *config = [[MSQAConfiguration alloc]
+        initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"
+                  scopes:@[ @"User.Read" ]];
+    _msSignIn = [[MSQASignIn alloc] initWithConfiguration:config error:nil];
+  }
+  return self;
+}
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -50,26 +62,23 @@
 
   _rootController = [UIViewController new];
 
-  // Configure the shared instance for MSQASignIn.
-  MSQAConfiguration *config = [[MSQAConfiguration alloc]
-      initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"
-                scopes:@[ @"User.Read", @"Calendars.Read" ]];
-  [MSQASignIn.sharedInstance setConfiguration:config error:nil];
-
-  [MSQASignIn.sharedInstance
-      getCurrentAccountWithCompletionBlock:^(MSQAAccountData *_Nullable account,
-                                             NSError *_Nullable error) {
-        if (account && !error) {
-          SampleMainViewController *controller =
-              [SampleMainViewController sharedViewController];
-          [controller setAccountInfo:account];
-          [self setCurrentViewController:controller];
-          return;
-        }
-        [self setCurrentViewController:[SampleLoginViewController
-                                           sharedViewController]];
-      }];
-
+  if (_msSignIn) {
+    [_msSignIn
+        getCurrentAccountWithCompletionBlock:^(
+            MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+          if (account && !error) {
+            SampleMainViewController *controller =
+                [SampleMainViewController sharedViewController];
+            [controller setAccountInfo:account msSignIn:_msSignIn];
+            [self setCurrentViewController:controller];
+            return;
+          }
+          [[SampleLoginViewController sharedViewController]
+              setMSQASignIn:_msSignIn];
+          [self setCurrentViewController:[SampleLoginViewController
+                                             sharedViewController]];
+        }];
+  }
   [window setRootViewController:_rootController];
   [window setBackgroundColor:[UIColor whiteColor]];
   [window makeKeyAndVisible];
@@ -81,10 +90,12 @@
             openURL:(NSURL *)url
             options:
                 (NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-  return [MSQASignIn.sharedInstance
-              handleURL:url
-      sourceApplication:options
-                            [UIApplicationOpenURLOptionsSourceApplicationKey]];
+  if (_msSignIn) {
+    return [_msSignIn handleURL:url
+              sourceApplication:
+                  options[UIApplicationOpenURLOptionsSourceApplicationKey]];
+  }
+  return NO;
 }
 
 + (void)setCurrentViewController:(UIViewController *)viewController {

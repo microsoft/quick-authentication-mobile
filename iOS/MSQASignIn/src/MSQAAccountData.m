@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
   return self;
 }
 
-- (void)setPhoto:(UIImage *)photo {
+- (void)setPhoto:(NSString *)photo {
   _photo = photo;
 }
 

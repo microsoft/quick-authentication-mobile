@@ -43,18 +43,20 @@ static NSString *const kEmptyScopesError = @"Empty scopes array";
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MSQASignIn ()
-
-@property(nonatomic, readonly) BOOL isConfigured;
-
-@end
-
 @implementation MSQASignIn {
   MSALPublicClientApplication *_msalPublicClientApplication;
   MSQAConfiguration *_configuration;
 }
 
 #pragma mark - Public methods
+
+- (instancetype)initWithConfiguration:(MSQAConfiguration *)configuration
+                                error:(NSError *_Nullable *_Nullable)error {
+  if (!(self = [super init])) {
+    return nil;
+  }
+  return [self initPrivateWithConfiguration:configuration error:error];
+}
 
 - (BOOL)handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication {
   return [MSALPublicClientApplication handleMSALResponse:url
@@ -64,12 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)acquireTokenWithScopes:(NSArray<NSString *> *)scopes
                     controller:(UIViewController *)controller
                completionBlock:(MSQACompletionBlock)completionBlock {
-  if (!self.isConfigured) {
-    [MSQASignIn callCompletionBlockAsync:completionBlock
-                                errorStr:kMSALNotConfiguredError];
-    return;
-  }
-
   if (scopes.count == 0) {
     [MSQASignIn callCompletionBlockAsync:completionBlock
                                 errorStr:kEmptyScopesError];
@@ -92,12 +88,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)acquireTokenSilentWithScopes:(NSArray<NSString *> *)scopes
                      completionBlock:(MSQACompletionBlock)completionBlock {
-  if (!self.isConfigured) {
-    [MSQASignIn callCompletionBlockAsync:completionBlock
-                                errorStr:kMSALNotConfiguredError];
-    return;
-  }
-
   if (scopes.count == 0) {
     [MSQASignIn callCompletionBlockAsync:completionBlock
                                 errorStr:kEmptyScopesError];
@@ -124,12 +114,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getCurrentAccountWithCompletionBlock:
     (MSQACompletionBlock)completionBlock {
-  if (!self.isConfigured) {
-    [MSQASignIn callCompletionBlockAsync:completionBlock
-                                errorStr:kMSALNotConfiguredError];
-    return;
-  }
-
   MSALParameters *parameters = [MSALParameters new];
   parameters.completionBlockQueue = dispatch_get_main_queue();
 
@@ -157,15 +141,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)signOutWithCompletionBlock:
     (void (^)(NSError *_Nullable error))completionBlock {
-  if (!self.isConfigured) {
-    [MSQASignIn runBlockAyncOnMainThread:^{
-      completionBlock([NSError errorWithDomain:kMSALNotConfiguredError
-                                          code:0
-                                      userInfo:nil]);
-    }];
-    return;
-  }
-
   MSALParameters *parameters = [MSALParameters new];
   parameters.completionBlockQueue = dispatch_get_main_queue();
 
@@ -184,33 +159,6 @@ NS_ASSUME_NONNULL_BEGIN
                         }
                         completionBlock(error);
                       }];
-}
-
-- (void)setConfiguration:(MSQAConfiguration *)configuration
-                   error:(NSError *_Nullable *_Nullable)error {
-  MSALAuthority *authority =
-      [MSALAuthority authorityWithURL:[NSURL URLWithString:kAuthorityURL]
-                                error:nil];
-
-  MSALPublicClientApplicationConfig *msalConfig =
-      [[MSALPublicClientApplicationConfig alloc]
-          initWithClientId:configuration.clientID
-               redirectUri:nil
-                 authority:authority];
-
-  NSError *localError = nil;
-  _msalPublicClientApplication =
-      [[MSALPublicClientApplication alloc] initWithConfiguration:msalConfig
-                                                           error:&localError];
-  if (!localError) {
-    _configuration = configuration;
-    _isConfigured = YES;
-    return;
-  }
-
-  if (error) {
-    *error = localError;
-  }
 }
 
 - (void)signInWithViewController:(UIViewController *)controller
@@ -333,7 +281,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)continueToFetchPhotoWithAccount:(MSQAAccountData *)account
                         completionBlock:(MSQACompletionBlock)completionBlock {
   [MSQAPhotoFetcher fetchPhotoWithToken:account.accessToken
-                        completionBlock:^(UIImage *_Nullable photo,
+                        completionBlock:^(NSString *_Nullable photo,
                                           NSError *_Nullable error) {
                           if (photo) {
                             account.photo = photo;
@@ -342,6 +290,32 @@ NS_ASSUME_NONNULL_BEGIN
                             completionBlock(account, nil);
                           }];
                         }];
+}
+
+- (instancetype)initPrivateWithConfiguration:(MSQAConfiguration *)configuration
+                                       error:(NSError *_Nullable *_Nullable)
+                                                 error {
+  MSALAuthority *authority =
+      [MSALAuthority authorityWithURL:[NSURL URLWithString:kAuthorityURL]
+                                error:nil];
+  MSALPublicClientApplicationConfig *msalConfig =
+      [[MSALPublicClientApplicationConfig alloc]
+          initWithClientId:configuration.clientID
+               redirectUri:nil
+                 authority:authority];
+  NSError *localError = nil;
+  _msalPublicClientApplication =
+      [[MSALPublicClientApplication alloc] initWithConfiguration:msalConfig
+                                                           error:&localError];
+
+  if (localError) {
+    if (error) {
+      *error = localError;
+    }
+    return nil;
+  }
+  _configuration = configuration;
+  return self;
 }
 
 @end

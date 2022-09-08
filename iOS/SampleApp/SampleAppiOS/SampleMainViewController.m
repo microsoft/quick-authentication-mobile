@@ -35,6 +35,7 @@
 
 @implementation SampleMainViewController {
   MSQAAccountData *_accountData;
+  MSQASignIn *_msSignIn;
 }
 
 + (instancetype)sharedViewController {
@@ -66,8 +67,10 @@
   _profileImageView.clipsToBounds = YES;
 }
 
-- (void)setAccountInfo:(MSQAAccountData *)accountData {
+- (void)setAccountInfo:(MSQAAccountData *)accountData
+              msSignIn:(MSQASignIn *)msSignIn {
   _accountData = accountData;
+  _msSignIn = msSignIn;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,25 +81,28 @@
   _idLabel.text = [NSString stringWithFormat:@"Id: %@", _accountData.userId];
 
   if (_accountData.photo) {
-    [self setUserPhoto:_accountData.photo];
+    NSData *data = [[NSData alloc]
+        initWithBase64EncodedString:_accountData.photo
+                            options:
+                                NSDataBase64DecodingIgnoreUnknownCharacters];
+    [self setUserPhoto:[UIImage imageWithData:data]];
     return;
   }
   [self setUserPhoto:[UIImage imageNamed:@"no_photo"]];
 }
 
 - (IBAction)signOut:(id)sender {
-  [MSQASignIn.sharedInstance
-      signOutWithCompletionBlock:^(NSError *_Nullable error) {
-        if (error)
-          NSLog(@"Error:%@", error.description);
-      }];
+  [_msSignIn signOutWithCompletionBlock:^(NSError *_Nullable error) {
+    if (error)
+      NSLog(@"Error:%@", error.description);
+  }];
   [SampleAppDelegate setCurrentViewController:[SampleLoginViewController
                                                   sharedViewController]];
 }
 
 
 - (IBAction)fetchTokenSilent:(id)sender {
-  [MSQASignIn.sharedInstance
+  [_msSignIn
       acquireTokenSilentWithScopes:@[ @"User.Read" ]
                    completionBlock:^(MSQAAccountData *account, NSError *error) {
                      self->_tokenLabel.text = [NSString
@@ -105,29 +111,27 @@
 }
 
 - (IBAction)fetchTokenInteractive:(id)sender {
-  [MSQASignIn.sharedInstance
-      acquireTokenWithScopes:@[ @"User.Read", @"Calendars.Read" ]
-                  controller:self
-             completionBlock:^(MSQAAccountData *_Nullable account,
-                               NSError *_Nullable error) {
-               self->_tokenLabel.text = [NSString
-                   stringWithFormat:@"Token: %@", account.accessToken];
-             }];
+  [_msSignIn acquireTokenWithScopes:@[ @"User.Read", @"Calendars.Read" ]
+                         controller:self
+                    completionBlock:^(MSQAAccountData *_Nullable account,
+                                      NSError *_Nullable error) {
+                      self->_tokenLabel.text = [NSString
+                          stringWithFormat:@"Token: %@", account.accessToken];
+                    }];
 }
 
 - (IBAction)getCurrentAccount:(id)sender {
-  [MSQASignIn.sharedInstance
-      getCurrentAccountWithCompletionBlock:^(MSQAAccountData *_Nullable account,
-                                             NSError *_Nullable error) {
-        if (account) {
-          NSString *message =
-              [NSString stringWithFormat:@"FullName: %@\nEmail: %@",
-                                         account.fullName, account.userName];
-          [self showAlertWithMessage:message];
-          return;
-        }
-        [self showAlertWithMessage:@"None available account"];
-      }];
+  [_msSignIn getCurrentAccountWithCompletionBlock:^(
+                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+    if (account) {
+      NSString *message =
+          [NSString stringWithFormat:@"FullName: %@\nEmail: %@",
+                                     account.fullName, account.userName];
+      [self showAlertWithMessage:message];
+      return;
+    }
+    [self showAlertWithMessage:@"None available account"];
+  }];
 }
 
 - (void)showAlertWithMessage:(NSString *)message {

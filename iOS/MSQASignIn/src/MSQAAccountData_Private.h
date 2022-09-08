@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
                           userId:(NSString *)userId
                      accessToken:(nullable NSString *)accessToken;
 
-- (void)setPhoto:(UIImage *)photo;
+- (void)setPhoto:(NSString *)photo;
 
 @end
 
