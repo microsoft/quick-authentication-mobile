@@ -36,12 +36,12 @@ import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 import com.microsoft.quickauth.signin.internal.entity.MSQATokenResultInternal;
-import com.microsoft.quickauth.signin.internal.logger.ILogger;
-import com.microsoft.quickauth.signin.internal.logger.LogLevel;
-import com.microsoft.quickauth.signin.internal.logger.MSQALogger;
 import com.microsoft.quickauth.signin.internal.signinclient.MSQASingleSignInClientInternal;
+import com.microsoft.quickauth.signin.logger.ILogger;
+import com.microsoft.quickauth.signin.logger.LogLevel;
 
 /**
  * This is the entry point for developer to create public native applications and make API calls.
@@ -73,7 +73,7 @@ public final class MSQASignInClient implements ISignInClient {
       @NonNull final Context context,
       @NonNull final MSQASignInOptions signInOptions,
       @NonNull final ClientCreatedListener listener) {
-    if (isResourceExist(context, signInOptions.getConfigResourceId())) {
+    if (!isResourceExist(context, signInOptions.getConfigResourceId())) {
       listener.onError(
           new MSQAException(
               MSQAErrorString.NO_CONFIGURATION_FILE_ERROR,

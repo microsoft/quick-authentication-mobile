@@ -9,12 +9,15 @@
 
 # Add any project specific keep options here:
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
 ##---------------Begin: proguard configuration for QuickAuth  --------
--keep class com.microsoft.quick.auth.signin.** { *; }
+-keep class com.microsoft.quick.auth.signin.callback.** { *; }
+-keep class com.microsoft.quick.auth.signin.error.** { *; }
+-keep class com.microsoft.quick.auth.signin.logger.** { *; }
+-keep class com.microsoft.quick.auth.signin.view.** { *; }
+-keep public class com.microsoft.quickauth.signin.AccountInfo { *; }
+-keep public class com.microsoft.quickauth.signin.TokenResult { *; }
+-keep public class com.microsoft.quickauth.signin.ClientCreatedListener { *; }
+-keep public class com.microsoft.quickauth.signin.ISignInClient { *; }
+-keep public class com.microsoft.quickauth.signin.MSQASignInClient { *; }
+-keep public class com.microsoft.quickauth.signin.MSQASignInOptions { *; }
+-keep class com.microsoft.quickauth.signin.MSQASignInOptions$* { *; }
