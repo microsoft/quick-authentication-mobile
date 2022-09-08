@@ -27,6 +27,8 @@
 
 #import "MSQATelemetrySender.h"
 
+#import "MSQALogger_Private.h"
+
 static NSString *const kMetricURL = @"https://edge-auth.microsoft.com/metric";
 
 static NSString *const kContentType = @"application/json";
@@ -85,8 +87,10 @@ static NSString *const kOrigin = @"https://edge-auth.microsoft.com/";
                               NSError *_Nullable error) {
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             if (error || httpResponse.statusCode >= 400) {
-              // TODO(minggang): Replace `NSLog` with `MSQALogger`.
-              NSLog(@"Sending telemetry failed.");
+              [MSQALogger.sharedInstance
+                  logWithLevel:MSQALogLevelError
+                        format:@"Sending telemetry failed."];
+
               return;
             }
           }];

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 295C620C28E453C400B0D807 /* MSQALogger_Private.h */; };
 		296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		296E2DD628D1D2D000EC06EE /* MSQASilentTokenParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */; };
 		0262E18728D05291000DC8C8 /* SegoeUI-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0262E18628D05291000DC8C8 /* SegoeUI-SemiBold.ttf */; };
@@ -34,6 +35,8 @@
 		29E06DDF28B8C6B8003D558A /* MSQAPhotoFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */; };
 		29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */ = {isa = PBXBuildFile; fileRef = 29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */; };
 		29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 292FB4D628B755D000E846A5 /* MSQASignInButton.m */; };
+		29EA75B028C71BB900501E0E /* MSQALogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 29EA75AE28C71BB900501E0E /* MSQALogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		29EA75B128C71BB900501E0E /* MSQALogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EA75AF28C71BB900501E0E /* MSQALogger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,6 +67,7 @@
 		2900BB6628AA5A800025CF91 /* Podfile.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Podfile.md; sourceTree = "<group>"; };
 		292FB4D528B755D000E846A5 /* MSQASignInButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInButton.h; sourceTree = "<group>"; };
 		292FB4D628B755D000E846A5 /* MSQASignInButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignInButton.m; sourceTree = "<group>"; };
+		295C620C28E453C400B0D807 /* MSQALogger_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQALogger_Private.h; sourceTree = "<group>"; };
 		2969E7BD28D310BB00E2D137 /* Pods_QuickAuthSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_QuickAuthSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASilentTokenParameters.h; sourceTree = "<group>"; };
 		296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASilentTokenParameters.m; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 		29DC396D28A64EFF00699274 /* MSQASignIn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignIn.m; sourceTree = "<group>"; };
 		29DC397028A6551300699274 /* MSQASignIn_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn_Private.h; sourceTree = "<group>"; };
 		29E06DD128B8C695003D558A /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29EA75AE28C71BB900501E0E /* MSQALogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQALogger.h; sourceTree = "<group>"; };
+		29EA75AF28C71BB900501E0E /* MSQALogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQALogger.m; sourceTree = "<group>"; };
 		29F7C82728B32DB1003FF9F2 /* MSQAPhotoFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAPhotoFetcher.h; sourceTree = "<group>"; };
 		29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAPhotoFetcher.m; sourceTree = "<group>"; };
 		6D6EB6F9946EC7CCED87709B /* Pods-MQASignIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQASignIn.debug.xcconfig"; path = "Target Support Files/Pods-MQASignIn/Pods-MQASignIn.debug.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +171,8 @@
 			children = (
 				296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */,
 				0262E18128D0473B000DC8C8 /* resources */,
+				295C620C28E453C400B0D807 /* MSQALogger_Private.h */,
+				29EA75AF28C71BB900501E0E /* MSQALogger.m */,
 				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
 				29DC396D28A64EFF00699274 /* MSQASignIn.m */,
 				29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */,
@@ -185,6 +193,7 @@
 				292FB4D528B755D000E846A5 /* MSQASignInButton.h */,
 				2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */,
 				29DC394428A63F6E00699274 /* MSQASignIn.h */,
+				29EA75AE28C71BB900501E0E /* MSQALogger.h */,
 				29AD993A28AB86850029F4FB /* MSQAAccountData.h */,
 				296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */,
 			);
@@ -223,9 +232,11 @@
 				29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */,
 				29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */,
 				2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */,
+				295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */,
 				29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */,
 				296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */,
 				29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */,
+				29EA75B028C71BB900501E0E /* MSQALogger.h in Headers */,
 				29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */,
 				29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */,
 				29E06DDE28B8C6B8003D558A /* MSQAPhotoFetcher.h in Headers */,
@@ -379,6 +390,7 @@
 				2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */,
 				29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */,
 				29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */,
+				29EA75B128C71BB900501E0E /* MSQALogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
