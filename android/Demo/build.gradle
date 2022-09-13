@@ -40,8 +40,8 @@ spotless {
 }
 
 android {
-    compileSdk 31
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.azuresamples.msalandroidapp.test2"
         minSdk 16
@@ -72,7 +72,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
@@ -85,17 +85,27 @@ android {
             includeAndroidResources = true
         }
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // libraries for sign-in sdk
-    // TODO @jingjinggu change project implementation to maven
-    implementation(project(":quick_auth"))
-//    implementation "com.microsoft.quickauth.signin:0.0.8"
+    if (findProject(':quick_auth') != null) {
+        // For developer team only.
+        implementation(project(":quick_auth"))
+    }
+    else {
+        // Downloads and Builds MSAL from maven central.
+        implementation "com.microsoft.identity.client:msal:${rootProject.ext.msalSDKVersion}"
+        implementation(name: 'quickauth-1.0.0', ext: 'aar')
+    }
 
     // libraries for android
-    implementation "androidx.core:core-ktx:$rootProject.ext.kotlinVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintLayoutVersion"
     implementation "androidx.recyclerview:recyclerview:$rootProject.ext.recyclerviewVersion"

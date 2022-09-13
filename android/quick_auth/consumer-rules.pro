@@ -10,10 +10,10 @@
 # Add any project specific keep options here:
 
 ##---------------Begin: proguard configuration for QuickAuth  --------
--keep class com.microsoft.quick.auth.signin.callback.** { *; }
--keep class com.microsoft.quick.auth.signin.error.** { *; }
--keep class com.microsoft.quick.auth.signin.logger.** { *; }
--keep class com.microsoft.quick.auth.signin.view.** { *; }
+-keep class com.microsoft.quickauth.signin.callback.** { *; }
+-keep class com.microsoft.quickauth.signin.error.** { *; }
+-keep class com.microsoft.quickauth.signin.logger.** { *; }
+-keep class com.microsoft.quickauth.signin.view.** { *; }
 -keep public class com.microsoft.quickauth.signin.AccountInfo { *; }
 -keep public class com.microsoft.quickauth.signin.TokenResult { *; }
 -keep public class com.microsoft.quickauth.signin.ClientCreatedListener { *; }

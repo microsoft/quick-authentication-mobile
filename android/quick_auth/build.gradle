@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'com.diffplug.spotless'
 }
-//apply from: '../gradle/maven-release-aar.gradle'
+apply from: '../gradle/maven-release-aar.gradle'
 
 // check code style: gradle spotlessJavaCheck
 // use code style: gradle spotlessJavaApply
@@ -24,21 +24,21 @@ android {
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+        project.archivesBaseName = "quickauth"
+        project.version = android.defaultConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
             debuggable true
-            buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
         }
         release {
             minifyEnabled false
             debuggable false
             consumerProguardFiles 'consumer-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
-            buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
         }
     }
     flavorDimensions "main"

@@ -3,19 +3,15 @@ buildscript {
     apply from: rootProject.file("gradle/versions.gradle")
     repositories {
         maven {
-            url 'file:///home/jingjinggu/develop/microsoft/edgeinternal.identity.3p-demo-site/mobile-android/aar'
+            url "file://$project.rootDir/aar"
         }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-        mavenCentral()
-        google()
-        mavenLocal()
         maven {
             url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
         }
-        jcenter()
+        mavenCentral()
+        google()
+        mavenLocal()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleVersion"
@@ -27,19 +23,15 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url 'file:///home/jingjinggu/develop/microsoft/edgeinternal.identity.3p-demo-site/mobile-android/aar'
+            url "file://$project.rootDir/aar"
         }
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-        mavenCentral()
-        google()
-        mavenLocal()
         maven {
             url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
         }
-        jcenter()
+        mavenCentral()
+        google()
+        mavenLocal()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
 }
 
