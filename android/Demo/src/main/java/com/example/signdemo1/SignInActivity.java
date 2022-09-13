@@ -178,9 +178,15 @@ public class SignInActivity extends Activity {
       mTokenResult.setText(accountInfo.getIdToken());
     } else {
       mUserPhoto.setImageBitmap(null);
+      mTokenResult.setText(null);
       mUserInfoResult.setText(error != null ? "login error: " + error.getMessage() : "");
     }
-    updateStatus(accountInfo != null);
+    boolean signIn = accountInfo != null;
+    mStatus.setText(signIn ? "signed in" : "signed out");
+
+    mSignInButton.setVisibility(signIn ? View.GONE : View.VISIBLE);
+    mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);
+    mSignButtonSetting.setVisibility(signIn ? View.GONE : View.VISIBLE);
   }
 
   private void getCurrentAccount() {
@@ -190,13 +196,6 @@ public class SignInActivity extends Activity {
         (accountInfo, error) -> {
           if (accountInfo != null) uploadSignInfo(accountInfo, error);
         });
-  }
-
-  private void updateStatus(boolean signIn) {
-    mStatus.setText(signIn ? "signed in" : "signed out");
-
-    mSignInButton.setVisibility(signIn ? View.GONE : View.VISIBLE);
-    mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);
   }
 
   private void updateTokenResult(TokenResult tokenResult, Exception error) {

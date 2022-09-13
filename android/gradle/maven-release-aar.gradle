@@ -2,8 +2,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'pmd'
 
 ext["GROUP_ID"] = 'com.microsoft'
-ext["ARTIFACT_ID"] = "msquickauth"
-ext["VERSION"] = "0.0.9"
+ext["ARTIFACT_ID"] = "quickauth"
+ext["VERSION_CODE"] = 1
+ext["VERSION_NAME"] = "1.0.0"
 
 File secretPropsFile = project.rootProject.file('local.properties')
 if (secretPropsFile.exists()) {
@@ -29,8 +30,6 @@ task("generateQuickAuthJavadoc", type: Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.encoding("UTF-8")
 
-    exclude '**/BuildConfig.java'
-    exclude '**/R.java'
     destinationDir = reporting.file("$project.buildDir/outputs/jar/javadoc/")
 }
 
@@ -71,7 +70,7 @@ publishing {
         quickauth(MavenPublication) {
             groupId = GROUP_ID
             artifactId = ARTIFACT_ID
-            version = VERSION
+            version = VERSION_NAME
 
             pom {
                 name = ARTIFACT_ID
@@ -104,23 +103,23 @@ publishing {
                     }
                 }
             }
-            artifact(sourcesJar)
-            artifact(javadocJar)
-            artifact("$buildDir/outputs/aar/quick_auth-${project.version}.aar")
+//            artifact(sourcesJar)
+//            artifact(javadocJar)
+            artifact("$buildDir/outputs/aar/quickauth-${VERSION_NAME}.aar")
         }
 
     }
     repositories {
         maven {
-            url 'https://microsoft.pkgs.visualstudio.com/Edge/_packaging/QuickAuth/maven/v1'
+            url '/home/jingjinggu/develop/microsoft/quick-authentication/demos/android-demo/aar'
             name 'QuickAuth'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                username repoUsername
-                password repoUserToken
-            }
+//            authentication {
+//                basic(BasicAuthentication)
+//            }
+//            credentials {
+//                username repoUsername
+//                password repoUserToken
+//            }
         }
     }
 }
@@ -133,7 +132,8 @@ tasks.whenTaskAdded { task ->
             && !task.name.contains('Snapshot')
             && !task.name.contains('Test')
             && !task.name.contains('Local')) {
-        task.dependsOn 'javadocJar', 'sourcesJar'
+//        task.dependsOn 'javadocJar', 'sourcesJar'
+//        task.dependsOn 'sourcesJar'
     }
 }
 

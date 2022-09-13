@@ -58,8 +58,6 @@
         <activity android:name=".ChooseActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".IdTokenActivity" />
-        <activity android:name=".googletest.GoogleTestActivity" />
-        <activity android:name=".googletest.GoogleTest1Activity" />
     </application>
 
 </manifest>
