@@ -50,10 +50,13 @@ public class SignInActivity extends Activity {
   private TextView mUserInfoResult;
   private ImageView mUserPhoto;
   private View mSignButtonSetting;
+  private View mGetCurrentAccountButton;
   private TextView mTokenResult;
   private View mSignOutButton;
-  private View msAcquireTokenButton;
-  private View msAcquireTokenSilentButton;
+  private View mAcquireTokenButton;
+  private View mAcquireTokenSilentButton;
+  private View mFirstSignInContainerView;
+  private View mSecondSignInContainerView;
   private ViewGroup mRootView;
 
   private MSQASignInClient mSignInClient;
@@ -64,6 +67,12 @@ public class SignInActivity extends Activity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_sign_in);
+    scops = new String[] {"user.read"};
+    initView();
+    initClient();
+  }
+
+  private void initView() {
     mSignInButton = findViewById(R.id.ms_sign_button);
     mRootView = findViewById(R.id.root_view);
     mStatus = findViewById(R.id.status);
@@ -72,41 +81,21 @@ public class SignInActivity extends Activity {
     mSignButtonSetting = findViewById(R.id.ms_sign_button_setting);
     mSignOutButton = findViewById(R.id.ms_sign_out_button);
     mTokenResult = findViewById(R.id.tv_token_result);
-    msAcquireTokenButton = findViewById(R.id.ms_acquire_token_button);
-    msAcquireTokenSilentButton = findViewById(R.id.ms_acquire_token_silent_button);
-    scops = new String[] {"user.read"};
+    mAcquireTokenButton = findViewById(R.id.ms_acquire_token_button);
+    mGetCurrentAccountButton = findViewById(R.id.ms_get_current_account_button);
+    mAcquireTokenSilentButton = findViewById(R.id.ms_acquire_token_silent_button);
+    mFirstSignInContainerView = findViewById(R.id.sign_in_container_view1);
+    mSecondSignInContainerView = findViewById(R.id.sign_in_container_view2);
 
-    MSQASignInClient.create(
-        this,
-        new MSQASignInOptions.Builder()
-            .setConfigResourceId(R.raw.auth_config_single_account)
-            .setEnableLogcatLog(true)
-            .setLogLevel(LogLevel.VERBOSE)
-            .setExternalLogger(
-                (logLevel, message) -> {
-                  // get log message in this
-                })
-            .build(),
-        new ClientCreatedListener() {
+    initListener();
+  }
+
+  private void initListener() {
+    mGetCurrentAccountButton.setOnClickListener(
+        new View.OnClickListener() {
           @Override
-          public void onCreated(@NonNull MSQASignInClient client) {
-            mSignInClient = client;
+          public void onClick(View v) {
             getCurrentAccount();
-            mSignInButton.setSignInCallback(
-                SignInActivity.this,
-                client,
-                (accountInfo, error) -> {
-                  if (accountInfo != null) {
-                    uploadSignInfo(accountInfo, null);
-                  } else {
-                    uploadSignInfo(null, error);
-                  }
-                });
-          }
-
-          @Override
-          public void onError(@NonNull MSQAException error) {
-            mUserInfoResult.setText("create sign in client error:" + error.getMessage());
           }
         });
     mSignOutButton.setOnClickListener(
@@ -123,12 +112,12 @@ public class SignInActivity extends Activity {
           }
           pop.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
         });
-    msAcquireTokenButton.setOnClickListener(
+    mAcquireTokenButton.setOnClickListener(
         v -> {
           mTokenResult.setText("");
           acquireToken();
         });
-    msAcquireTokenSilentButton.setOnClickListener(
+    mAcquireTokenSilentButton.setOnClickListener(
         v -> {
           if (mSignInClient == null) return;
           mTokenResult.setText("");
@@ -153,6 +142,38 @@ public class SignInActivity extends Activity {
         });
   }
 
+  private void initClient() {
+    MSQASignInClient.create(
+        this,
+        new MSQASignInOptions.Builder()
+            .setConfigResourceId(R.raw.auth_config_single_account)
+            .setEnableLogcatLog(true)
+            .setLogLevel(LogLevel.VERBOSE)
+            .setExternalLogger(
+                (logLevel, message) -> {
+                  // get log message in this
+                })
+            .build(),
+        new ClientCreatedListener() {
+          @Override
+          public void onCreated(@NonNull MSQASignInClient client) {
+            mSignInClient = client;
+            getCurrentAccount();
+            mSignInButton.setSignInCallback(
+                SignInActivity.this,
+                client,
+                (accountInfo, error) -> {
+                  uploadSignInfo(accountInfo, error);
+                });
+          }
+
+          @Override
+          public void onError(@NonNull MSQAException error) {
+            mUserInfoResult.setText("create sign in client error:" + error.getMessage());
+          }
+        });
+  }
+
   private void acquireToken() {
     mSignInClient.acquireToken(
         this, scops, (tokenResult, error) -> updateTokenResult(tokenResult, error));
@@ -165,13 +186,10 @@ public class SignInActivity extends Activity {
           "MicrosoftAccountInfo{"
               + ", fullName='"
               + accountInfo.getFullName()
-              + '\''
               + ", userName='"
               + accountInfo.getUserName()
-              + '\''
               + ", id='"
               + accountInfo.getId()
-              + '\''
               + '}';
       mUserInfoResult.setText(userInfo);
       mTokenResult.setText(accountInfo.getIdToken());
@@ -186,14 +204,19 @@ public class SignInActivity extends Activity {
     mSignInButton.setVisibility(signIn ? View.GONE : View.VISIBLE);
     mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);
     mSignButtonSetting.setVisibility(signIn ? View.GONE : View.VISIBLE);
+    mFirstSignInContainerView.setVisibility(signIn ? View.VISIBLE : View.GONE);
+    mSecondSignInContainerView.setVisibility(signIn ? View.VISIBLE : View.GONE);
   }
 
   private void getCurrentAccount() {
     if (mSignInClient == null) return;
+    mTokenResult.setText(null);
+    mUserInfoResult.setText(null);
+    mUserPhoto.setImageBitmap(null);
     mSignInClient.getCurrentAccount(
         this,
         (accountInfo, error) -> {
-          if (accountInfo != null) uploadSignInfo(accountInfo, error);
+          uploadSignInfo(accountInfo, error);
         });
   }
 

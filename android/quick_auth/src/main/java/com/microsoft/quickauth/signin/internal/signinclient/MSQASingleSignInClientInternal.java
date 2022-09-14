@@ -51,6 +51,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.concurrent.CountDownLatch;
 import org.json.JSONObject;
 
 public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
@@ -82,11 +83,13 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
 
             @Override
             public void onSuccess(IAuthenticationResult authenticationResult) {
+              MSQALogger.getInstance().verbose(TAG, "get sign in authentication result success");
               getUserInfo(authenticationResult, completeListener);
             }
 
             @Override
             public void onError(MsalException exception) {
+              MSQALogger.getInstance().error(TAG, "sign in error", exception);
               completeListener.onComplete(null, MSQAException.create(exception));
             }
           });
@@ -106,9 +109,9 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final String[] scopes,
       final boolean silentTokenErrorRetry,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    // If no account in cache return error.
+    // If no account in cache return null.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQAException.createNoAccountException());
+      completeListener.onComplete(null, null);
     } else {
       // Start to request token silent.
       MSQALogger.getInstance()
@@ -177,6 +180,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
 
             @Override
             public void onSuccess(IAuthenticationResult authenticationResult) {
+              MSQALogger.getInstance().verbose(TAG, "get token success");
               completeListener.onComplete(authenticationResult, null);
             }
 
@@ -207,6 +211,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
           new SilentAuthenticationCallback() {
             @Override
             public void onSuccess(IAuthenticationResult authenticationResult) {
+              MSQALogger.getInstance().verbose(TAG, "acquire token silent success");
               completeListener.onComplete(authenticationResult, null);
             }
 
@@ -217,12 +222,8 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
               if (silentException instanceof MsalUiRequiredException) {
                 silentException =
                     new MSQAUiRequiredException(exception.getErrorCode(), exception.getMessage());
-                MSQALogger.getInstance()
-                    .error(
-                        TAG,
-                        "get token silent error, need invoke acquireToken api",
-                        silentException);
               }
+              MSQALogger.getInstance().error(TAG, "get token silent error", silentException);
               completeListener.onComplete(null, MSQAException.create(silentException));
             }
           });
@@ -238,35 +239,38 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             new Runnable() {
               @Override
               public void run() {
+                MSQALogger.getInstance().verbose(TAG, "get user info started");
+                CountDownLatch countDownLatch = new CountDownLatch(2);
                 // Generate account info from token result.
                 final MSQAAccountInfoInternal account =
                     MSQAAccountInfoInternal.getAccount(tokenResult);
-                // Start get user id from graph api
-                try {
-                  String id = getUserId(tokenResult);
-                  account.setId(id);
-                } catch (final Exception e) {
-                  MSQALogger.getInstance().error(TAG, "get user id error", e);
-                  // Post the callback running in the main thread.
-                  MSQATaskExecutor.main()
-                      .execute(
-                          new Runnable() {
-                            @Override
-                            public void run() {
-                              completeListener.onComplete(null, MSQAException.create(e));
-                            }
-                          });
-                  return;
-                }
-                // Start get user photo from graph api.
 
-                account.setUserPhoto(getUserPhoto(tokenResult));
+                // Start get user photo from graph api.
+                MSQATaskExecutor.background()
+                    .execute(
+                        new Runnable() {
+                          @Override
+                          public void run() {
+                            account.setUserPhoto(getUserPhoto(tokenResult));
+                            countDownLatch.countDown();
+                          }
+                        });
+
+                // Start get user id from graph api
+                account.setId(getUserId(tokenResult));
+                countDownLatch.countDown();
+                try {
+                  countDownLatch.await();
+                } catch (InterruptedException e) {
+                  e.printStackTrace();
+                }
                 // Post the callback running in the main thread.
                 MSQATaskExecutor.main()
                     .execute(
                         new Runnable() {
                           @Override
                           public void run() {
+                            MSQALogger.getInstance().verbose(TAG, "get user info finished");
                             completeListener.onComplete(account, null);
                           }
                         });
@@ -299,12 +303,12 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     } finally {
       MSQAHttpConnectionClient.safeCloseStream(responseStream);
     }
-
+    MSQALogger.getInstance().verbose(TAG, "get user photo finished");
     return base64Photo;
   }
 
   @WorkerThread
-  public String getUserId(@NonNull IAuthenticationResult tokenResult) throws Exception {
+  public String getUserId(@NonNull IAuthenticationResult tokenResult) {
     MSQALogger.getInstance().verbose(TAG, "get user id started");
     MSQAHttpRequest httpRequest =
         new MSQAHttpRequest.Builder()
@@ -316,11 +320,16 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                 MSQAAPIConstant.MS_GRAPH_TK_REQUEST_PREFIX + tokenResult.getAccessToken())
             .builder();
     String id = null;
-    String result = MSQAHttpConnectionClient.request(httpRequest);
-    if (!TextUtils.isEmpty(result)) {
-      JSONObject jsonObject = new JSONObject(result);
-      id = jsonObject.optString("id");
+    try {
+      String result = MSQAHttpConnectionClient.request(httpRequest);
+      if (!TextUtils.isEmpty(result)) {
+        JSONObject jsonObject = new JSONObject(result);
+        id = jsonObject.optString("id");
+      }
+    } catch (Exception e) {
+      MSQALogger.getInstance().error(TAG, "get user id error", e);
     }
+    MSQALogger.getInstance().verbose(TAG, "get user id finished");
     return id;
   }
 
