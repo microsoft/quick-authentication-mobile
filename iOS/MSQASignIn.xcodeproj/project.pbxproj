@@ -9,6 +9,16 @@
 /* Begin PBXBuildFile section */
 		296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		296E2DD628D1D2D000EC06EE /* MSQASilentTokenParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */; };
+		0262E18728D05291000DC8C8 /* SegoeUI-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0262E18628D05291000DC8C8 /* SegoeUI-SemiBold.ttf */; };
+		0262E19728D07D23000DC8C8 /* Microsoft-Brand-20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19428D07D23000DC8C8 /* Microsoft-Brand-20@3x.png */; };
+		0262E19828D07D23000DC8C8 /* Microsoft-Brand-20.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19528D07D23000DC8C8 /* Microsoft-Brand-20.png */; };
+		0262E19928D07D23000DC8C8 /* Microsoft-Brand-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19628D07D23000DC8C8 /* Microsoft-Brand-20@2x.png */; };
+		0262E1A028D07DE2000DC8C8 /* Microsoft-Brand-16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19A28D07DE1000DC8C8 /* Microsoft-Brand-16@2x.png */; };
+		0262E1A128D07DE2000DC8C8 /* Microsoft-Brand-16@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19B28D07DE2000DC8C8 /* Microsoft-Brand-16@3x.png */; };
+		0262E1A228D07DE2000DC8C8 /* Microsoft-Brand-16.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19C28D07DE2000DC8C8 /* Microsoft-Brand-16.png */; };
+		0262E1A328D07DE2000DC8C8 /* Microsoft-Brand-12.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19D28D07DE2000DC8C8 /* Microsoft-Brand-12.png */; };
+		0262E1A428D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19E28D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png */; };
+		0262E1A528D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19F28D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png */; };
 		2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */; };
 		29BCDAF128D45CF100AC4047 /* Pods_MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */; };
@@ -40,6 +50,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0262E18628D05291000DC8C8 /* SegoeUI-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SegoeUI-SemiBold.ttf"; sourceTree = "<group>"; };
+		0262E19428D07D23000DC8C8 /* Microsoft-Brand-20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-20@3x.png"; sourceTree = "<group>"; };
+		0262E19528D07D23000DC8C8 /* Microsoft-Brand-20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-20.png"; sourceTree = "<group>"; };
+		0262E19628D07D23000DC8C8 /* Microsoft-Brand-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-20@2x.png"; sourceTree = "<group>"; };
+		0262E19A28D07DE1000DC8C8 /* Microsoft-Brand-16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-16@2x.png"; sourceTree = "<group>"; };
+		0262E19B28D07DE2000DC8C8 /* Microsoft-Brand-16@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-16@3x.png"; sourceTree = "<group>"; };
+		0262E19C28D07DE2000DC8C8 /* Microsoft-Brand-16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-16.png"; sourceTree = "<group>"; };
+		0262E19D28D07DE2000DC8C8 /* Microsoft-Brand-12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-12.png"; sourceTree = "<group>"; };
+		0262E19E28D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-12@3x.png"; sourceTree = "<group>"; };
+		0262E19F28D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-12@2x.png"; sourceTree = "<group>"; };
 		24962992F81A856753ED96CB /* Pods-MSQASignIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignIn.release.xcconfig"; path = "Target Support Files/Pods-MSQASignIn/Pods-MSQASignIn.release.xcconfig"; sourceTree = "<group>"; };
 		2900BB6628AA5A800025CF91 /* Podfile.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Podfile.md; sourceTree = "<group>"; };
 		292FB4D528B755D000E846A5 /* MSQASignInButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInButton.h; sourceTree = "<group>"; };
@@ -91,6 +111,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0262E18128D0473B000DC8C8 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				0262E19D28D07DE2000DC8C8 /* Microsoft-Brand-12.png */,
+				0262E19F28D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png */,
+				0262E19E28D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png */,
+				0262E19C28D07DE2000DC8C8 /* Microsoft-Brand-16.png */,
+				0262E19A28D07DE1000DC8C8 /* Microsoft-Brand-16@2x.png */,
+				0262E19B28D07DE2000DC8C8 /* Microsoft-Brand-16@3x.png */,
+				0262E19528D07D23000DC8C8 /* Microsoft-Brand-20.png */,
+				0262E19628D07D23000DC8C8 /* Microsoft-Brand-20@2x.png */,
+				0262E19428D07D23000DC8C8 /* Microsoft-Brand-20@3x.png */,
+				0262E18628D05291000DC8C8 /* SegoeUI-SemiBold.ttf */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
 		29DC393728A63F6E00699274 = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */,
+				0262E18128D0473B000DC8C8 /* resources */,
 				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
 				29DC396D28A64EFF00699274 /* MSQASignIn.m */,
 				29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */,
@@ -282,6 +320,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0262E19728D07D23000DC8C8 /* Microsoft-Brand-20@3x.png in Resources */,
+				0262E1A528D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png in Resources */,
+				0262E1A128D07DE2000DC8C8 /* Microsoft-Brand-16@3x.png in Resources */,
+				0262E19828D07D23000DC8C8 /* Microsoft-Brand-20.png in Resources */,
+				0262E1A428D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png in Resources */,
+				0262E1A328D07DE2000DC8C8 /* Microsoft-Brand-12.png in Resources */,
+				0262E1A028D07DE2000DC8C8 /* Microsoft-Brand-16@2x.png in Resources */,
+				0262E18728D05291000DC8C8 /* SegoeUI-SemiBold.ttf in Resources */,
+				0262E19928D07D23000DC8C8 /* Microsoft-Brand-20@2x.png in Resources */,
+				0262E1A228D07DE2000DC8C8 /* Microsoft-Brand-16.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
