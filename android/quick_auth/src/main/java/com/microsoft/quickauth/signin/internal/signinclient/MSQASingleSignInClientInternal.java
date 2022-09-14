@@ -68,6 +68,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     // If no account in cache, start request sign-in api.
     if (iAccount == null) {
+      MSQALogger.getInstance().verbose(TAG, "sign in started with no account in cache");
       signIn(
           activity,
           null,
@@ -91,6 +92,10 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
           });
     } else {
       // If has account in cache, request current account directly
+      MSQALogger.getInstance()
+          .verbose(
+              TAG,
+              "sign in started, has account in cache and will start request get current sign in account api");
       getCurrentSignInAccount(activity, iAccount, scopes, true, completeListener);
     }
   }
@@ -106,6 +111,10 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
       // Start to request token silent.
+      MSQALogger.getInstance()
+          .verbose(
+              TAG,
+              "get current sign in account started, has account in cache and will start request token silent api");
       acquireTokenSilent(
           iAccount,
           scopes,
@@ -116,6 +125,10 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
               if (tokenResult != null) {
                 getUserInfo(tokenResult, completeListener);
               } else if (silentTokenErrorRetry && error instanceof MSQAUiRequiredException) {
+                MSQALogger.getInstance()
+                    .verbose(
+                        TAG,
+                        "get current sign in account started, has account in cache and will start request token silent api");
                 acquireToken(
                     activity,
                     scopes,
@@ -149,6 +162,9 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     if (iAccount == null) {
       completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
+      MSQALogger.getInstance()
+          .verbose(
+              TAG, "acquire token started, has account in cache and will start request token api");
       acquireToken(
           activity,
           scopes,
@@ -181,6 +197,10 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     if (iAccount == null) {
       completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
+      MSQALogger.getInstance()
+          .verbose(
+              TAG,
+              "acquire token silent started, has account in cache and will start request token silent api");
       acquireTokenSilentAsync(
           iAccount,
           scopes,
@@ -197,8 +217,12 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
               if (silentException instanceof MsalUiRequiredException) {
                 silentException =
                     new MSQAUiRequiredException(exception.getErrorCode(), exception.getMessage());
+                MSQALogger.getInstance()
+                    .error(
+                        TAG,
+                        "get token silent error, need invoke acquireToken api",
+                        silentException);
               }
-              MSQALogger.getInstance().error(TAG, "get token silent error", exception);
               completeListener.onComplete(null, MSQAException.create(silentException));
             }
           });
@@ -209,7 +233,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final IAuthenticationResult tokenResult,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     // Post user info task in background thread.
-    MSQATaskExecutor.io()
+    MSQATaskExecutor.background()
         .execute(
             new Runnable() {
               @Override
@@ -255,6 +279,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     InputStream responseStream = null;
     String base64Photo = null;
     try {
+      MSQALogger.getInstance().verbose(TAG, "get user photo started");
       HttpURLConnection conn =
           MSQAHttpConnectionClient.createHttpURLConnection(
               new MSQAHttpRequest.Builder()
@@ -280,6 +305,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
 
   @WorkerThread
   public String getUserId(@NonNull IAuthenticationResult tokenResult) throws Exception {
+    MSQALogger.getInstance().verbose(TAG, "get user id started");
     MSQAHttpRequest httpRequest =
         new MSQAHttpRequest.Builder()
             .setUrl(MSQAAPIConstant.MS_GRAPH_USER_INFO_PATH)

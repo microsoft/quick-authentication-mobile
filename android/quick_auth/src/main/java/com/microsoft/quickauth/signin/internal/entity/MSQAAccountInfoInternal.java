@@ -86,7 +86,8 @@ public class MSQAAccountInfoInternal implements AccountInfo {
     this.mId = id;
   }
 
-  public static MSQAAccountInfoInternal getAccount(IAuthenticationResult authenticationResult) {
+  public static MSQAAccountInfoInternal getAccount(
+      @NonNull IAuthenticationResult authenticationResult) {
     MSQAAccountInfoInternal account = new MSQAAccountInfoInternal();
     IAccount iAccount = authenticationResult.getAccount();
     if (iAccount.getClaims() != null && iAccount.getClaims().containsKey("name")) {
@@ -94,7 +95,7 @@ public class MSQAAccountInfoInternal implements AccountInfo {
       account.setFullName(name != null ? name.toString() : null);
     }
     account.setUserName(iAccount.getUsername());
-    account.setIdToken(authenticationResult.getAccessToken());
+    account.setIdToken(iAccount.getIdToken());
     return account;
   }
 }

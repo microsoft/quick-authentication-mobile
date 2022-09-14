@@ -35,7 +35,7 @@ public interface ClientCreatedListener {
   void onCreated(@NonNull MSQASignInClient client);
 
   /**
-   * Called once failure and pass the error.
+   * Called on fail with error.
    *
    * @param error Error for creating a client
    */

@@ -45,7 +45,7 @@
     <dimen name="msqa_sign_in_button_text_size_small">12sp</dimen>
 
     <!--  Sign-In button shape  -->
-    <dimen name="msqa_sign_in_button_radios_square">0dp</dimen>
-    <dimen name="msqa_sign_in_button_radios_round">4dp</dimen>
-    <dimen name="msqa_sign_in_button_radios_pill">24dp</dimen>
+    <dimen name="msqa_sign_in_button_radius_square">0dp</dimen>
+    <dimen name="msqa_sign_in_button_radius_round">4dp</dimen>
+    <dimen name="msqa_sign_in_button_radius_pill">24dp</dimen>
 </resources>

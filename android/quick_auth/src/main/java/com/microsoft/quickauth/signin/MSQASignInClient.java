@@ -46,7 +46,7 @@ import com.microsoft.quickauth.signin.logger.LogLevel;
 /**
  * This is the entry point for developer to create public native applications and make API calls.
  */
-public final class MSQASignInClient implements ISignInClient {
+public final class MSQASignInClient {
   private static final String TAG = "MSQASignInClient";
   private final String[] mScopes;
   private final @NonNull MSQASingleSignInClientInternal mSignInClient;
@@ -133,7 +133,15 @@ public final class MSQASignInClient implements ISignInClient {
     MSQALogger.getInstance().setExternalLogger(externalLogger);
   }
 
-  @Override
+  /**
+   * Allows a user to sign in to your application with one of their accounts. This method may only
+   * be called once: once a user is signed in, they must first be signed out before another user may
+   * sign in.
+   *
+   * @param activity Activity that is used as the parent activity for launching sign in page.
+   * @param completeListener A callback to be invoked when sign in success and will return sign in
+   *     account info {@link AccountInfo}.
+   */
   public void signIn(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
@@ -157,7 +165,12 @@ public final class MSQASignInClient implements ISignInClient {
         });
   }
 
-  @Override
+  /**
+   * Signs out the current the Account and Credentials (tokens).
+   *
+   * @param completeListener A callback to be invoked when sign out finishes and will return sign
+   *     out result.
+   */
   public void signOut(@NonNull final OnCompleteListener<Boolean> completeListener) {
     mSignInClient.signOut(
         new ISingleAccountPublicClientApplication.SignOutCallback() {
@@ -173,7 +186,14 @@ public final class MSQASignInClient implements ISignInClient {
         });
   }
 
-  @Override
+  /**
+   * Gets the current account. This method must be called whenever the application is resumed or
+   * prior to running a scheduled background operation.
+   *
+   * @param activity Activity that is used as the parent activity for get sign account
+   * @param completeListener A callback to be invoked when complete and will return sign in account
+   *     info {@link AccountInfo} if success
+   */
   public void getCurrentAccount(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
@@ -199,7 +219,14 @@ public final class MSQASignInClient implements ISignInClient {
         });
   }
 
-  @Override
+  /**
+   * Acquire token interactively, will pop-up webUI. Interactive flow will skip the cache lookup.
+   *
+   * @param activity Activity that is used as the parent activity for get token.
+   * @param scopes The non-null array of scopes to be requested for the access token, the supported
+   *     scopes can be found in{@link MSQASignInScopeInternal}.
+   * @param completeListener A callback to be invoked when token get finished.
+   */
   public void acquireToken(
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
@@ -254,7 +281,16 @@ public final class MSQASignInClient implements ISignInClient {
         });
   }
 
-  @Override
+  /**
+   * Perform acquire token silent call. If there is a valid access token in the cache, the sdk will
+   * return the access token; If no valid access token exists, the sdk will try to find a refresh
+   * token and use the refresh token to get a new access token. If refresh token does not exist or
+   * it fails the refresh, exception will be sent back via callback.
+   *
+   * @param scopes The non-null array of scopes to be requested for the access token, the supported
+   *     scopes can be found in{@link MSQASignInScopeInternal}.
+   * @param completeListener A callback to be invoked when token get finished.
+   */
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
