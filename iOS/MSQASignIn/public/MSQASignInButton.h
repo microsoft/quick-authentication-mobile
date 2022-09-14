@@ -35,14 +35,14 @@ typedef NS_ENUM(NSInteger, MSQASignInButtonType) {
 };
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonTheme) {
-  kMSQASignInButtonThemeDark = 0,
-  kMSQASignInButtonThemeLight = 1
+  kMSQASignInButtonThemeLight = 0,
+  kMSQASignInButtonThemeDark = 1
 };
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonSize) {
-  kMSQASignInButtonSizeSmall = 0,
+  kMSQASignInButtonSizeLarge = 0,
   kMSQASignInButtonSizeMedium = 1,
-  kMSQASignInButtonSizeLarge = 2
+  kMSQASignInButtonSizeSmall = 2
 };
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonText) {
@@ -54,13 +54,14 @@ typedef NS_ENUM(NSInteger, MSQASignInButtonText) {
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonShape) {
   kMSQASignInButtonShapeRectangular = 0,
-  kMSQASignInButtonShapePill = 1,
-  kMSQASignInButtonShapeRounded = 2
+  kMSQASignInButtonShapeRounded = 1,
+  kMSQASignInButtonShapePill = 2
 };
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonLogo) {
   kMSQASignInButtonLogoLeft = 0,
-  kMSQASignInButtonLogoCenter = 1
+  kMSQASignInButtonLogoLeftTextCenter = 1,
+  kMSQASignInButtonLogoCenter = 2
 };
 
 /// This class provides the "Sign in with Microsoft" button.
