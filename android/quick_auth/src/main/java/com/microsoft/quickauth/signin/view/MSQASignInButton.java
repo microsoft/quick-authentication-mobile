@@ -264,7 +264,7 @@ public class MSQASignInButton extends LinearLayout {
   }
 
   private Drawable getContainerBackground() {
-    int radios = getBackgroundRadios();
+    int radius = getBackgroundRadius();
     int backgroundRes = R.drawable.msqa_sign_in_button_background;
     Drawable drawable = getResources().getDrawable(backgroundRes);
     if (drawable instanceof GradientDrawable) {
@@ -279,18 +279,18 @@ public class MSQASignInButton extends LinearLayout {
                 .getDimensionPixelSize(R.dimen.msqa_sign_in_button_background_border_width),
             getResources().getColor(R.color.msqa_sign_in_button_border_light));
       }
-      gradientDrawable.setCornerRadius(getResources().getDimensionPixelSize(radios));
+      gradientDrawable.setCornerRadius(getResources().getDimensionPixelSize(radius));
     }
     return drawable;
   }
 
-  private int getBackgroundRadios() {
+  private int getBackgroundRadius() {
     if (mButtonShape == ButtonShape.ROUNDED) {
-      return R.dimen.msqa_sign_in_button_radios_round;
+      return R.dimen.msqa_sign_in_button_radius_round;
     } else if (mButtonShape == ButtonShape.PILL) {
-      return R.dimen.msqa_sign_in_button_radios_pill;
+      return R.dimen.msqa_sign_in_button_radius_pill;
     }
-    return R.dimen.msqa_sign_in_button_radios_square;
+    return R.dimen.msqa_sign_in_button_radius_square;
   }
 
   private int getIconSize() {

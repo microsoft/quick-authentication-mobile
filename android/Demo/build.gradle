@@ -32,7 +32,7 @@ spotless {
     java {
         target project.fileTree(project.rootDir) {
             include '**/*.java'
-            exclude '**/quick/auth/**'
+            exclude '**/quickauth/**'
             exclude '**/quick_auth/**'
         }
         googleJavaFormat()
@@ -94,13 +94,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    // libraries for sign-in sdk
+    // libraries for quick auth sdk
     if (findProject(':quick_auth') != null) {
-        // For developer team only.
         implementation(project(":quick_auth"))
-    }
-    else {
-        // Downloads and Builds MSAL from maven central.
+    } else {
         implementation "com.microsoft.identity.client:msal:${rootProject.ext.msalSDKVersion}"
         implementation(name: 'quickauth-1.0.0', ext: 'aar')
     }

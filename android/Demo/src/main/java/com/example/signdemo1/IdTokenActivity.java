@@ -30,7 +30,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.ClientCreatedListener;
-import com.microsoft.quickauth.signin.ISignInClient;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.TokenResult;
@@ -44,7 +43,7 @@ public class IdTokenActivity extends Activity {
   private boolean mSilentToken;
   private Button mSignInButton;
 
-  private ISignInClient mSignInClient;
+  private MSQASignInClient mSignInClient;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {

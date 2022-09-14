@@ -40,7 +40,7 @@ public class MSQATaskExecutor {
     return MAIN_THREAD;
   }
 
-  public static ThreadPoolExecutor io() {
+  public static ThreadPoolExecutor background() {
     return BACKGROUND_THREAD;
   }
 

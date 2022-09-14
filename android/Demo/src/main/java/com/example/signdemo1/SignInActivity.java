@@ -35,7 +35,6 @@ import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
 import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.ClientCreatedListener;
-import com.microsoft.quickauth.signin.ISignInClient;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.TokenResult;
@@ -57,7 +56,7 @@ public class SignInActivity extends Activity {
   private View msAcquireTokenSilentButton;
   private ViewGroup mRootView;
 
-  private ISignInClient mSignInClient;
+  private MSQASignInClient mSignInClient;
   private SignInButtonSettingPop pop;
   private String[] scops;
 
