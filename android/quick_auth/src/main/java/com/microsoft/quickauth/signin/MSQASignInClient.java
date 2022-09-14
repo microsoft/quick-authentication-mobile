@@ -74,12 +74,15 @@ public final class MSQASignInClient {
       @NonNull final MSQASignInOptions signInOptions,
       @NonNull final ClientCreatedListener listener) {
     if (!isResourceExist(context, signInOptions.getConfigResourceId())) {
-      listener.onError(
+      MSQAException exception =
           new MSQAException(
               MSQAErrorString.NO_CONFIGURATION_FILE_ERROR,
-              MSQAErrorString.NO_CONFIGURATION_FILE_ERROR_MESSAGE));
+              MSQAErrorString.NO_CONFIGURATION_FILE_ERROR_MESSAGE);
+      listener.onError(exception);
+      MSQALogger.getInstance().error(TAG, "client initialize error", exception);
       return;
     }
+    MSQALogger.getInstance().verbose(TAG, "client initialize started");
     PublicClientApplication.createSingleAccountPublicClientApplication(
         context.getApplicationContext(),
         signInOptions.getConfigResourceId(),
@@ -92,11 +95,13 @@ public final class MSQASignInClient {
             setExternalLogger(signInOptions.getExternalLogger());
             MSQASignInClient client =
                 new MSQASignInClient(context.getApplicationContext(), application);
+            MSQALogger.getInstance().verbose(TAG, "client initialize success");
             listener.onCreated(client);
           }
 
           @Override
           public void onError(MsalException exception) {
+            MSQALogger.getInstance().error(TAG, "client initialize error", exception);
             listener.onError(MSQAException.create(exception));
           }
         });

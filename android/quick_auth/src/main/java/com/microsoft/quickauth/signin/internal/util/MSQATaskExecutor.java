@@ -26,13 +26,12 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class MSQATaskExecutor {
   private static final Executor MAIN_THREAD = new MSQATaskExecutor.Main();
-  private static final ThreadPoolExecutor BACKGROUND_THREAD =
-      (ThreadPoolExecutor) Executors.newCachedThreadPool();
+  private static final ExecutorService BACKGROUND_THREAD = Executors.newCachedThreadPool();
 
   private MSQATaskExecutor() {}
 
@@ -40,7 +39,7 @@ public class MSQATaskExecutor {
     return MAIN_THREAD;
   }
 
-  public static ThreadPoolExecutor background() {
+  public static ExecutorService background() {
     return BACKGROUND_THREAD;
   }
 
