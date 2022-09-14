@@ -37,6 +37,13 @@ static NSString* const kLargeIconImageName = @"Microsoft-Brand-20";
 static NSString* const kMediumIconImageName = @"Microsoft-Brand-16";
 static NSString* const kSmallIconImageName = @"Microsoft-Brand-12";
 
+static NSString* const kCoderTypeKey = @"type";
+static NSString* const kCoderThemeKey = @"theme";
+static NSString* const kCoderSizeKey = @"size";
+static NSString* const kCoderTextKey = @"text";
+static NSString* const kCoderShapeKey = @"shape";
+static NSString* const kCoderLogoKey = @"logo";
+
 static const CGFloat kBorderWidth = 1;
 
 static const CGFloat kLargeIconWidth = 20;
@@ -104,6 +111,24 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   self = [super initWithCoder:coder];
   if (self) {
     [self initInternal];
+    if ([coder containsValueForKey:kCoderTypeKey]) {
+      _type = [coder decodeIntegerForKey:kCoderTypeKey];
+    }
+    if ([coder containsValueForKey:kCoderThemeKey]) {
+      _theme = [coder decodeIntegerForKey:kCoderThemeKey];
+    }
+    if ([coder containsValueForKey:kCoderSizeKey]) {
+      _size = [coder decodeIntegerForKey:kCoderSizeKey];
+    }
+    if ([coder containsValueForKey:kCoderTextKey]) {
+      _text = [coder decodeIntegerForKey:kCoderTextKey];
+    }
+    if ([coder containsValueForKey:kCoderShapeKey]) {
+      _shape = [coder decodeIntegerForKey:kCoderShapeKey];
+    }
+    if ([coder containsValueForKey:kCoderLogoKey]) {
+      _logo = [coder decodeIntegerForKey:kCoderLogoKey];
+    }
   }
   return self;
 }
