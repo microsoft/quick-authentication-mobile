@@ -25,31 +25,18 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQAAccountData_Private.h"
+#import "MSQASilentTokenParameters.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation MSQAAccountData
+@implementation MSQASilentTokenParameters
 
-- (instancetype)initWithFullName:(NSString *)fullName
-                        userName:(NSString *)userName
-                          userId:(NSString *)userId
-                         idToken:(nullable NSString *)idToken
-                     accessToken:(nullable NSString *)accessToken {
+- (instancetype)initWithScopes:(NSArray<NSString *> *)scopes {
   self = [super init];
   if (self) {
-    _fullName = fullName;
-    _userName = userName;
-    _userId = userId;
-    _idToken = idToken;
-    _accessToken = accessToken;
-    _base64Photo = nil;
+    _scopes = scopes;
   }
   return self;
-}
-
-- (void)setBase64Photo:(NSString *)base64Photo {
-  _base64Photo = base64Photo;
 }
 
 @end

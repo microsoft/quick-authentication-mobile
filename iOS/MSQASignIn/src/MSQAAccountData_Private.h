@@ -31,12 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSQAAccountData ()
 
+@property(nonatomic, readonly, nullable) NSString *accessToken;
+
 - (instancetype)initWithFullName:(NSString *)fullName
                         userName:(NSString *)userName
                           userId:(NSString *)userId
+                         idToken:(nullable NSString *)idToken
                      accessToken:(nullable NSString *)accessToken;
 
-- (void)setPhoto:(NSString *)photo;
+- (void)setBase64Photo:(NSString *)base64Photo;
 
 @end
 

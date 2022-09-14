@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -27,7 +27,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="02G-N7-auS">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="87"/>
-                    <color key="backgroundColor" red="0.26324986760000002" green="0.56124190409999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="87" id="FYQ-QN-elg"/>
                     </constraints>
@@ -81,7 +81,9 @@
                         <constraint firstAttribute="width" constant="310" id="U6g-Ia-IAc"/>
                     </constraints>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Fetch Token Silently"/>
+                    <buttonConfiguration key="configuration" style="filled" title="Fetch Token Silently">
+                        <color key="baseBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </buttonConfiguration>
                     <connections>
                         <action selector="fetchTokenSilent:" destination="-1" eventType="touchUpInside" id="2lZ-V4-5b3"/>
                     </connections>
@@ -94,7 +96,9 @@
                     </constraints>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" title="Sign Out"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Sign Out"/>
+                    <buttonConfiguration key="configuration" style="filled" title="Sign Out">
+                        <color key="baseBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </buttonConfiguration>
                     <connections>
                         <action selector="signOut:" destination="-1" eventType="touchUpInside" id="Vsx-3V-V6H"/>
                     </connections>
@@ -106,7 +110,9 @@
                         <constraint firstAttribute="width" constant="310" id="qfE-Sc-fDw"/>
                     </constraints>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Fetch Token Interactively"/>
+                    <buttonConfiguration key="configuration" style="filled" title="Fetch Token Interactively">
+                        <color key="baseBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </buttonConfiguration>
                     <connections>
                         <action selector="fetchTokenInteractive:" destination="-1" eventType="touchUpInside" id="rBy-mf-lFJ"/>
                     </connections>
@@ -118,7 +124,9 @@
                         <constraint firstAttribute="height" constant="50" id="bcn-A0-H5E"/>
                     </constraints>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Get Current Account"/>
+                    <buttonConfiguration key="configuration" style="filled" title="Get Current Account">
+                        <color key="baseBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </buttonConfiguration>
                     <connections>
                         <action selector="getCurrentAccount:" destination="-1" eventType="touchUpInside" id="GgU-yv-cv5"/>
                     </connections>

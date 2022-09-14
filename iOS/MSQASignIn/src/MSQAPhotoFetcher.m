@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)fetchPhotoWithToken:(NSString *)token
                     completionBlock:
-                        (void (^)(NSString *_Nullable photo,
+                        (void (^)(NSString *_Nullable base64Photo,
                                   NSError *_Nullable error))completionBlock {
   MSQAPhotoFetcher *fetcher = [MSQAPhotoFetcher new];
   fetcher->_token = token;
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)startInternalWithCompletionBlock:
-    (void (^)(NSString *_Nullable photo,
+    (void (^)(NSString *_Nullable base64Photo,
               NSError *_Nullable error))completionBlock {
   [self getJSON:@"me/photo"
       completionBlock:^(NSDictionary *json, NSError *error) {

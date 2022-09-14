@@ -25,32 +25,20 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQAAccountData_Private.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation MSQAAccountData
+/// Represents the parameter used when acquiring the token silently.
+@interface MSQASilentTokenParameters : NSObject
 
-- (instancetype)initWithFullName:(NSString *)fullName
-                        userName:(NSString *)userName
-                          userId:(NSString *)userId
-                         idToken:(nullable NSString *)idToken
-                     accessToken:(nullable NSString *)accessToken {
-  self = [super init];
-  if (self) {
-    _fullName = fullName;
-    _userName = userName;
-    _userId = userId;
-    _idToken = idToken;
-    _accessToken = accessToken;
-    _base64Photo = nil;
-  }
-  return self;
-}
+/// Permissions you want to included in the token to be received.
+@property(nonnull, readonly, nonatomic) NSArray<NSString *> *scopes;
 
-- (void)setBase64Photo:(NSString *)base64Photo {
-  _base64Photo = base64Photo;
-}
+/// Initialize the `MSQASilentTokenParameters` object.
+/// - Parameter scopes: Permissions you want to included in the access token
+/// received.
+- (instancetype)initWithScopes:(NSArray<NSString *> *)scopes;
 
 @end
 

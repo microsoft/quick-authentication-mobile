@@ -33,6 +33,9 @@
 #import "MSQAAccountData_Private.h"
 #import "MSQAConfiguration.h"
 #import "MSQAPhotoFetcher.h"
+#import "MSQASilentTokenParameters.h"
+
+#define DEFAULT_SCOPES @[ @"User.Read" ]
 
 static NSString *const kAuthorityURL =
     @"https://login.microsoftonline.com/consumers";
@@ -63,18 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
                                        sourceApplication:sourceApplication];
 }
 
-- (void)acquireTokenWithScopes:(NSArray<NSString *> *)scopes
-                    controller:(UIViewController *)controller
-               completionBlock:(MSQACompletionBlock)completionBlock {
-  if (scopes.count == 0) {
-    [MSQASignIn callCompletionBlockAsync:completionBlock
-                                errorStr:kEmptyScopesError];
-    return;
-  }
-
-  MSALInteractiveTokenParameters *parameters =
-      [MSQASignIn createInteractiveTokenParametersWithScopes:scopes
-                                                  controller:controller];
+- (void)acquireTokenWithParameters:(MSQAInteractiveTokenParameters *)parameters
+                   completionBlock:(MSQACompletionBlock)completionBlock {
   parameters.completionBlockQueue = dispatch_get_main_queue();
 
   [_msalPublicClientApplication
@@ -86,19 +79,14 @@ NS_ASSUME_NONNULL_BEGIN
                  }];
 }
 
-- (void)acquireTokenSilentWithScopes:(NSArray<NSString *> *)scopes
-                     completionBlock:(MSQACompletionBlock)completionBlock {
-  if (scopes.count == 0) {
-    [MSQASignIn callCompletionBlockAsync:completionBlock
-                                errorStr:kEmptyScopesError];
-    return;
-  }
+- (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
+                         completionBlock:(MSQACompletionBlock)completionBlock {
 
-  MSALParameters *parameters = [MSALParameters new];
-  parameters.completionBlockQueue = dispatch_get_main_queue();
+  MSALParameters *params = [MSALParameters new];
+  params.completionBlockQueue = dispatch_get_main_queue();
 
   [_msalPublicClientApplication
-      getCurrentAccountWithParameters:parameters
+      getCurrentAccountWithParameters:params
                       completionBlock:^(MSALAccount *_Nullable account,
                                         MSALAccount *_Nullable previousAccount,
                                         NSError *_Nullable error) {
@@ -106,9 +94,9 @@ NS_ASSUME_NONNULL_BEGIN
                           completionBlock(nil, error);
                           return;
                         }
-                        [self acquireTokenSilentWithScopes:scopes
-                                                   account:account
-                                           completionBlock:completionBlock];
+                        [self acquireTokenSilentWithParameters:parameters
+                                                       account:account
+                                               completionBlock:completionBlock];
                       }];
 }
 
@@ -134,6 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                  getUserIdFromObjectId:
                                                      account.homeAccountId
                                                          .objectId]
+                                     idToken:nil
                                  accessToken:nil];
                         completionBlock(accountData, nil);
                       }];
@@ -163,51 +152,49 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)signInWithViewController:(UIViewController *)controller
                  completionBlock:(MSQACompletionBlock)completionBlock {
+  MSQASilentTokenParameters *parameters =
+      [[MSQASilentTokenParameters alloc] initWithScopes:@[ @"User.Read" ]];
   [self
-      acquireTokenSilentWithScopes:_configuration.scopes
-                   completionBlock:^(MSQAAccountData *_Nullable account,
-                                     NSError *_Nullable error) {
-                     if (account && !error) {
-                       [self continueToFetchPhotoWithAccount:account
-                                             completionBlock:completionBlock];
-                       return;
-                     }
-                     [self
-                         acquireTokenWithScopes:self->_configuration.scopes
-                                     controller:controller
-                                completionBlock:^(
-                                    MSQAAccountData *_Nullable account,
-                                    NSError *_Nullable error) {
-                                  if (account && !error) {
-                                    [self
-                                        continueToFetchPhotoWithAccount:account
-                                                        completionBlock:
-                                                            completionBlock];
-                                    return;
-                                  }
-                                  completionBlock(nil, error);
-                                }];
-                   }];
+      acquireTokenSilentWithParameters:parameters
+                       completionBlock:^(MSQAAccountData *_Nullable account,
+                                         NSError *_Nullable error) {
+                         if (account && !error) {
+                           [self
+                               continueToFetchPhotoWithAccount:account
+                                               completionBlock:completionBlock];
+                           return;
+                         }
+
+                         [self
+                             acquireTokenWithParameters:
+                                 [MSQASignIn
+                                     createInteractiveTokenParametersWithController:
+                                         controller]
+                                        completionBlock:^(
+                                            MSQAAccountData *_Nullable account,
+                                            NSError *_Nullable error) {
+                                          if (account && !error) {
+                                            [self
+                                                continueToFetchPhotoWithAccount:
+                                                    account
+                                                                completionBlock:
+                                                                    completionBlock];
+                                            return;
+                                          }
+                                          completionBlock(nil, error);
+                                        }];
+                       }];
 }
 
 #pragma mark - Class methods
 
-+ (MSQASignIn *)sharedInstance {
-  static dispatch_once_t once;
-  static MSQASignIn *sharedInstance;
-  dispatch_once(&once, ^{
-    sharedInstance = [[self alloc] init];
-  });
-  return sharedInstance;
-}
-
 + (MSALInteractiveTokenParameters *)
-    createInteractiveTokenParametersWithScopes:(NSArray<NSString *> *)scopes
-                                    controller:(UIViewController *)controller {
+    createInteractiveTokenParametersWithController:
+        (UIViewController *)controller {
   MSALWebviewParameters *webParameters = [[MSALWebviewParameters alloc]
       initWithAuthPresentationViewController:controller];
   MSALInteractiveTokenParameters *parameters =
-      [[MSALInteractiveTokenParameters alloc] initWithScopes:scopes
+      [[MSALInteractiveTokenParameters alloc] initWithScopes:DEFAULT_SCOPES
                                            webviewParameters:webParameters];
   return parameters;
 }
@@ -220,6 +207,7 @@ NS_ASSUME_NONNULL_BEGIN
       [[MSQAAccountData alloc] initWithFullName:account.accountClaims[@"name"]
                                        userName:account.username
                                          userId:userId
+                                        idToken:result.idToken
                                     accessToken:result.accessToken];
 }
 
@@ -237,7 +225,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)callCompletionBlockAsync:(MSQACompletionBlock)completionBlock
                         errorStr:(NSString *)errStr {
-  [MSQASignIn runBlockAyncOnMainThread:^{
+  [MSQASignIn runBlockAsyncOnMainThread:^{
     completionBlock(nil, [NSError errorWithDomain:errStr code:0 userInfo:nil]);
   }];
 }
@@ -254,7 +242,7 @@ NS_ASSUME_NONNULL_BEGIN
   completionBlock(nil, error);
 }
 
-+ (void)runBlockAyncOnMainThread:(void (^)(void))block {
++ (void)runBlockAsyncOnMainThread:(void (^)(void))block {
   dispatch_async(dispatch_get_main_queue(), ^{
     block();
   });
@@ -262,15 +250,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Private methods
 
-- (void)acquireTokenSilentWithScopes:(NSArray<NSString *> *)scopes
-                             account:(MSALAccount *_Nullable)account
-                     completionBlock:(MSQACompletionBlock)completionBlock {
-  MSALSilentTokenParameters *parameters =
-      [[MSALSilentTokenParameters alloc] initWithScopes:scopes account:account];
-  parameters.completionBlockQueue = dispatch_get_main_queue();
+- (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
+                                 account:(MSALAccount *_Nullable)account
+                         completionBlock:(MSQACompletionBlock)completionBlock {
+  MSALSilentTokenParameters *silentTokenParameters =
+      [[MSALSilentTokenParameters alloc] initWithScopes:parameters.scopes
+                                                account:account];
+  silentTokenParameters.completionBlockQueue = dispatch_get_main_queue();
 
-  [self->_msalPublicClientApplication
-      acquireTokenSilentWithParameters:parameters
+  [_msalPublicClientApplication
+      acquireTokenSilentWithParameters:silentTokenParameters
                        completionBlock:^(MSALResult *result, NSError *error) {
                          [MSQASignIn callCompletionBlock:completionBlock
                                           withMSALResult:result
@@ -281,12 +270,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)continueToFetchPhotoWithAccount:(MSQAAccountData *)account
                         completionBlock:(MSQACompletionBlock)completionBlock {
   [MSQAPhotoFetcher fetchPhotoWithToken:account.accessToken
-                        completionBlock:^(NSString *_Nullable photo,
+                        completionBlock:^(NSString *_Nullable base64Photo,
                                           NSError *_Nullable error) {
-                          if (photo) {
-                            account.photo = photo;
+                          if (base64Photo) {
+                            account.base64Photo = base64Photo;
                           }
-                          [MSQASignIn runBlockAyncOnMainThread:^{
+                          [MSQASignIn runBlockAsyncOnMainThread:^{
                             completionBlock(account, nil);
                           }];
                         }];

@@ -47,8 +47,7 @@
   self = [super init];
   if (self) {
     MSQAConfiguration *config = [[MSQAConfiguration alloc]
-        initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"
-                  scopes:@[ @"User.Read" ]];
+        initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"];
     _msSignIn = [[MSQASignIn alloc] initWithConfiguration:config error:nil];
   }
   return self;

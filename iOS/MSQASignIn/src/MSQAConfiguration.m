@@ -31,12 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation MSQAConfiguration
 
-- (instancetype)initWithClientID:(NSString *)clientID
-                          scopes:(NSArray<NSString *> *)scopes {
+- (instancetype)initWithClientID:(NSString *)clientID {
   self = [super init];
   if (self) {
     _clientID = clientID;
-    _scopes = scopes;
   }
   return self;
 }

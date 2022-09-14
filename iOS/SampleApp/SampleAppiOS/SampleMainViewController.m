@@ -29,6 +29,7 @@
 
 #import <MSQASignIn/MSQAAccountData.h>
 #import <MSQASignIn/MSQASignIn.h>
+#import <MSQASignIn/MSQASilentTokenParameters.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleLoginViewController.h"
@@ -80,9 +81,9 @@
       [NSString stringWithFormat:@"Full name: %@", _accountData.fullName];
   _idLabel.text = [NSString stringWithFormat:@"Id: %@", _accountData.userId];
 
-  if (_accountData.photo) {
+  if (_accountData.base64Photo) {
     NSData *data = [[NSData alloc]
-        initWithBase64EncodedString:_accountData.photo
+        initWithBase64EncodedString:_accountData.base64Photo
                             options:
                                 NSDataBase64DecodingIgnoreUnknownCharacters];
     [self setUserPhoto:[UIImage imageWithData:data]];
@@ -100,24 +101,33 @@
                                                   sharedViewController]];
 }
 
-
 - (IBAction)fetchTokenSilent:(id)sender {
-  [_msSignIn
-      acquireTokenSilentWithScopes:@[ @"User.Read" ]
-                   completionBlock:^(MSQAAccountData *account, NSError *error) {
-                     self->_tokenLabel.text = [NSString
-                         stringWithFormat:@"Token: %@", account.accessToken];
-                   }];
+  MSQASilentTokenParameters *parameters =
+      [[MSQASilentTokenParameters alloc] initWithScopes:@[ @"User.Read" ]];
+  [_msSignIn acquireTokenSilentWithParameters:parameters
+                              completionBlock:^(MSQAAccountData *account,
+                                                NSError *error) {
+                                self->_tokenLabel.text =
+                                    [NSString stringWithFormat:@"ID token: %@",
+                                                               account.idToken];
+                              }];
 }
 
 - (IBAction)fetchTokenInteractive:(id)sender {
-  [_msSignIn acquireTokenWithScopes:@[ @"User.Read", @"Calendars.Read" ]
-                         controller:self
-                    completionBlock:^(MSQAAccountData *_Nullable account,
-                                      NSError *_Nullable error) {
-                      self->_tokenLabel.text = [NSString
-                          stringWithFormat:@"Token: %@", account.accessToken];
-                    }];
+  MSQAWebviewParameters *webParameters = [[MSQAWebviewParameters alloc]
+      initWithAuthPresentationViewController:self];
+  MSQAInteractiveTokenParameters *parameters =
+      [[MSALInteractiveTokenParameters alloc]
+             initWithScopes:@[ @"User.Read", @"Calendars.Read" ]
+          webviewParameters:webParameters];
+
+  [_msSignIn acquireTokenWithParameters:parameters
+                        completionBlock:^(MSQAAccountData *_Nullable account,
+                                          NSError *_Nullable error) {
+                          self->_tokenLabel.text =
+                              [NSString stringWithFormat:@"ID token: %@",
+                                                         account.idToken];
+                        }];
 }
 
 - (IBAction)getCurrentAccount:(id)sender {

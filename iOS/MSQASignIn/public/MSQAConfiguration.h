@@ -29,7 +29,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// The class reprensents the configuration for the `MSQASignIn`.
+/// The class represents the configuration for the `MSQASignIn`.
 @interface MSQAConfiguration : NSObject
 
 /// The client ID of the app from the Microsoft developer portal.
@@ -38,21 +38,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// The permissions you want to include in the access token to be fetched.
 @property(nonatomic, readonly) NSArray<NSString *> *scopes;
 
-/// Unavailable, use `initWithClientID:scopes`.
+/// Unavailable, use `initWithClientID`.
 /// :nodoc:
 + (instancetype)new NS_UNAVAILABLE;
 
-/// Unavailable, use `initWithClientID:scopes`.
+/// Unavailable, use `initWithClientID`.
 /// :nodoc
 - (instancetype)init NS_UNAVAILABLE;
 
 /// Initialize `MSQAConfiguration` class.
 /// @param clientID The client ID of the app from the Microsoft developer
 /// portal.
-/// @param scopes The permissions you want to include in the access token to be
-/// fetched.
-- (instancetype)initWithClientID:(NSString *)clientID
-                          scopes:(NSArray<NSString *> *)scopes;
+- (instancetype)initWithClientID:(NSString *)clientID;
 
 @end
 

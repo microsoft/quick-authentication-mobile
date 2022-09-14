@@ -31,8 +31,8 @@
 /// This class represents a MSA account.
 @interface MSQAAccountData : NSObject
 
-/// MSA user's ful name.
-@property(nonatomic, readonly, nonnull) NSString *fullName;
+/// MSA user's full name.
+@property(nonatomic, readonly, nullable) NSString *fullName;
 
 /// MSA user's email address or phone number.
 @property(nonatomic, readonly, nonnull) NSString *userName;
@@ -41,9 +41,9 @@
 @property(nonatomic, readonly, nonnull) NSString *userId;
 
 /// The user's photo in Base64.
-@property(nonatomic, readonly, nullable) NSString *photo;
+@property(nonatomic, readonly, nullable) NSString *base64Photo;
 
-/// MSA account access token.
-@property(nonatomic, readonly, nullable) NSString *accessToken;
+/// MSA account id token.
+@property(nonatomic, readonly, nullable) NSString *idToken;
 
 @end
