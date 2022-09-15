@@ -103,8 +103,8 @@ publishing {
                     }
                 }
             }
-//            artifact(sourcesJar)
-//            artifact(javadocJar)
+            artifact(sourcesJar)
+            artifact(javadocJar)
             artifact("$buildDir/outputs/aar/quickauth-${VERSION_NAME}.aar")
         }
 
