@@ -35,10 +35,10 @@ android {
             debuggable true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             debuggable false
             consumerProguardFiles 'consumer-rules.pro'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     flavorDimensions "main"
