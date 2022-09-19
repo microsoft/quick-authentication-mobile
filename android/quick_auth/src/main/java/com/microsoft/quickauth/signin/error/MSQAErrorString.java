@@ -47,7 +47,7 @@ public class MSQAErrorString {
   public static final String HTTP_ACCOUNT_REQUEST_ERROR = "http_account_request_error";
 
   public static final String HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE =
-      "Account info request " + "error.";
+      "Account info request error.";
 
   /** User cancel error */
   public static final String USER_CANCEL_ERROR = "user_cancel_error";

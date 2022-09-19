@@ -99,11 +99,11 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
           .verbose(
               TAG,
               "sign in started, has account in cache and will start request get current sign in account api");
-      getCurrentSignInAccount(activity, iAccount, scopes, true, completeListener);
+      getCurrentAccount(activity, iAccount, scopes, true, completeListener);
     }
   }
 
-  public void getCurrentSignInAccount(
+  public void getCurrentAccount(
       @NonNull final Activity activity,
       @Nullable final IAccount iAccount,
       @NonNull final String[] scopes,

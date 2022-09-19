@@ -206,14 +206,14 @@ public final class MSQASignInClient {
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override
           public void onAccountLoaded(@Nullable IAccount activeAccount) {
-            mSignInClient.getCurrentSignInAccount(
+            mSignInClient.getCurrentAccount(
                 activity, activeAccount, mScopes, false, completeListener);
           }
 
           @Override
           public void onAccountChanged(
               @Nullable IAccount priorAccount, @Nullable IAccount currentAccount) {
-            mSignInClient.getCurrentSignInAccount(
+            mSignInClient.getCurrentAccount(
                 activity, currentAccount, mScopes, false, completeListener);
           }
 

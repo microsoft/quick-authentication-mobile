@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public interface AccountInfo {
@@ -41,7 +40,7 @@ public interface AccountInfo {
   /**
    * @return CID for MSA.
    */
-  @NonNull
+  @Nullable
   String getId();
 
   /**
