@@ -27,7 +27,7 @@ import com.microsoft.quickauth.signin.error.MSQAException;
 
 public interface OnFailureListener {
   /**
-   * Called once failure and pass the error object.
+   * Called once and pass the error object.
    *
    * @param error the error result.
    */

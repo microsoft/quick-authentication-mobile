@@ -75,7 +75,7 @@ public class MSQAHttpConnectionClient {
     return conn;
   }
 
-  public static String convertStreamToString(InputStream inputStream) throws IOException {
+  private static String convertStreamToString(InputStream inputStream) throws IOException {
     if (inputStream == null) return null;
     try {
       BufferedReader reader =

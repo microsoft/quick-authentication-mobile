@@ -22,7 +22,6 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.internal.entity;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.identity.client.IAccount;
@@ -48,10 +47,10 @@ public class MSQAAccountInfoInternal implements AccountInfo {
     return mUserName;
   }
 
-  @NonNull
+  @Nullable
   @Override
   public String getId() {
-    return !TextUtils.isEmpty(mId) ? mId : "";
+    return mId;
   }
 
   @Nullable
@@ -90,7 +89,7 @@ public class MSQAAccountInfoInternal implements AccountInfo {
       @NonNull IAuthenticationResult authenticationResult) {
     MSQAAccountInfoInternal account = new MSQAAccountInfoInternal();
     IAccount iAccount = authenticationResult.getAccount();
-    if (iAccount.getClaims() != null && iAccount.getClaims().containsKey("name")) {
+    if (iAccount.getClaims() != null) {
       Object name = iAccount.getClaims().get("name");
       account.setFullName(name != null ? name.toString() : null);
     }
