@@ -44,7 +44,6 @@ import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
 import com.microsoft.quickauth.signin.internal.http.MSQAAPIConstant;
 import com.microsoft.quickauth.signin.internal.http.MSQAHttpConnectionClient;
-import com.microsoft.quickauth.signin.internal.http.MSQAHttpMethod;
 import com.microsoft.quickauth.signin.internal.http.MSQAHttpRequest;
 import com.microsoft.quickauth.signin.internal.util.MSQATaskExecutor;
 import java.io.ByteArrayOutputStream;
@@ -111,7 +110,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     // If no account in cache return null.
     if (iAccount == null) {
-      completeListener.onComplete(null, null);
+      completeListener.onComplete(null, MSQAException.createNoAccountException());
     } else {
       // Start to request token silent.
       MSQALogger.getInstance()
@@ -285,10 +284,9 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     try {
       MSQALogger.getInstance().verbose(TAG, "get user photo started");
       HttpURLConnection conn =
-          MSQAHttpConnectionClient.createHttpURLConnection(
+          MSQAHttpConnectionClient.get(
               new MSQAHttpRequest.Builder()
-                  .setUrl(MSQAAPIConstant.MS_GRAPH_USER_PHOTO_LARGEST)
-                  .setHttpMethod(MSQAHttpMethod.GET)
+                  .setUrl(MSQAAPIConstant.MS_GRAPH_USER_PHOTO_LARGEST_PATH)
                   .addHeader("Content-Type", "image/jpg")
                   .addHeader(
                       "Authorization",
@@ -313,7 +311,6 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
     MSQAHttpRequest httpRequest =
         new MSQAHttpRequest.Builder()
             .setUrl(MSQAAPIConstant.MS_GRAPH_USER_INFO_PATH)
-            .setHttpMethod(MSQAHttpMethod.GET)
             .addHeader("Content-Type", "application/json")
             .addHeader(
                 "Authorization",
@@ -321,7 +318,8 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             .builder();
     String id = null;
     try {
-      String result = MSQAHttpConnectionClient.request(httpRequest);
+      HttpURLConnection conn = MSQAHttpConnectionClient.get(httpRequest);
+      String result = MSQAHttpConnectionClient.getStringResponse(conn);
       if (!TextUtils.isEmpty(result)) {
         JSONObject jsonObject = new JSONObject(result);
         id = jsonObject.optString("id");

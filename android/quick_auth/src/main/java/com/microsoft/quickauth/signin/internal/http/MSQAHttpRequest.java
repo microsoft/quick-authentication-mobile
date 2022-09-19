@@ -30,14 +30,14 @@ public class MSQAHttpRequest {
 
   private final String mUrl;
   private @NonNull final Map<String, String> mHeader;
-  private @MSQAHttpMethod final String mHttpMethod;
+  private @NonNull final Map<String, Object> mParams;
   private final int mConnectTimeout;
   private final int mReadTimeout;
 
   public MSQAHttpRequest(Builder builder) {
     mUrl = builder.mUrl;
     mHeader = builder.mHeader;
-    mHttpMethod = builder.mHttpMethod;
+    mParams = builder.mParams;
     mConnectTimeout = builder.mConnectTimeout;
     mReadTimeout = builder.mReadTimeout;
   }
@@ -51,8 +51,8 @@ public class MSQAHttpRequest {
     return mHeader;
   }
 
-  public String getHttpMethod() {
-    return mHttpMethod;
+  public Map<String, Object> getParams() {
+    return mParams;
   }
 
   public int getConnectTimeout() {
@@ -66,12 +66,13 @@ public class MSQAHttpRequest {
   public static class Builder {
     private String mUrl;
     private @NonNull final Map<String, String> mHeader;
-    private @MSQAHttpMethod String mHttpMethod;
+    private @NonNull Map<String, Object> mParams;
     private int mConnectTimeout;
     private int mReadTimeout;
 
     public Builder() {
       mHeader = new HashMap<>();
+      mParams = new HashMap<>();
       mConnectTimeout = MSQAAPIConstant.CONNECT_TIMEOUT;
       mReadTimeout = MSQAAPIConstant.READ_TIMEOUT;
     }
@@ -86,8 +87,13 @@ public class MSQAHttpRequest {
       return this;
     }
 
-    public Builder setHttpMethod(@MSQAHttpMethod String httpMethod) {
-      mHttpMethod = httpMethod;
+    public Builder addParams(@NonNull String key, @NonNull String value) {
+      mParams.put(key, value);
+      return this;
+    }
+
+    public Builder setParams(@NonNull Map<String, Object> params) {
+      mParams = params;
       return this;
     }
 

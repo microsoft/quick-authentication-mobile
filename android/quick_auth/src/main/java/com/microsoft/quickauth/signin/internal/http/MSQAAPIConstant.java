@@ -28,6 +28,9 @@ public class MSQAAPIConstant {
   public static final String MS_GRAPH_TK_REQUEST_PREFIX = "Bearer ";
   public static final String MS_GRAPH_ROOT_ENDPOINT = "https://graph.microsoft.com/";
   public static final String MS_GRAPH_USER_INFO_PATH = MS_GRAPH_ROOT_ENDPOINT + "v1.0/me";
-  public static final String MS_GRAPH_USER_PHOTO = MS_GRAPH_ROOT_ENDPOINT + "v1.0/me/photo";
-  public static final String MS_GRAPH_USER_PHOTO_LARGEST = MS_GRAPH_USER_PHOTO + "/$value";
+  public static final String MS_GRAPH_USER_PHOTO_PATH = MS_GRAPH_ROOT_ENDPOINT + "v1.0/me/photo";
+  public static final String MS_GRAPH_USER_PHOTO_LARGEST_PATH =
+      MS_GRAPH_USER_PHOTO_PATH + "/$value";
+  public static final String MS_QUICK_AUTH_ROOT_ENDPOINT = "https://edge-auth.microsoft.com/";
+  public static final String MS_QUICK_AUTH_API_PATH = MS_QUICK_AUTH_ROOT_ENDPOINT + "api";
 }
