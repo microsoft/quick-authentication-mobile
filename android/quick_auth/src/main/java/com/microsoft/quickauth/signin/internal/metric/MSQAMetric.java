@@ -1,6 +1,7 @@
 package com.microsoft.quickauth.signin.internal.metric;
 
 import androidx.annotation.NonNull;
+import com.microsoft.quickauth.signin.BuildConfig;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,12 +74,12 @@ public class MSQAMetric {
     private String mComments;
 
     /** Timestamp of the event in milliseconds. */
-    private long mTimestamp;
+    private String mTimestamp;
 
     /** Custom number field reserved for client. */
     private int mNumberField1;
 
-    /** Custom number field reserver for client. */
+    /** Custom number field reserved for client. */
     private int mNumberField2;
 
     public MetricEvent() {
@@ -139,11 +140,11 @@ public class MSQAMetric {
       return this;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
       return mTimestamp;
     }
 
-    public MetricEvent setTimestamp(long timestamp) {
+    public MetricEvent setTimestamp(String timestamp) {
       this.mTimestamp = timestamp;
       return this;
     }
@@ -172,26 +173,36 @@ public class MSQAMetric {
     Map<String, Object> map = new HashMap<>();
     map.put("EasyAuthSessionId", getSessionId());
     map.put("LibVersion", getLibVersion());
-    String eventResult = null;
+    JSONArray jsonArray = new JSONArray();
     if (mEvents != null && !mEvents.isEmpty()) {
       try {
-        JSONArray jsonArray = new JSONArray();
+
         for (MetricEvent event : mEvents) {
           JSONObject jsonObject = new JSONObject();
           jsonObject.putOpt("OperationId", event.getOperationId());
           jsonObject.putOpt("EventName", event.getEventName());
+          jsonObject.putOpt("Message", event.getMessage());
+          jsonObject.putOpt("Comments", event.getComments());
           jsonObject.putOpt("Count", event.getCount());
           jsonObject.putOpt("Duration", event.getDuration());
-          jsonObject.putOpt("NumberField1", event.getNumberField1());
-          jsonObject.putOpt("NumberField2", event.getNumberField2());
+          jsonObject.putOpt("Timestamp", event.getTimestamp());
           jsonArray.put(jsonObject);
         }
-        eventResult = jsonArray.toString();
       } catch (JSONException e) {
         MSQALogger.getInstance().error(TAG, "metric transfer to string error", e);
       }
     }
-    map.put("Events", eventResult);
+    if (BuildConfig.DEBUG)
+      MSQALogger.getInstance()
+          .verbose(
+              TAG,
+              "event result= EasyAuthSessionId="
+                  + getSessionId()
+                  + ", LibVersion="
+                  + getLibVersion()
+                  + ", "
+                  + jsonArray);
+    map.put("Events", jsonArray);
     return map;
   }
 }

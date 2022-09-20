@@ -33,12 +33,16 @@ import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
+import com.microsoft.identity.client.exception.MsalArgumentException;
 import com.microsoft.identity.client.exception.MsalException;
+import com.microsoft.identity.client.exception.MsalServiceException;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQACancelException;
+import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.error.MSQANoScopeException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.entity.MSQAAccountInfoInternal;
@@ -89,7 +93,14 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             @Override
             public void onError(MsalException exception) {
               MSQALogger.getInstance().error(TAG, "sign in error", exception);
-              completeListener.onComplete(null, MSQAException.create(exception));
+              if (MsalServiceException.ACCESS_DENIED.equals(exception.getErrorCode())) {
+                completeListener.onComplete(
+                    null,
+                    new MSQACancelException(
+                        MSQAErrorString.USER_CANCEL_ERROR, exception.getMessage()));
+              } else {
+                completeListener.onComplete(null, MSQAException.create(exception));
+              }
             }
           });
     } else {
@@ -167,28 +178,47 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       MSQALogger.getInstance()
           .verbose(
               TAG, "acquire token started, has account in cache and will start request token api");
-      acquireToken(
-          activity,
-          scopes,
-          new AuthenticationCallback() {
-            @Override
-            public void onCancel() {
-              MSQALogger.getInstance().warn(TAG, "get token canceled");
-              completeListener.onComplete(null, MSQAException.createNoAccountException());
-            }
+      try {
+        acquireToken(
+            activity,
+            scopes,
+            new AuthenticationCallback() {
+              @Override
+              public void onCancel() {
+                MSQALogger.getInstance().warn(TAG, "get token canceled");
+                completeListener.onComplete(null, MSQACancelException.create());
+              }
 
-            @Override
-            public void onSuccess(IAuthenticationResult authenticationResult) {
-              MSQALogger.getInstance().verbose(TAG, "get token success");
-              completeListener.onComplete(authenticationResult, null);
-            }
+              @Override
+              public void onSuccess(IAuthenticationResult authenticationResult) {
+                MSQALogger.getInstance().verbose(TAG, "get token success");
+                completeListener.onComplete(authenticationResult, null);
+              }
 
-            @Override
-            public void onError(MsalException exception) {
-              MSQALogger.getInstance().error(TAG, "get token error", exception);
-              completeListener.onComplete(null, MSQAException.create(exception));
-            }
-          });
+              @Override
+              public void onError(MsalException exception) {
+                MSQALogger.getInstance().error(TAG, "get token error", exception);
+                if (MsalServiceException.ACCESS_DENIED.equals(exception.getErrorCode())) {
+                  completeListener.onComplete(
+                      null,
+                      new MSQACancelException(
+                          MSQAErrorString.USER_CANCEL_ERROR, exception.getMessage()));
+                } else if (exception instanceof MsalArgumentException
+                    && MsalArgumentException.SCOPE_ARGUMENT_NAME.equals(
+                        ((MsalArgumentException) exception).getOperationName())) {
+                  completeListener.onComplete(
+                      null,
+                      new MSQANoScopeException(
+                          MSQAErrorString.NO_SCOPE_ERROR, exception.getMessage()));
+                } else {
+                  completeListener.onComplete(null, MSQAException.create(exception));
+                }
+              }
+            });
+
+      } catch (Exception e) {
+        completeListener.onComplete(null, MSQAException.create(e));
+      }
     }
   }
 
@@ -204,28 +234,43 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
           .verbose(
               TAG,
               "acquire token silent started, has account in cache and will start request token silent api");
-      acquireTokenSilentAsync(
-          iAccount,
-          scopes,
-          new SilentAuthenticationCallback() {
-            @Override
-            public void onSuccess(IAuthenticationResult authenticationResult) {
-              MSQALogger.getInstance().verbose(TAG, "acquire token silent success");
-              completeListener.onComplete(authenticationResult, null);
-            }
-
-            @Override
-            public void onError(MsalException exception) {
-              Exception silentException = exception;
-              // wrapper silent MSAL UI thread and expose new thread for developers
-              if (silentException instanceof MsalUiRequiredException) {
-                silentException =
-                    new MSQAUiRequiredException(exception.getErrorCode(), exception.getMessage());
+      try {
+        acquireTokenSilentAsync(
+            iAccount,
+            scopes,
+            new SilentAuthenticationCallback() {
+              @Override
+              public void onSuccess(IAuthenticationResult authenticationResult) {
+                MSQALogger.getInstance().verbose(TAG, "acquire token silent success");
+                completeListener.onComplete(authenticationResult, null);
               }
-              MSQALogger.getInstance().error(TAG, "get token silent error", silentException);
-              completeListener.onComplete(null, MSQAException.create(silentException));
-            }
-          });
+
+              @Override
+              public void onError(MsalException exception) {
+                if (exception instanceof MsalArgumentException
+                    && MsalArgumentException.SCOPE_ARGUMENT_NAME.equals(
+                        ((MsalArgumentException) exception).getOperationName())) {
+                  completeListener.onComplete(
+                      null,
+                      new MSQANoScopeException(
+                          MSQAErrorString.NO_SCOPE_ERROR, exception.getMessage()));
+                } else {
+                  Exception silentException = exception;
+                  // wrapper silent MSAL UI thread and expose new thread for developers
+                  if (silentException instanceof MsalUiRequiredException) {
+                    silentException =
+                        new MSQAUiRequiredException(
+                            exception.getErrorCode(), exception.getMessage());
+                  }
+                  MSQALogger.getInstance().error(TAG, "get token silent error", silentException);
+                  completeListener.onComplete(null, MSQAException.create(silentException));
+                }
+              }
+            });
+
+      } catch (Exception e) {
+        completeListener.onComplete(null, MSQAException.create(e));
+      }
     }
   }
 

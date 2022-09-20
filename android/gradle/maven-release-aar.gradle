@@ -5,6 +5,7 @@ ext["GROUP_ID"] = 'com.microsoft'
 ext["ARTIFACT_ID"] = "quickauth"
 ext["VERSION_CODE"] = 1
 ext["VERSION_NAME"] = "1.0.0"
+ext["LIB_VERSION"] = "v0.1"
 
 File secretPropsFile = project.rootProject.file('local.properties')
 if (secretPropsFile.exists()) {

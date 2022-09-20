@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQACancelException;
+import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.error.MSQANoScopeException;
 
 public class MSQAMetricListener<TResult> implements OnCompleteListener<TResult> {
-  private final @NonNull MSQAMetricController mController;
-  private final @Nullable OnCompleteListener<TResult> mCompleteListener;
+  protected final @NonNull MSQAMetricController mController;
+  protected final @Nullable OnCompleteListener<TResult> mCompleteListener;
 
   public MSQAMetricListener(
       @NonNull MSQAMetricController controller,
@@ -24,6 +26,16 @@ public class MSQAMetricListener<TResult> implements OnCompleteListener<TResult> 
       mController.getEvent().setMessage(MSQAMetricMessage.SUCCESS);
     } else if (error instanceof MSQACancelException) {
       mController.getEvent().setMessage(MSQAMetricMessage.CANCELED).setComments(error.getMessage());
+    } else if (error instanceof MSQANoScopeException) {
+      mController
+          .getEvent()
+          .setMessage(MSQAMetricMessage.NO_SCOPES)
+          .setComments(error.getMessage());
+    } else if (error != null && error.getErrorCode().equals(MSQAErrorString.NO_CURRENT_ACCOUNT)) {
+      mController
+          .getEvent()
+          .setMessage(MSQAMetricMessage.NO_ACCOUNT_PRESENT)
+          .setComments(error.getMessage());
     } else {
       mController
           .getEvent()

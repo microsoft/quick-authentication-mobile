@@ -49,6 +49,11 @@ public class MSQAErrorString {
   public static final String HTTP_REQUEST_ACCOUNT_INFO_ERROR_MESSAGE =
       "Account info request error.";
 
+  /** No scope error */
+  public static final String NO_SCOPE_ERROR = "no_scope_error";
+
+  public static final String NO_SCOPE_ERROR_MESSAGE = "Empty scopes list.";
+
   /** User cancel error */
   public static final String USER_CANCEL_ERROR = "user_cancel_error";
 
