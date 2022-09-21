@@ -37,8 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
                     completionBlock:
                         (void (^)(NSString *_Nullable base64Photo,
                                   NSError *_Nullable error))completionBlock {
-  MSQAPhotoFetcher *fetcher = [MSQAPhotoFetcher new];
-  fetcher->_token = token;
+  MSQAPhotoFetcher *fetcher = [[MSQAPhotoFetcher alloc] initWithToken:token];
   [fetcher startInternalWithCompletionBlock:completionBlock];
 
   return fetcher;
@@ -50,6 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
   NSString *urlString =
       [NSString stringWithFormat:@"https://graph.microsoft.com/v1.0/%@", path];
   return [NSURL URLWithString:urlString];
+}
+
+- (instancetype)initWithToken:(NSString *)token {
+  if (!(self = [super init])) {
+    return nil;
+  }
+  _token = token;
+  return self;
 }
 
 - (void)startInternalWithCompletionBlock:

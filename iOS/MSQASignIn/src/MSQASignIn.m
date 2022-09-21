@@ -82,11 +82,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
                          completionBlock:(MSQACompletionBlock)completionBlock {
 
-  MSALParameters *params = [MSALParameters new];
-  params.completionBlockQueue = dispatch_get_main_queue();
+  MSALParameters *paramsForGetCurrentAccount = [MSALParameters new];
+  paramsForGetCurrentAccount.completionBlockQueue = dispatch_get_main_queue();
 
   [_msalPublicClientApplication
-      getCurrentAccountWithParameters:params
+      getCurrentAccountWithParameters:paramsForGetCurrentAccount
                       completionBlock:^(MSALAccount *_Nullable account,
                                         MSALAccount *_Nullable previousAccount,
                                         NSError *_Nullable error) {
