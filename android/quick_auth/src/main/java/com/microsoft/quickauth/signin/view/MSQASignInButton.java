@@ -32,11 +32,15 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.R;
@@ -99,6 +103,10 @@ public class MSQASignInButton extends LinearLayout {
             onButtonClick();
           }
         });
+
+    regardViewAsButton(this);
+    mSignInIcon.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+    mSignInText.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
   }
 
   private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -186,6 +194,7 @@ public class MSQASignInButton extends LinearLayout {
     }
     // set container
     mSignInContainer.setBackground(getContainerBackground());
+    mSignInContainer.setContentDescription(getResources().getString(getButtonText()));
     // set icon
     ViewGroup.LayoutParams iconLayoutParams = mSignInIcon.getLayoutParams();
     if (iconLayoutParams != null) {
@@ -340,5 +349,26 @@ public class MSQASignInButton extends LinearLayout {
     } else {
       return R.string.msqa_signin_with_text;
     }
+  }
+
+  /**
+   * This method will set a {@link android.view.View.AccessibilityDelegate} on giving view.
+   *
+   * @param view the view to override a11y class to a Button, normally an {@link TextView}
+   */
+  public void regardViewAsButton(@Nullable View view) {
+    if (view == null) {
+      return;
+    }
+    ViewCompat.setAccessibilityDelegate(
+        view,
+        new AccessibilityDelegateCompat() {
+          @Override
+          public void onInitializeAccessibilityNodeInfo(
+              View host, AccessibilityNodeInfoCompat info) {
+            super.onInitializeAccessibilityNodeInfo(host, info);
+            info.setClassName(Button.class.getName());
+          }
+        });
   }
 }
