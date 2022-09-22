@@ -37,7 +37,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
         android:gravity="center"
-        android:text="Microsoft Quick Auth SDK"
+        android:text="Microsoft Quick Auth SDK Demo"
         android:textColor="@android:color/white"
         android:textSize="30sp" />
 
@@ -46,14 +46,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/signed_out"
+        android:layout_marginTop="20dp"
+        android:text="This button below provided for third part developers"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <com.microsoft.quickauth.signin.view.MSQASignInButton
@@ -146,16 +147,26 @@
         </LinearLayout>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:text="This button below provided to test different button style"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <Button
             android:id="@+id/ms_sign_button_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:background="@color/blue_grey_500"
             android:gravity="center"
             android:padding="12dp"
-            android:text="Set sign in button style"
+            android:text="Change style"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 

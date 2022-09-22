@@ -199,7 +199,7 @@ public class SignInActivity extends Activity {
       mUserInfoResult.setText(error != null ? "login error: " + error.getMessage() : "");
     }
     boolean signIn = accountInfo != null;
-    mStatus.setText(signIn ? "signed in" : "signed out");
+    //    mStatus.setText(signIn ? "signed in" : "signed out");
 
     mSignInButton.setVisibility(signIn ? View.GONE : View.VISIBLE);
     mSignOutButton.setVisibility(signIn ? View.VISIBLE : View.GONE);

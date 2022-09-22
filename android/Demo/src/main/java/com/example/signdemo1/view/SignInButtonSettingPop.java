@@ -73,6 +73,7 @@ public class SignInButtonSettingPop extends PopupWindow {
     initSeekBar(rootView);
     rootView.setOnClickListener(v -> dismiss());
     rootView.findViewById(R.id.setting_container).setOnClickListener(v -> {});
+    rootView.findViewById(R.id.close).setOnClickListener(v -> dismiss());
   }
 
   private void initSeekBar(View rootView) {
