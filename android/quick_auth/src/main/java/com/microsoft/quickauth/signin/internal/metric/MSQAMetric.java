@@ -179,10 +179,8 @@ public class MSQAMetric {
 
         for (MetricEvent event : mEvents) {
           JSONObject jsonObject = new JSONObject();
-          jsonObject.putOpt("OperationId", event.getOperationId());
           jsonObject.putOpt("EventName", event.getEventName());
           jsonObject.putOpt("Message", event.getMessage());
-          jsonObject.putOpt("Comments", event.getComments());
           jsonObject.putOpt("Count", event.getCount());
           jsonObject.putOpt("Duration", event.getDuration());
           jsonObject.putOpt("Timestamp", event.getTimestamp());
