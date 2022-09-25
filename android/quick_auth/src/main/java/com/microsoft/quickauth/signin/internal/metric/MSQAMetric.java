@@ -60,7 +60,7 @@ public class MSQAMetric {
     private String mOperationId;
 
     /** The event name, e.g., "SignIn.Clicked", "SignIn.Success". */
-    private @MSQAMetricEvent String mEventName;
+    private final @MSQAMetricEvent String mEventName;
 
     /** Count of the event. */
     private int mCount;
@@ -82,8 +82,9 @@ public class MSQAMetric {
     /** Custom number field reserved for client. */
     private int mNumberField2;
 
-    public MetricEvent() {
+    public MetricEvent(@MSQAMetricEvent String eventName) {
       mCount = 1;
+      mEventName = eventName;
     }
 
     public String getOperationId() {
@@ -97,11 +98,6 @@ public class MSQAMetric {
 
     public String getEventName() {
       return mEventName;
-    }
-
-    public MetricEvent setEventName(@MSQAMetricEvent String eventName) {
-      this.mEventName = eventName;
-      return this;
     }
 
     public int getCount() {

@@ -36,6 +36,7 @@ import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQAErrorString;
 import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.error.MSQANoAccountException;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 import com.microsoft.quickauth.signin.internal.entity.MSQATokenResultInternal;
@@ -102,7 +103,7 @@ public final class MSQASignInClient {
           @Override
           public void onError(MsalException exception) {
             MSQALogger.getInstance().error(TAG, "client initialize error", exception);
-            listener.onError(MSQAException.create(exception));
+            listener.onError(MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -152,8 +153,7 @@ public final class MSQASignInClient {
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
     OnCompleteListener<AccountInfo> internalListener = completeListener;
     if (!(completeListener instanceof MSQAMetricListener)) {
-      MSQAMetricController controller = new MSQAMetricController();
-      controller.getEvent().setEventName(MSQAMetricEvent.SIGN_IN);
+      MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_IN);
       internalListener = new MSQASignInMetricListener<>(controller, completeListener, false);
     }
     OnCompleteListener<AccountInfo> finalInternalListener = internalListener;
@@ -172,7 +172,7 @@ public final class MSQASignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            finalInternalListener.onComplete(null, MSQAException.create(exception));
+            finalInternalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -184,8 +184,7 @@ public final class MSQASignInClient {
    *     out result.
    */
   public void signOut(@NonNull final OnCompleteListener<Boolean> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController();
-    controller.getEvent().setEventName(MSQAMetricEvent.SIGN_OUT);
+    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_OUT);
     OnCompleteListener<Boolean> internalListener =
         new MSQAMetricListener<>(controller, completeListener);
 
@@ -198,7 +197,7 @@ public final class MSQASignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            internalListener.onComplete(false, MSQAException.create(exception));
+            internalListener.onComplete(false, MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -214,15 +213,14 @@ public final class MSQASignInClient {
   public void getCurrentAccount(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController();
-    controller.getEvent().setEventName(MSQAMetricEvent.GET_CURRENT_ACCOUNT);
+    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.GET_CURRENT_ACCOUNT);
     OnCompleteListener<AccountInfo> internalListener =
         new MSQAMetricListener<AccountInfo>(controller, null) {
           @Override
           public void onComplete(@Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
             super.onComplete(accountInfo, error);
             // If no account return no error.
-            if (error != null && error.getErrorCode().equals(MSQAErrorString.NO_CURRENT_ACCOUNT)) {
+            if (error instanceof MSQANoAccountException) {
               error = null;
             }
             completeListener.onComplete(accountInfo, error);
@@ -246,7 +244,7 @@ public final class MSQASignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            internalListener.onComplete(null, MSQAException.create(exception));
+            internalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -263,8 +261,7 @@ public final class MSQASignInClient {
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController();
-    controller.getEvent().setEventName(MSQAMetricEvent.ACQUIRE_TOKEN);
+    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN);
     OnCompleteListener<TokenResult> internalListener =
         new MSQAMetricListener<>(controller, completeListener);
     mSignInClient.getCurrentAccountAsync(
@@ -312,7 +309,7 @@ public final class MSQASignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            internalListener.onComplete(null, MSQAException.create(exception));
+            internalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -330,8 +327,8 @@ public final class MSQASignInClient {
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<TokenResult> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController();
-    controller.getEvent().setEventName(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT);
+    MSQAMetricController controller =
+        new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT);
     OnCompleteListener<TokenResult> internalListener =
         new MSQAMetricListener<>(controller, completeListener);
     mSignInClient.getCurrentAccountAsync(
@@ -377,7 +374,7 @@ public final class MSQASignInClient {
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            internalListener.onComplete(null, MSQAException.create(exception));
+            internalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
           }
         });
   }

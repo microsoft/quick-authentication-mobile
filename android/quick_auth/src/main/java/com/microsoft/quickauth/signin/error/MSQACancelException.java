@@ -22,6 +22,8 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.error;
 
+import androidx.annotation.Nullable;
+
 /** Exception for user cancelling the flow. */
 public class MSQACancelException extends MSQAException {
   public MSQACancelException(String errorCode) {
@@ -36,8 +38,9 @@ public class MSQACancelException extends MSQAException {
     super(errorCode, errorMessage, throwable);
   }
 
-  public static MSQACancelException create() {
+  public static MSQACancelException create(@Nullable Exception exception) {
     return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR, MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
+        MSQAErrorString.USER_CANCEL_ERROR,
+        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
   }
 }

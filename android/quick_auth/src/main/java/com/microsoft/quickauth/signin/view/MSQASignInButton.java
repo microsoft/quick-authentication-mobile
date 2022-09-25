@@ -229,8 +229,7 @@ public class MSQASignInButton extends LinearLayout {
 
   private void onButtonClick() {
     if (mActivity != null && mClient != null && mListener != null) {
-      mController = new MSQAMetricController();
-      mController.getEvent().setEventName(MSQAMetricEvent.BUTTON_SIGN_IN);
+      mController = new MSQAMetricController(MSQAMetricEvent.BUTTON_SIGN_IN);
       mInternalListener =
           new MSQASignInMetricListener<AccountInfo>(mController, null, true) {
             @Override

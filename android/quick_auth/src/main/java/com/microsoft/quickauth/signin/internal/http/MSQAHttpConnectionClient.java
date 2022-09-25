@@ -48,13 +48,8 @@ public class MSQAHttpConnectionClient {
   public static HttpURLConnection post(@NonNull MSQAHttpRequest request)
       throws IOException, JSONException {
     URL url = new URL(request.getUrl());
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setConnectTimeout(request.getConnectTimeout());
-    conn.setReadTimeout(request.getReadTimeout());
+    HttpURLConnection conn = createConnection(url, request);
     conn.setRequestMethod(MSQAHttpMethod.POST);
-    for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
-      conn.setRequestProperty(entry.getKey(), entry.getValue());
-    }
     // add params
     if (request.getParams() != null && !request.getParams().isEmpty()) {
       JSONObject jsonObject = new JSONObject();
@@ -84,10 +79,16 @@ public class MSQAHttpConnectionClient {
       }
     }
     URL url = new URL(urlBuilder.toString());
+    HttpURLConnection conn = createConnection(url, request);
+    conn.setRequestMethod(MSQAHttpMethod.GET);
+    return conn;
+  }
+
+  private static HttpURLConnection createConnection(URL url, @NonNull MSQAHttpRequest request)
+      throws IOException {
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     conn.setConnectTimeout(request.getConnectTimeout());
     conn.setReadTimeout(request.getReadTimeout());
-    conn.setRequestMethod(MSQAHttpMethod.GET);
     for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
       conn.setRequestProperty(entry.getKey(), entry.getValue());
     }

@@ -64,22 +64,18 @@ public class MSQAHttpRequest {
   }
 
   public static class Builder {
-    private String mUrl;
+    private @NonNull final String mUrl;
     private @NonNull final Map<String, String> mHeader;
     private @NonNull Map<String, Object> mParams;
     private int mConnectTimeout;
     private int mReadTimeout;
 
-    public Builder() {
+    public Builder(@NonNull String url) {
       mHeader = new HashMap<>();
       mParams = new HashMap<>();
+      mUrl = url;
       mConnectTimeout = MSQAAPIConstant.CONNECT_TIMEOUT;
       mReadTimeout = MSQAAPIConstant.READ_TIMEOUT;
-    }
-
-    public Builder setUrl(String url) {
-      mUrl = url;
-      return this;
     }
 
     public Builder addHeader(@NonNull String key, @NonNull String value) {

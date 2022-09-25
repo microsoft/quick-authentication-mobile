@@ -13,34 +13,31 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
-public class MSQAMetricController {
+public class MSQAMetricController implements IMSQAMetricController {
   private final String TAG = "MSQAMetricController";
   private long mStartTime;
   private String mTimeStamp;
   private final @NonNull MSQAMetric.MetricEvent mEvent;
   private List<MSQAMetric.MetricEvent> mExtensionEvent;
-  private SimpleDateFormat mSimpleDateFormat;
+  private static final String mSessionId = UUID.randomUUID().toString();
 
-  public MSQAMetricController() {
-    mTimeStamp = formatTimeStamp(new Date());
+  public MSQAMetricController(@MSQAMetricEvent String eventName) {
+    mTimeStamp = safeFormatTimeStamp(new Date());
     mStartTime = System.currentTimeMillis();
-    mEvent = new MSQAMetric.MetricEvent().setTimestamp(mTimeStamp);
+    mEvent = new MSQAMetric.MetricEvent(eventName).setTimestamp(mTimeStamp);
 
     MSQALogger.getInstance().verbose(TAG, "start time update");
   }
 
-  public MSQAMetricController start() {
-    mStartTime = System.currentTimeMillis();
-    mTimeStamp = formatTimeStamp(new Date());
-    return this;
-  }
-
+  @Override
   public @NonNull MSQAMetric.MetricEvent getEvent() {
     return mEvent;
   }
 
+  @Override
   public MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event) {
     if (mExtensionEvent == null) mExtensionEvent = new ArrayList<>();
     if (TextUtils.isEmpty(event.getTimestamp())) event.setTimestamp(mTimeStamp);
@@ -48,6 +45,7 @@ public class MSQAMetricController {
     return this;
   }
 
+  @Override
   public void postMetric() {
     MSQATaskExecutor.background()
         .execute(
@@ -58,7 +56,7 @@ public class MSQAMetricController {
                 mEvent.setDuration(System.currentTimeMillis() - mStartTime);
                 MSQAMetric msqaMetric =
                     new MSQAMetric()
-                        .setSessionId(UUID.randomUUID().toString())
+                        .setSessionId(mSessionId)
                         .setLibVersion(BuildConfig.LIB_VERSION)
                         .addEvent(mEvent);
                 if (mExtensionEvent != null && !mExtensionEvent.isEmpty()) {
@@ -67,8 +65,7 @@ public class MSQAMetricController {
                   }
                 }
                 MSQAHttpRequest request =
-                    new MSQAHttpRequest.Builder()
-                        .setUrl(MSQAAPIConstant.MS_QUICK_AUTH_METRIC_PATH)
+                    new MSQAHttpRequest.Builder(MSQAAPIConstant.MS_QUICK_AUTH_METRIC_PATH)
                         .addHeader("Content-Type", "application/json")
                         .addHeader("Origin", MSQAAPIConstant.MS_QUICK_AUTH_ROOT_ENDPOINT)
                         .setParams(msqaMetric.getMetricParams())
@@ -87,10 +84,10 @@ public class MSQAMetricController {
             });
   }
 
-  private String formatTimeStamp(Date date) {
+  private String safeFormatTimeStamp(Date date) {
     try {
-      if (mSimpleDateFormat == null)
-        mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+      SimpleDateFormat mSimpleDateFormat =
+          new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
       return mSimpleDateFormat.format(date);
     } catch (Exception e) {
       MSQALogger.getInstance().error(TAG, "simple format error", e);
