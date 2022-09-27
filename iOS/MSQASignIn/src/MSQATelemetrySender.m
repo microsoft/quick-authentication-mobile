@@ -69,7 +69,12 @@ static NSString *const kOrigin = @"https://edge-auth.microsoft.com/";
   urlRequest.allHTTPHeaderFields =
       @{@"Content-Type" : kContentType, @"Origin" : kOrigin};
 
-  NSData *data = [self createTelemetryDataWithEvent:event message:message];
+  NSData *data =
+      [MSQATelemetrySender createTelemetryDataWithEvent:event
+                                                   uuid:self.uuid
+                                             appVersion:self.appVersion
+                                              timestamp:self.timestamp
+                                                message:message];
   if (data) {
     [urlRequest setHTTPBody:data];
     NSURLSession *session = [NSURLSession sharedSession];
@@ -100,14 +105,17 @@ static NSString *const kOrigin = @"https://edge-auth.microsoft.com/";
       objectForKey:@"CFBundleShortVersionString"];
 }
 
-- (NSData *)createTelemetryDataWithEvent:(NSString *)event
++ (NSData *)createTelemetryDataWithEvent:(NSString *)event
+                                    uuid:(NSString *)uuid
+                              appVersion:(NSString *)appVersion
+                               timestamp:(NSString *)timestamp
                                  message:(NSString *)message {
   NSDictionary *eventsDict = [[NSDictionary alloc]
-      initWithObjects:@[ event, @1, message, self.timestamp ]
+      initWithObjects:@[ event, @1, message, timestamp ]
               forKeys:@[ @"EventName", @"Count", @"Message", @"Timestamp" ]];
   NSArray *events = [NSMutableArray arrayWithObject:eventsDict];
   NSDictionary *payloadDict = [[NSDictionary alloc]
-      initWithObjects:@[ self.uuid, self.appVersion, events ]
+      initWithObjects:@[ uuid, appVersion, events ]
               forKeys:@[ @"EasyAuthSessionId", @"LibVersion", @"events" ]];
   return [NSJSONSerialization dataWithJSONObject:payloadDict
                                          options:NSJSONWritingPrettyPrinted
