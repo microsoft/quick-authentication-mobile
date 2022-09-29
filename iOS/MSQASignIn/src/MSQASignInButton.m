@@ -200,7 +200,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _iconView.image = image;
 }
 
-- (void)drawButtonText:(CGContextRef)context {
+- (void)drawButtonText {
   if (_type == kMSQASignInButtonTypeIcon) {
     return;
   }
@@ -277,8 +277,8 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   CGContextRetain(context);
 
   [self drawButtonBackground:context];
+  [self drawButtonText];
   [self updateButtonIcon];
-  [self drawButtonText:context];
 
   CGContextRelease(context);
 }
