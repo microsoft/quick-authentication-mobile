@@ -162,6 +162,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _iconView.contentMode = UIViewContentModeCenter;
   _iconView.userInteractionEnabled = NO;
   [self addSubview:_iconView];
+  [self updateButtonIconImage];
 
   [self updateUI];
 }
@@ -187,17 +188,6 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   CGPathRelease(path);
 
   CGContextRestoreGState(context);
-}
-
-- (void)updateButtonIcon {
-  [_iconView setFrame:[self buttonIconFrame]];
-  NSString* imagePath = [self buttonIconImagePath];
-  if (!imagePath) {
-    _iconView.image = nil;
-    return;
-  }
-  UIImage* image = [UIImage imageWithContentsOfFile:imagePath];
-  _iconView.image = image;
 }
 
 - (void)drawButtonText {
@@ -228,6 +218,20 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
          NSFontAttributeName : font,
          NSForegroundColorAttributeName : color
        }];
+}
+
+- (void)updateButtonIconFrame {
+  [_iconView setFrame:[self buttonIconFrame]];
+}
+
+- (void)updateButtonIconImage {
+  NSString* imagePath = [self buttonIconImagePath];
+  if (!imagePath) {
+    _iconView.image = nil;
+    return;
+  }
+  UIImage* image = [UIImage imageWithContentsOfFile:imagePath];
+  _iconView.image = image;
 }
 
 #pragma mark - Override
@@ -278,7 +282,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
   [self drawButtonBackground:context];
   [self drawButtonText];
-  [self updateButtonIcon];
+  [self updateButtonIconFrame];
 
   CGContextRelease(context);
 }
@@ -413,6 +417,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
     return;
   }
   _size = size;
+  [self updateButtonIconImage];
   [self updateUI];
 }
 
