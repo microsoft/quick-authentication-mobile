@@ -25,7 +25,7 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQASignIn.h"
+#import "MSQASignIn_Private.h"
 
 #import <Foundation/Foundation.h>
 #import <MSAL/MSAL.h>
@@ -34,6 +34,7 @@
 #import "MSQAConfiguration.h"
 #import "MSQAPhotoFetcher.h"
 #import "MSQASilentTokenParameters.h"
+#import "MSQATelemetrySender.h"
 
 #define DEFAULT_SCOPES @[ @"User.Read" ]
 
@@ -43,6 +44,26 @@ static NSString *const kAuthorityURL =
 static NSString *const kMSALNotConfiguredError = @"MSQASignIn not configured";
 
 static NSString *const kEmptyScopesError = @"Empty scopes array";
+
+// Events defined for telemetries.
+static NSString *const kSignInSucessEvent = @"SignIn.Success";
+static NSString *const kSignInFailureEvent = @"SignIn.Failure";
+static NSString *const kButtonSignInEvent = @"button-sign-in";
+static NSString *const kSignOutEvent = @"signOut";
+static NSString *const kGetCurrentAccountEvent = @"getCurrentAccount";
+static NSString *const kSignInEvent = @"signIn";
+static NSString *const kAcquireTokenEvent = @"acquireToken";
+static NSString *const kAcquireTokenSilentEvent = @"acquireTokenSilent";
+
+// Messsages defined for telemetries.
+static NSString *const kSuccessMessage = @"success";
+static NSString *const kFailureMessage = @"failure";
+static NSString *const kCanceledMessage = @"canceled";
+static NSString *const kInvalidCallbackMessage = @"invalid-callback";
+static NSString *const kNoAccountPresentMessage = @"no-account-present";
+static NSString *const kNoScopes = @"no-scopes";
+static NSString *const kSignInButtonMessage = @"sign-in-button";
+static NSString *const kStartSignInAPI = @"start-signin-api";
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -68,36 +89,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)acquireTokenWithParameters:(MSQAInteractiveTokenParameters *)parameters
                    completionBlock:(MSQACompletionBlock)completionBlock {
-  parameters.completionBlockQueue = dispatch_get_main_queue();
-
-  [_msalPublicClientApplication
-      acquireTokenWithParameters:parameters
-                 completionBlock:^(MSALResult *result, NSError *error) {
-                   [MSQASignIn callCompletionBlock:completionBlock
-                                    withMSALResult:result
-                                             error:error];
-                 }];
+  [self acquireTokenWithParameters:parameters
+                 willSendTelemetry:YES
+                   completionBlock:completionBlock];
 }
 
 - (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
                          completionBlock:(MSQACompletionBlock)completionBlock {
-
-  MSALParameters *paramsForGetCurrentAccount = [MSALParameters new];
-  paramsForGetCurrentAccount.completionBlockQueue = dispatch_get_main_queue();
-
-  [_msalPublicClientApplication
-      getCurrentAccountWithParameters:paramsForGetCurrentAccount
-                      completionBlock:^(MSALAccount *_Nullable account,
-                                        MSALAccount *_Nullable previousAccount,
-                                        NSError *_Nullable error) {
-                        if (!account || error) {
-                          completionBlock(nil, error);
-                          return;
-                        }
-                        [self acquireTokenSilentWithParameters:parameters
-                                                       account:account
-                                               completionBlock:completionBlock];
-                      }];
+  [self acquireTokenSilentWithParameters:parameters
+                       willSendTelemetry:YES
+                         completionBlock:completionBlock];
 }
 
 - (void)getCurrentAccountWithCompletionBlock:
@@ -110,7 +111,10 @@ NS_ASSUME_NONNULL_BEGIN
                       completionBlock:^(MSALAccount *_Nullable account,
                                         MSALAccount *_Nullable previousAccount,
                                         NSError *_Nullable error) {
-                        if (!account || error) {
+                        BOOL isSuccess = [MSQASignIn
+                            validateGetCurrentAccountResultWithAccount:account
+                                                                 error:error];
+                        if (!isSuccess) {
                           completionBlock(nil, error);
                           return;
                         }
@@ -144,46 +148,27 @@ NS_ASSUME_NONNULL_BEGIN
                               removeAccount:account
                                       error:&localError];
                           completionBlock(localError);
+                          [MSQATelemetrySender.sharedInstance
+                              sendWithEvent:kSignOutEvent
+                                    message:kSuccessMessage];
                           return;
                         }
                         completionBlock(error);
+                        [MSQATelemetrySender.sharedInstance
+                            sendWithEvent:kSignOutEvent
+                                  message:kFailureMessage];
                       }];
 }
 
 - (void)signInWithViewController:(UIViewController *)controller
                  completionBlock:(MSQACompletionBlock)completionBlock {
-  MSQASilentTokenParameters *parameters =
-      [[MSQASilentTokenParameters alloc] initWithScopes:@[ @"User.Read" ]];
-  [self
-      acquireTokenSilentWithParameters:parameters
-                       completionBlock:^(MSQAAccountData *_Nullable account,
-                                         NSError *_Nullable error) {
-                         if (account && !error) {
-                           [self
-                               continueToFetchPhotoWithAccount:account
-                                               completionBlock:completionBlock];
-                           return;
-                         }
-
-                         [self
-                             acquireTokenWithParameters:
-                                 [MSQASignIn
-                                     createInteractiveTokenParametersWithController:
-                                         controller]
-                                        completionBlock:^(
-                                            MSQAAccountData *_Nullable account,
-                                            NSError *_Nullable error) {
-                                          if (account && !error) {
-                                            [self
-                                                continueToFetchPhotoWithAccount:
-                                                    account
-                                                                completionBlock:
-                                                                    completionBlock];
-                                            return;
-                                          }
-                                          completionBlock(nil, error);
-                                        }];
-                       }];
+  [self signInInternalWithViewController:controller
+                         completionBlock:^(MSQAAccountData *_Nullable account,
+                                           NSError *_Nullable error) {
+                           [MSQASignIn sendSignInResultTelemetry:NO
+                                                           error:error];
+                           completionBlock(account, error);
+                         }];
 }
 
 #pragma mark - Class methods
@@ -223,6 +208,24 @@ NS_ASSUME_NONNULL_BEGIN
                                              range:NSMakeRange(0, str.length)];
 }
 
+// Validate the `scopes`, if it's `nil` or empty, calls the `competionBlock`
+// with an error asycly and returns `No`, otherwise, returns `YES`.
++ (BOOL)validateScopes:(nonnull NSArray *)scopes
+                 event:(NSString *)event
+     willSendTelemetry:(BOOL)willSendTelemetry
+       completionBlock:(MSQACompletionBlock)completionBlock {
+  if (!scopes || scopes.count == 0) {
+    if (willSendTelemetry) {
+      [MSQATelemetrySender.sharedInstance sendWithEvent:event
+                                                message:kNoScopes];
+    }
+    [MSQASignIn callCompletionBlockAsync:completionBlock
+                                errorStr:kEmptyScopesError];
+    return NO;
+  }
+  return YES;
+}
+
 + (void)callCompletionBlockAsync:(MSQACompletionBlock)completionBlock
                         errorStr:(NSString *)errStr {
   [MSQASignIn runBlockAsyncOnMainThread:^{
@@ -246,6 +249,60 @@ NS_ASSUME_NONNULL_BEGIN
   dispatch_async(dispatch_get_main_queue(), ^{
     block();
   });
+}
+
+// Send the sign in result telemetry based on:
+// - If the sign in was triggered by a button, indicating by
+//   `isTriggeredBySignInButton`.
+// - If sign in is successful, indicating by `error` passed by the MSAL methods.
++ (void)sendSignInResultTelemetry:(BOOL)isTriggeredBySignInButton
+                            error:(NSError *)error {
+  NSString *eventName =
+      isTriggeredBySignInButton ? kButtonSignInEvent : kSignInEvent;
+  NSString *message =
+      isTriggeredBySignInButton ? kSignInButtonMessage : kStartSignInAPI;
+  if (error) {
+    BOOL isCanceled = [[error.userInfo valueForKey:@"MSALOAuthErrorKey"]
+        isEqual:@"access_denied"];
+
+    if (isCanceled) {
+      [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
+                                                message:kCanceledMessage];
+    } else {
+      [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
+                                                message:kFailureMessage];
+    }
+    [MSQATelemetrySender.sharedInstance sendWithEvent:kSignInFailureEvent
+                                              message:message];
+    return;
+  }
+
+  [MSQATelemetrySender.sharedInstance sendWithEvent:kSignInSucessEvent
+                                            message:message];
+  [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
+                                            message:kSuccessMessage];
+}
+
+// Validate the result of `getCurrentAccountWithCompletionBlock` and send the
+// telemetry, return `YES` if a valid one presented, otherwise, return `NO`.
++ (BOOL)validateGetCurrentAccountResultWithAccount:(MSALAccount *)account
+                                             error:(NSError *)error {
+  // The `account` and `error` can be `nil` both when no account presents in
+  // cache.
+  if (!account && !error) {
+    [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
+                                              message:kNoAccountPresentMessage];
+    return NO;
+  }
+  if (error) {
+    [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
+                                              message:kFailureMessage];
+    return NO;
+  }
+
+  [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
+                                            message:kSuccessMessage];
+  return YES;
 }
 
 #pragma mark - Private methods
@@ -305,6 +362,134 @@ NS_ASSUME_NONNULL_BEGIN
   }
   _configuration = configuration;
   return self;
+}
+
+- (void)signInInternalWithViewController:(UIViewController *)controller
+                         completionBlock:(MSQACompletionBlock)completionBlock {
+  MSQASilentTokenParameters *parameters =
+      [[MSQASilentTokenParameters alloc] initWithScopes:DEFAULT_SCOPES];
+
+  [self
+      acquireTokenSilentWithParameters:parameters
+                     willSendTelemetry:NO
+                       completionBlock:^(MSQAAccountData *_Nullable account,
+                                         NSError *_Nullable error) {
+                         if (account && !error) {
+                           [self
+                               continueToFetchPhotoWithAccount:account
+                                               completionBlock:completionBlock];
+
+                           return;
+                         }
+                         MSQAInteractiveTokenParameters *interactiveParams =
+                             [MSQASignIn
+                                 createInteractiveTokenParametersWithController:
+                                     controller];
+                         [self
+                             acquireTokenWithParameters:interactiveParams
+                                      willSendTelemetry:NO
+                                        completionBlock:^(
+                                            MSQAAccountData *_Nullable account,
+                                            NSError *_Nullable error) {
+                                          if (account && !error) {
+                                            [self
+                                                continueToFetchPhotoWithAccount:
+                                                    account
+                                                                completionBlock:
+                                                                    completionBlock];
+                                            return;
+                                          }
+                                          completionBlock(nil, error);
+                                        }];
+                       }];
+}
+
+- (void)signInByButtonWithViewController:(UIViewController *)controller
+                         completionBlock:(MSQACompletionBlock)completionBlock {
+  [self signInInternalWithViewController:controller
+                         completionBlock:^(MSQAAccountData *_Nullable account,
+                                           NSError *_Nullable error) {
+                           [MSQASignIn sendSignInResultTelemetry:YES
+                                                           error:error];
+                           completionBlock(account, error);
+                         }];
+}
+
+- (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
+                       willSendTelemetry:(BOOL)willSendTelemetry
+                         completionBlock:(MSQACompletionBlock)completionBlock {
+  MSALParameters *paramsForGetCurrentAccount = [MSALParameters new];
+  paramsForGetCurrentAccount.completionBlockQueue = dispatch_get_main_queue();
+
+  if (![MSQASignIn validateScopes:parameters.scopes
+                            event:kAcquireTokenSilentEvent
+                willSendTelemetry:willSendTelemetry
+                  completionBlock:completionBlock]) {
+    return;
+  }
+
+  [_msalPublicClientApplication
+      getCurrentAccountWithParameters:paramsForGetCurrentAccount
+                      completionBlock:^(MSALAccount *_Nullable account,
+                                        MSALAccount *_Nullable previousAccount,
+                                        NSError *_Nullable error) {
+                        if (willSendTelemetry && !account && !error) {
+                          [MSQATelemetrySender.sharedInstance
+                              sendWithEvent:kAcquireTokenSilentEvent
+                                    message:kNoAccountPresentMessage];
+                        }
+                        if (!account || error) {
+                          completionBlock(nil, error);
+                          return;
+                        }
+
+                        MSQACompletionBlock acquireTokenCompletionBlock =
+                            ^(MSQAAccountData *_Nullable account,
+                              NSError *_Nullable error) {
+                              if (willSendTelemetry) {
+                                NSString *message =
+                                    error ? kFailureMessage : kSuccessMessage;
+                                [MSQATelemetrySender.sharedInstance
+                                    sendWithEvent:kAcquireTokenSilentEvent
+                                          message:message];
+                              }
+                              completionBlock(account, error);
+                            };
+                        [self acquireTokenSilentWithParameters:parameters
+                                                       account:account
+                                               completionBlock:
+                                                   acquireTokenCompletionBlock];
+                      }];
+}
+
+- (void)acquireTokenWithParameters:(MSQAInteractiveTokenParameters *)parameters
+                 willSendTelemetry:(BOOL)willSendTelemetry
+                   completionBlock:(MSQACompletionBlock)completionBlock {
+  if (![MSQASignIn validateScopes:parameters.scopes
+                            event:kAcquireTokenEvent
+                willSendTelemetry:willSendTelemetry
+                  completionBlock:completionBlock]) {
+    return;
+  }
+
+  parameters.completionBlockQueue = dispatch_get_main_queue();
+  MSQACompletionBlock acquireTokenCompletionBlock =
+      ^(MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+        if (willSendTelemetry) {
+          NSString *message = error ? kFailureMessage : kSuccessMessage;
+          [MSQATelemetrySender.sharedInstance sendWithEvent:kAcquireTokenEvent
+                                                    message:message];
+        }
+        completionBlock(account, error);
+      };
+
+  [_msalPublicClientApplication
+      acquireTokenWithParameters:parameters
+                 completionBlock:^(MSALResult *result, NSError *error) {
+                   [MSQASignIn callCompletionBlock:acquireTokenCompletionBlock
+                                    withMSALResult:result
+                                             error:error];
+                 }];
 }
 
 @end

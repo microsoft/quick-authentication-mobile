@@ -12,6 +12,8 @@
 		2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */; };
 		29BCDAF128D45CF100AC4047 /* Pods_MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */; };
+		29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */; };
+		29BCDAF728DB0F5300AC4047 /* MSQATelemetrySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */; };
 		29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC397028A6551300699274 /* MSQASignIn_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 292FB4D528B755D000E846A5 /* MSQASignInButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC394428A63F6E00699274 /* MSQASignIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,6 +57,8 @@
 		29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountData.m; sourceTree = "<group>"; };
 		29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountData_Private.h; sourceTree = "<group>"; };
 		29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATelemetrySender.h; sourceTree = "<group>"; };
+		29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATelemetrySender.m; sourceTree = "<group>"; };
 		29DC394428A63F6E00699274 /* MSQASignIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn.h; sourceTree = "<group>"; };
 		29DC394528A63F6E00699274 /* MSQASignIn.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MSQASignIn.docc; sourceTree = "<group>"; };
 		29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSQASignInTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +130,8 @@
 				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
 				29DC396D28A64EFF00699274 /* MSQASignIn.m */,
 				29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */,
+				29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */,
+				29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */,
 				2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */,
 				29F7C82728B32DB1003FF9F2 /* MSQAPhotoFetcher.h */,
 				29F7C82828B32DB1003FF9F2 /* MSQAPhotoFetcher.m */,
@@ -179,6 +185,7 @@
 				29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */,
 				29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */,
 				2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */,
+				29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */,
 				296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */,
 				29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */,
 				29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */,
@@ -319,6 +326,7 @@
 			files = (
 				296E2DD628D1D2D000EC06EE /* MSQASilentTokenParameters.m in Sources */,
 				29E06DDC28B8C6B8003D558A /* MSQASignIn.m in Sources */,
+				29BCDAF728DB0F5300AC4047 /* MSQATelemetrySender.m in Sources */,
 				29E06DDF28B8C6B8003D558A /* MSQAPhotoFetcher.m in Sources */,
 				2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */,
 				29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */,
