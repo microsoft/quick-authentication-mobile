@@ -20,27 +20,36 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.error;
+package com.microsoft.quickauth.signin.internal.metric;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.microsoft.quickauth.signin.callback.OnCompleteListener;
+import com.microsoft.quickauth.signin.error.MSQAException;
 
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
-    super(errorCode);
+public class MSQASignInMetricListener<TResult> extends MSQAMetricListener<TResult> {
+
+  private boolean mIsSignInButton;
+
+  public MSQASignInMetricListener(
+      @NonNull MSQAMetricController controller,
+      @Nullable OnCompleteListener<TResult> completeListener,
+      boolean isSignInButton) {
+    super(controller, completeListener);
+    mIsSignInButton = isSignInButton;
   }
 
-  public MSQACancelException(String errorCode, String errorMessage) {
-    super(errorCode, errorMessage);
-  }
-
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
-    super(errorCode, errorMessage, throwable);
-  }
-
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
+  @Override
+  public void onComplete(@Nullable TResult tResult, @Nullable MSQAException error) {
+    String eventName =
+        tResult != null ? MSQAMetricEvent.SIGN_IN_SUCCESS : MSQAMetricEvent.SIGN_IN_FAILURE;
+    mController.addExtEvent(
+        new MSQAMetric.MetricEvent(eventName)
+            .setMessage(
+                mIsSignInButton
+                    ? MSQAMetricMessage.SIGN_IN_BUTTON
+                    : MSQAMetricMessage.START_SIGN_IN_API)
+            .setComments(error != null ? error.getMessage() : null));
+    super.onComplete(tResult, error);
   }
 }

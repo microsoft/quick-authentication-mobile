@@ -24,6 +24,7 @@
 -keep class com.microsoft.quickauth.signin.logger.** { *; }
 -keep class com.microsoft.quickauth.signin.view.** { *; }
 -keepclassmembers class com.microsoft.quickauth.signin.internal.** { *; }
+-keep public class com.microsoft.quickauth.signin.BuildConfig { *; }
 -keep public class com.microsoft.quickauth.signin.AccountInfo { *; }
 -keep public class com.microsoft.quickauth.signin.TokenResult { *; }
 -keep public class com.microsoft.quickauth.signin.ClientCreatedListener { *; }

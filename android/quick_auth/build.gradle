@@ -28,6 +28,7 @@ android {
         versionName VERSION_NAME
         project.archivesBaseName = "quickauth"
         project.version = android.defaultConfig.versionName
+        buildConfigField("String", "LIB_VERSION", "\"${project.ext.LIB_VERSION}\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

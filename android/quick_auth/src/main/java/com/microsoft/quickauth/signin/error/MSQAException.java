@@ -22,7 +22,10 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.error;
 
+import com.microsoft.identity.client.exception.MsalArgumentException;
 import com.microsoft.identity.client.exception.MsalException;
+import com.microsoft.identity.client.exception.MsalServiceException;
+import com.microsoft.identity.client.exception.MsalUiRequiredException;
 import com.microsoft.identity.client.internal.MsalUtils;
 
 public class MSQAException extends Exception {
@@ -93,25 +96,31 @@ public class MSQAException extends Exception {
     return "";
   }
 
-  public static MSQAException create(Exception exception) {
+  public static MSQAException mapToMSQAException(Exception exception) {
     if (exception instanceof MSQAException) return (MSQAException) exception;
 
-    MSQAException signInException;
+    MSQAException msqaException;
     if (exception instanceof MsalException) {
-      signInException =
-          new MSQAException(((MsalException) exception).getErrorCode(), exception.getMessage());
+      if (MsalServiceException.ACCESS_DENIED.equals(((MsalException) exception).getErrorCode())) {
+        msqaException = MSQACancelException.create(exception);
+      } else if (exception instanceof MsalArgumentException
+          && MsalArgumentException.SCOPE_ARGUMENT_NAME.equals(
+              ((MsalArgumentException) exception).getOperationName())) {
+        msqaException = MSQANoScopeException.create(exception);
+      } else if (exception instanceof MsalUiRequiredException) {
+        msqaException =
+            new MSQAUiRequiredException(
+                ((MsalUiRequiredException) exception).getErrorCode(), exception.getMessage());
+      } else {
+        msqaException =
+            new MSQAException(((MsalException) exception).getErrorCode(), exception.getMessage());
+      }
     } else if (exception instanceof InterruptedException) {
-      signInException =
-          new MSQAException(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
+      msqaException = new MSQAException(MSQAErrorString.INTERRUPTED_ERROR, exception.getMessage());
     } else {
-      signInException = new MSQAException(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
+      msqaException = new MSQAException(MSQAErrorString.UNKNOWN_ERROR, exception.getMessage());
     }
-    signInException.setSuppressedException(exception);
-    return signInException;
-  }
-
-  public static MSQAException createNoAccountException() {
-    return new MSQAException(
-        MSQAErrorString.NO_CURRENT_ACCOUNT, MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+    msqaException.setSuppressedException(exception);
+    return msqaException;
   }
 }

@@ -33,19 +33,71 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MSQAHttpConnectionClient {
 
   private static final String TAG = "HttpConnectionClient";
 
   @WorkerThread
-  public static String request(@NonNull MSQAHttpRequest request) throws IOException, MSQAException {
+  public static HttpURLConnection post(@NonNull MSQAHttpRequest request)
+      throws IOException, JSONException {
+    URL url = new URL(request.getUrl());
+    HttpURLConnection conn = createConnection(url, request);
+    conn.setRequestMethod(MSQAHttpMethod.POST);
+    // add params
+    if (request.getParams() != null && !request.getParams().isEmpty()) {
+      JSONObject jsonObject = new JSONObject();
+      for (Map.Entry<String, Object> entry : request.getParams().entrySet()) {
+        jsonObject.putOpt(entry.getKey(), entry.getValue());
+      }
+      OutputStream out = conn.getOutputStream();
+      out.write(jsonObject.toString().getBytes());
+      out.flush();
+      out.close();
+    }
+    return conn;
+  }
+
+  @WorkerThread
+  public static HttpURLConnection get(@NonNull MSQAHttpRequest request) throws IOException {
+    StringBuilder urlBuilder = new StringBuilder(request.getUrl());
+    // add params
+    if (request.getParams() != null && !request.getParams().isEmpty()) {
+      urlBuilder.append("?");
+      int index = 0;
+      for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
+        urlBuilder.append(entry.getKey()).append("=").append(entry.getValue());
+        if (index != request.getParams().size() - 1) {
+          urlBuilder.append("&");
+        }
+      }
+    }
+    URL url = new URL(urlBuilder.toString());
+    HttpURLConnection conn = createConnection(url, request);
+    conn.setRequestMethod(MSQAHttpMethod.GET);
+    return conn;
+  }
+
+  private static HttpURLConnection createConnection(URL url, @NonNull MSQAHttpRequest request)
+      throws IOException {
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    conn.setConnectTimeout(request.getConnectTimeout());
+    conn.setReadTimeout(request.getReadTimeout());
+    for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
+      conn.setRequestProperty(entry.getKey(), entry.getValue());
+    }
+    return conn;
+  }
+
+  public static String getStringResponse(HttpURLConnection conn) throws IOException, MSQAException {
     InputStream responseStream = null;
     try {
-      HttpURLConnection conn = MSQAHttpConnectionClient.createHttpURLConnection(request);
       responseStream = conn.getInputStream();
       if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
         return responseStream == null
@@ -60,19 +112,6 @@ public class MSQAHttpConnectionClient {
     } finally {
       MSQAHttpConnectionClient.safeCloseStream(responseStream);
     }
-  }
-
-  public static HttpURLConnection createHttpURLConnection(@NonNull MSQAHttpRequest request)
-      throws IOException {
-    URL url = new URL(request.getUrl());
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setConnectTimeout(request.getConnectTimeout());
-    conn.setReadTimeout(request.getReadTimeout());
-    conn.setRequestMethod(request.getHttpMethod());
-    for (Map.Entry<String, String> entry : request.getHeader().entrySet()) {
-      conn.setRequestProperty(entry.getKey(), entry.getValue());
-    }
-    return conn;
   }
 
   private static String convertStreamToString(InputStream inputStream) throws IOException {

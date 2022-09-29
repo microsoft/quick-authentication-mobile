@@ -23,24 +23,28 @@
 package com.microsoft.quickauth.signin.error;
 
 import androidx.annotation.Nullable;
+import com.microsoft.identity.client.exception.MsalArgumentException;
 
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
+/**
+ * This error class is a wrapper for MSAL no scope error, created when error operationName is {@link
+ * MsalArgumentException#SCOPE_ARGUMENT_NAME}.
+ */
+public class MSQANoScopeException extends MSQAException {
+  public MSQANoScopeException(String errorCode) {
     super(errorCode);
   }
 
-  public MSQACancelException(String errorCode, String errorMessage) {
+  public MSQANoScopeException(String errorCode, String errorMessage) {
     super(errorCode, errorMessage);
   }
 
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
+  public MSQANoScopeException(String errorCode, String errorMessage, Throwable throwable) {
     super(errorCode, errorMessage, throwable);
   }
 
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
+  public static MSQANoScopeException create(@Nullable Exception exception) {
+    return new MSQANoScopeException(
+        MSQAErrorString.NO_SCOPE_ERROR,
+        exception != null ? exception.getMessage() : MSQAErrorString.NO_SCOPE_ERROR_MESSAGE);
   }
 }

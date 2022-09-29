@@ -22,25 +22,25 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.error;
 
-import androidx.annotation.Nullable;
-
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
+/**
+ * This error class is a wrapper msal no account error, created when error code is {@link
+ * MSQAErrorString#NO_CURRENT_ACCOUNT}.
+ */
+public class MSQANoAccountException extends MSQAException {
+  public MSQANoAccountException(String errorCode) {
     super(errorCode);
   }
 
-  public MSQACancelException(String errorCode, String errorMessage) {
+  public MSQANoAccountException(String errorCode, String errorMessage) {
     super(errorCode, errorMessage);
   }
 
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
+  public MSQANoAccountException(String errorCode, String errorMessage, Throwable throwable) {
     super(errorCode, errorMessage, throwable);
   }
 
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
+  public static MSQANoAccountException create() {
+    return new MSQANoAccountException(
+        MSQAErrorString.NO_CURRENT_ACCOUNT, MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
   }
 }

@@ -20,27 +20,30 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.error;
+package com.microsoft.quickauth.signin.internal.metric;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
-    super(errorCode);
-  }
-
-  public MSQACancelException(String errorCode, String errorMessage) {
-    super(errorCode, errorMessage);
-  }
-
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
-    super(errorCode, errorMessage, throwable);
-  }
-
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
-  }
+@Retention(RetentionPolicy.SOURCE)
+@StringDef({
+  MSQAMetricEvent.SIGN_IN_SUCCESS,
+  MSQAMetricEvent.SIGN_IN_FAILURE,
+  MSQAMetricEvent.BUTTON_SIGN_IN,
+  MSQAMetricEvent.SIGN_OUT,
+  MSQAMetricEvent.GET_CURRENT_ACCOUNT,
+  MSQAMetricEvent.SIGN_IN,
+  MSQAMetricEvent.ACQUIRE_TOKEN,
+  MSQAMetricEvent.ACQUIRE_TOKEN_SILENT
+})
+public @interface MSQAMetricEvent {
+  String SIGN_IN_SUCCESS = "SignIn.Success";
+  String SIGN_IN_FAILURE = "SignIn.Failure";
+  String BUTTON_SIGN_IN = "button-sign-in";
+  String SIGN_OUT = "signOut";
+  String GET_CURRENT_ACCOUNT = "getCurrentAccount";
+  String SIGN_IN = "signIn";
+  String ACQUIRE_TOKEN = "acquireToken";
+  String ACQUIRE_TOKEN_SILENT = "acquireTokenSilent";
 }

@@ -20,27 +20,16 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.error;
+package com.microsoft.quickauth.signin.internal.metric;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
-    super(errorCode);
-  }
+public interface IMSQAMetricController {
 
-  public MSQACancelException(String errorCode, String errorMessage) {
-    super(errorCode, errorMessage);
-  }
+  @NonNull
+  MSQAMetric.MetricEvent getEvent();
 
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
-    super(errorCode, errorMessage, throwable);
-  }
+  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
 
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
-  }
+  void postMetric();
 }

@@ -20,27 +20,28 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.error;
+package com.microsoft.quickauth.signin.internal.metric;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-/** Exception for user cancelling the flow. */
-public class MSQACancelException extends MSQAException {
-  public MSQACancelException(String errorCode) {
-    super(errorCode);
-  }
-
-  public MSQACancelException(String errorCode, String errorMessage) {
-    super(errorCode, errorMessage);
-  }
-
-  public MSQACancelException(String errorCode, String errorMessage, Throwable throwable) {
-    super(errorCode, errorMessage, throwable);
-  }
-
-  public static MSQACancelException create(@Nullable Exception exception) {
-    return new MSQACancelException(
-        MSQAErrorString.USER_CANCEL_ERROR,
-        exception != null ? exception.getMessage() : MSQAErrorString.USER_CANCEL_ERROR_MESSAGE);
-  }
+@Retention(RetentionPolicy.SOURCE)
+@StringDef({
+  MSQAMetricMessage.START_SIGN_IN_API,
+  MSQAMetricMessage.SIGN_IN_BUTTON,
+  MSQAMetricMessage.SUCCESS,
+  MSQAMetricMessage.CANCELED,
+  MSQAMetricMessage.FAILURE,
+  MSQAMetricMessage.NO_SCOPES,
+  MSQAMetricMessage.NO_ACCOUNT_PRESENT
+})
+public @interface MSQAMetricMessage {
+  String START_SIGN_IN_API = "start-signin-api";
+  String SIGN_IN_BUTTON = "sign-in-button";
+  String SUCCESS = "success";
+  String CANCELED = "canceled";
+  String FAILURE = "failure";
+  String NO_SCOPES = "no-scopes";
+  String NO_ACCOUNT_PRESENT = "no-account-present";
 }
