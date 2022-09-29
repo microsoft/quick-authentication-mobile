@@ -189,7 +189,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   CGContextRestoreGState(context);
 }
 
-- (void)drawButtonIcon {
+- (void)updateButtonIcon {
   [_iconView setFrame:[self buttonIconFrame]];
   NSString* imagePath = [self buttonIconImagePath];
   if (!imagePath) {
@@ -277,7 +277,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   CGContextRetain(context);
 
   [self drawButtonBackground:context];
-  [self drawButtonIcon];
+  [self updateButtonIcon];
   [self drawButtonText:context];
 
   CGContextRelease(context);
