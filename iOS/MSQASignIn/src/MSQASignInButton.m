@@ -541,7 +541,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
       return @"Sign in with Microsoft";
     case kMSQASignInButtonTextSignUpWith:
       return @"Sign up with Microsoft";
-    case kMSQASignInButtonTextContimueWith:
+    case kMSQASignInButtonTextContinueWith:
       return @"Continue with Microsoft";
     case kMSQASignInButtonTextSignIn:
       return @"Sign in";
