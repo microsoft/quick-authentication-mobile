@@ -67,10 +67,10 @@ typedef void (^MSQALogCallback)(MSQALogLevel level,
 /// The minimum log level for messages to be passed onto the log
 /// callback, changing the level will apply to all instances of `MSQASignIn`.
 /// Default value is `MSQALogLevelInfo`.
-@property(nonatomic) MSQALogLevel logLevel;
+@property(atomic) MSQALogLevel logLevel;
 
 /// Enables the logging from MSAL.
-@property(nonatomic) BOOL enableMSALLogging;
+@property(atomic) BOOL enableMSALLogging;
 
 /// Sets the callback for the logger.
 /// @param callback `MSQALogCallback` callback that is called when logging.

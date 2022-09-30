@@ -477,24 +477,25 @@ NS_ASSUME_NONNULL_BEGIN
                           return;
                         }
 
-                        MSQACompletionBlock acquireTokenCompletionBlock =
-                            ^(MSQAAccountData *_Nullable account,
-                              NSError *_Nullable error) {
-                              NSString *logMessage =
-                                  error ? @"Failed to acquire token."
-                                        : @"Acquiring token succeeded.";
-                              [MSQALogger.sharedInstance
-                                  logWithLevel:MSQALogLevelError
-                                        format:logMessage];
-                              if (willSendTelemetry) {
-                                NSString *message =
-                                    error ? kFailureMessage : kSuccessMessage;
-                                [MSQATelemetrySender.sharedInstance
-                                    sendWithEvent:kAcquireTokenSilentEvent
-                                          message:message];
-                              }
-                              completionBlock(account, error);
-                            };
+                        MSQACompletionBlock acquireTokenCompletionBlock = ^(
+                            MSQAAccountData *_Nullable account,
+                            NSError *_Nullable error) {
+                          NSString *logMessage =
+                              error ? @"Failed to acquire token."
+                                    : @"Acquiring token succeeded.";
+                          MSQALogLevel logLevel =
+                              error ? MSQALogLevelError : MSQALogLevelVerbose;
+                          [MSQALogger.sharedInstance logWithLevel:logLevel
+                                                           format:logMessage];
+                          if (willSendTelemetry) {
+                            NSString *message =
+                                error ? kFailureMessage : kSuccessMessage;
+                            [MSQATelemetrySender.sharedInstance
+                                sendWithEvent:kAcquireTokenSilentEvent
+                                      message:message];
+                          }
+                          completionBlock(account, error);
+                        };
                         [self acquireTokenSilentWithParameters:parameters
                                                        account:account
                                                completionBlock:
@@ -517,8 +518,8 @@ NS_ASSUME_NONNULL_BEGIN
       ^(MSQAAccountData *_Nullable account, NSError *_Nullable error) {
         NSString *logMessage =
             error ? @"Failed to acquire token." : @"Acquiring token succeeded.";
-        [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
-                                         format:logMessage];
+        MSQALogLevel logLevel = error ? MSQALogLevelError : MSQALogLevelVerbose;
+        [MSQALogger.sharedInstance logWithLevel:logLevel format:logMessage];
         if (willSendTelemetry) {
           NSString *message = error ? kFailureMessage : kSuccessMessage;
           [MSQATelemetrySender.sharedInstance sendWithEvent:kAcquireTokenEvent

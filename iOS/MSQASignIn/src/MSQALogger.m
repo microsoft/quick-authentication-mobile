@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation MSQALogger {
   MSQALogCallback _callback;
+  MSQALogLevel _logLevel;
 }
 
 + (MSQALogger *)sharedInstance {
@@ -85,9 +86,17 @@ NS_ASSUME_NONNULL_BEGIN
     _callback(level, message);
   }
 }
+
 - (void)setLogLevel:(MSQALogLevel)logLevel {
-  MSALGlobalConfig.loggerConfig.logLevel = [MSQALogger toMSALLogLevel:logLevel];
-  _logLevel = logLevel;
+  @synchronized(self) {
+    MSALGlobalConfig.loggerConfig.logLevel =
+        [MSQALogger toMSALLogLevel:logLevel];
+    _logLevel = logLevel;
+  }
+}
+
+- (MSQALogLevel)logLevel {
+  return _logLevel;
 }
 
 + (MSALLogLevel)toMSALLogLevel:(MSQALogLevel)level {

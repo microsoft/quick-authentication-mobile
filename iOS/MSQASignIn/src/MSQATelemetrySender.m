@@ -88,7 +88,7 @@ static NSString *const kOrigin = @"https://edge-auth.microsoft.com/";
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             if (error || httpResponse.statusCode >= 400) {
               [MSQALogger.sharedInstance
-                  logWithLevel:MSQALogLevelError
+                  logWithLevel:MSQALogLevelInfo
                         format:@"Sending telemetry failed."];
 
               return;
