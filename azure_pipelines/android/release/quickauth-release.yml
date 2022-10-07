@@ -1,0 +1,58 @@
+jobs:
+  - job: quick_auth_release
+    displayName: Quick Auth Release Build Tasks
+    cancelTimeoutInMinutes: 1
+    steps:
+      - checkout: self
+        clean: true
+        submodules: recursive
+        persistCredentials: True
+      - bash: |
+          echo 'start cd to android project'
+          pwd
+          ls
+          echo 'end cd to android project'
+        displayName: 'Bash Script'
+      - task: Gradle@3
+        name: Gradle3
+        displayName: Assemble Release
+        inputs:
+          gradleWrapperFile: android/gradlew
+          workingDirectory: 'android'
+          tasks: quick_auth:clean quick_auth:assemble
+          publishJUnitResults: false
+          jdkArchitecture: x86
+          sqAnalysisBreakBuildIfQualityGateFailed: false
+      - task: Gradle@3
+        displayName: Generate Pom file
+        inputs:
+          gradleWrapperFile: android/gradlew
+          workingDirectory: 'android'
+          tasks: quick_auth:generatePomFileForQuickauthPublication
+          publishJUnitResults: false
+          jdkArchitecture: x86
+          sqAnalysisBreakBuildIfQualityGateFailed: false
+      - task: CopyFiles@2
+        displayName: 'Copy aar to Artifact Staging Directory'
+        inputs:
+          SourceFolder: android/quick_auth/build/outputs/aar
+          Contents: '**/*.aar'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - task: CopyFiles@2
+        displayName: 'Copy jars to Artifact Staging Directory'
+        inputs:
+          SourceFolder: android/quick_auth/build/outputs/jar
+          Contents: '**/*.jar'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - task: CopyFiles@2
+        displayName: 'Copy pom to Artifact Staging Directory'
+        inputs:
+          SourceFolder: android/quick_auth/build/publications/quickauth
+          Contents: '**/*.xml'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishPipelineArtifact@1
+        name: PublishPipelineArtifact1
+        displayName: 'Publish Artifact: Build Outputs'
+        inputs:
+          ArtifactName: BuildOutputs
+          TargetPath: $(Build.ArtifactStagingDirectory)
