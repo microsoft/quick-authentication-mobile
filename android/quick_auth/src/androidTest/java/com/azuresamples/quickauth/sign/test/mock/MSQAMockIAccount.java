@@ -20,24 +20,60 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test.mock;
 
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.List;
+import com.microsoft.identity.client.IAccount;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface IMSQAMetricController {
+// MSQA mock test IAccount.
+public class MSQAMockIAccount implements IAccount {
+
+  private Context mContext;
+  private Map<String, Object> mClaims;
+
+  public MSQAMockIAccount(Context context) {
+    mContext = context;
+    mClaims = new HashMap<>();
+    mClaims.put("name", MSQATestMockUtil.MOCK_STRING);
+  }
 
   @NonNull
-  MSQAMetric.MetricEvent getEvent();
+  @Override
+  public String getId() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public String getAuthority() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
 
   @Nullable
-  List<MSQAMetric.MetricEvent> getExtEvent();
+  @Override
+  public String getIdToken() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
 
-  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
+  @Nullable
+  @Override
+  public Map<String, ?> getClaims() {
+    return mClaims;
+  }
 
   @NonNull
-  IMSQAErrorToMessageMapper getMessageMapper();
+  @Override
+  public String getUsername() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
 
-  void postMetric();
+  @NonNull
+  @Override
+  public String getTenantId() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
 }

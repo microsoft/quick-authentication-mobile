@@ -40,10 +40,12 @@ import com.microsoft.quickauth.signin.error.MSQANoAccountException;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
 import com.microsoft.quickauth.signin.internal.entity.MSQATokenResultInternal;
+import com.microsoft.quickauth.signin.internal.metric.MSQAGetCurrentAccountMessageMapper;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricEvent;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricListener;
 import com.microsoft.quickauth.signin.internal.metric.MSQASignInMetricListener;
+import com.microsoft.quickauth.signin.internal.metric.MSQASignOutMessageMapper;
 import com.microsoft.quickauth.signin.internal.signinclient.MSQASingleSignInClientInternal;
 import com.microsoft.quickauth.signin.logger.ILogger;
 import com.microsoft.quickauth.signin.logger.LogLevel;
@@ -56,9 +58,9 @@ public final class MSQASignInClient {
   private final String[] mScopes;
   private final @NonNull MSQASingleSignInClientInternal mSignInClient;
 
-  private MSQASignInClient(@NonNull ISingleAccountPublicClientApplication signInClientApplication) {
+  private MSQASignInClient(@NonNull MSQASingleSignInClientInternal signInClient) {
     mScopes = new String[] {MSQASignInScopeInternal.READ};
-    mSignInClient = new MSQASingleSignInClientInternal(signInClientApplication);
+    mSignInClient = signInClient;
   }
 
   /**
@@ -75,6 +77,9 @@ public final class MSQASignInClient {
       @NonNull final Context context,
       @NonNull final MSQASignInOptions signInOptions,
       @NonNull final ClientCreatedListener listener) {
+    setEnableLogcatLog(signInOptions.isEnableLogcatLog());
+    setLogLevel(signInOptions.getLogLevel());
+    setExternalLogger(signInOptions.getExternalLogger());
     if (!isResourceExist(context, signInOptions.getConfigResourceId())) {
       MSQAException exception =
           new MSQAException(
@@ -92,10 +97,13 @@ public final class MSQASignInClient {
           @Override
           public void onCreated(ISingleAccountPublicClientApplication application) {
             MSQALogger.getInstance().init(context);
-            setEnableLogcatLog(signInOptions.isEnableLogcatLog());
-            setLogLevel(signInOptions.getLogLevel());
-            setExternalLogger(signInOptions.getExternalLogger());
-            MSQASignInClient client = new MSQASignInClient(application);
+            MSQASingleSignInClientInternal signInClient;
+            if (signInOptions.getTestSingleClientProvider() != null) {
+              signInClient = signInOptions.getTestSingleClientProvider().get(application);
+            } else {
+              signInClient = new MSQASingleSignInClientInternal(application);
+            }
+            MSQASignInClient client = new MSQASignInClient(signInClient);
             MSQALogger.getInstance().verbose(TAG, "client initialize success");
             listener.onCreated(client);
           }
@@ -151,28 +159,30 @@ public final class MSQASignInClient {
   public void signIn(
       @NonNull final Activity activity,
       @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
-    OnCompleteListener<MSQAAccountInfo> internalListener = completeListener;
-    if (!(completeListener instanceof MSQAMetricListener)) {
-      MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_IN);
-      internalListener = new MSQASignInMetricListener<>(controller, completeListener, false);
-    }
-    OnCompleteListener<MSQAAccountInfo> finalInternalListener = internalListener;
+    OnCompleteListener<MSQAAccountInfo> internalListener =
+        MSQAMetricListener.wrapperIfNeeded(
+            completeListener,
+            () -> {
+              MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_IN);
+              return new MSQASignInMetricListener<>(controller, completeListener, false);
+            });
+
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override
           public void onAccountLoaded(@Nullable IAccount activeAccount) {
-            mSignInClient.signIn(activity, activeAccount, mScopes, finalInternalListener);
+            mSignInClient.signIn(activity, activeAccount, mScopes, internalListener);
           }
 
           @Override
           public void onAccountChanged(
               @Nullable IAccount priorAccount, @Nullable IAccount currentAccount) {
-            mSignInClient.signIn(activity, currentAccount, mScopes, finalInternalListener);
+            mSignInClient.signIn(activity, currentAccount, mScopes, internalListener);
           }
 
           @Override
           public void onError(@NonNull MsalException exception) {
-            finalInternalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
+            internalListener.onComplete(null, MSQAException.mapToMSQAException(exception));
           }
         });
   }
@@ -184,9 +194,15 @@ public final class MSQASignInClient {
    *     out result.
    */
   public void signOut(@NonNull final OnCompleteListener<Boolean> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_OUT);
     OnCompleteListener<Boolean> internalListener =
-        new MSQAMetricListener<>(controller, completeListener);
+        MSQAMetricListener.wrapperIfNeeded(
+            completeListener,
+            () -> {
+              MSQAMetricController controller =
+                  new MSQAMetricController(
+                      MSQAMetricEvent.SIGN_OUT, new MSQASignOutMessageMapper());
+              return new MSQAMetricListener<>(controller, completeListener);
+            });
 
     mSignInClient.signOut(
         new ISingleAccountPublicClientApplication.SignOutCallback() {
@@ -211,20 +227,26 @@ public final class MSQASignInClient {
    */
   public void getCurrentAccount(
       @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.GET_CURRENT_ACCOUNT);
     OnCompleteListener<MSQAAccountInfo> internalListener =
-        new MSQAMetricListener<MSQAAccountInfo>(controller, null) {
-          @Override
-          public void onComplete(
-              @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
-            super.onComplete(accountInfo, error);
-            // If no account return no error.
-            if (error instanceof MSQANoAccountException) {
-              error = null;
-            }
-            completeListener.onComplete(accountInfo, error);
-          }
-        };
+        MSQAMetricListener.wrapperIfNeeded(
+            completeListener,
+            () -> {
+              MSQAMetricController controller =
+                  new MSQAMetricController(
+                      MSQAMetricEvent.GET_CURRENT_ACCOUNT,
+                      new MSQAGetCurrentAccountMessageMapper());
+              return new MSQAMetricListener<MSQAAccountInfo>(controller, completeListener) {
+                @Override
+                public void onComplete(
+                    @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
+                  // If no account return no error.
+                  if (error instanceof MSQANoAccountException) {
+                    error = null;
+                  }
+                  super.onComplete(accountInfo, error);
+                }
+              };
+            });
 
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
@@ -258,9 +280,15 @@ public final class MSQASignInClient {
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
-    MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN);
     OnCompleteListener<MSQATokenResult> internalListener =
-        new MSQAMetricListener<>(controller, completeListener);
+        MSQAMetricListener.wrapperIfNeeded(
+            completeListener,
+            () -> {
+              MSQAMetricController controller =
+                  new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN);
+              return new MSQAMetricListener<>(controller, completeListener);
+            });
+
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override
@@ -324,10 +352,15 @@ public final class MSQASignInClient {
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
       @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
-    MSQAMetricController controller =
-        new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT);
     OnCompleteListener<MSQATokenResult> internalListener =
-        new MSQAMetricListener<>(controller, completeListener);
+        MSQAMetricListener.wrapperIfNeeded(
+            completeListener,
+            () -> {
+              MSQAMetricController controller =
+                  new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT);
+              return new MSQAMetricListener<>(controller, completeListener);
+            });
+
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override

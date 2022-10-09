@@ -45,9 +45,9 @@ import com.microsoft.quickauth.signin.MSQAAccountInfo;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.R;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
-import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricEvent;
+import com.microsoft.quickauth.signin.internal.metric.MSQAMetricListener;
 import com.microsoft.quickauth.signin.internal.metric.MSQASignInMetricListener;
 
 public class MSQASignInButton extends LinearLayout {
@@ -238,16 +238,14 @@ public class MSQASignInButton extends LinearLayout {
 
   private void onButtonClick() {
     if (mActivity != null && mClient != null && mListener != null) {
-      mController = new MSQAMetricController(MSQAMetricEvent.BUTTON_SIGN_IN);
       mInternalListener =
-          new MSQASignInMetricListener<MSQAAccountInfo>(mController, null, true) {
-            @Override
-            public void onComplete(
-                @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
-              if (mListener != null) mListener.onComplete(accountInfo, error);
-              super.onComplete(accountInfo, error);
-            }
-          };
+          MSQAMetricListener.wrapperIfNeeded(
+              mListener,
+              () -> {
+                mController = new MSQAMetricController(MSQAMetricEvent.BUTTON_SIGN_IN);
+                return new MSQASignInMetricListener<>(mController, mListener, true);
+              });
+
       mClient.signIn(mActivity, mInternalListener);
     }
   }

@@ -20,24 +20,17 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import java.util.List;
+import androidx.annotation.StringDef;
+import com.microsoft.quickauth.signin.internal.entity.MSQASignInScopeInternal;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface IMSQAMetricController {
-
-  @NonNull
-  MSQAMetric.MetricEvent getEvent();
-
-  @Nullable
-  List<MSQAMetric.MetricEvent> getExtEvent();
-
-  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
-
-  @NonNull
-  IMSQAErrorToMessageMapper getMessageMapper();
-
-  void postMetric();
+@Retention(RetentionPolicy.SOURCE)
+@StringDef({MSQASignInScopeInternal.READ, MSQASignInScopeInternal.READ_AND_WRITE})
+public @interface MSQATestFlag {
+  String SUCCESS = "success";
+  String CANCEL = "cancel";
+  String Failure = "failure";
 }
