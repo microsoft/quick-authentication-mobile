@@ -24,20 +24,18 @@ package com.microsoft.quickauth.signin.internal.metric;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.List;
 
-public interface IMSQAMetricController {
-
-  @NonNull
-  MSQAMetric.MetricEvent getEvent();
-
-  @Nullable
-  List<MSQAMetric.MetricEvent> getExtEvent();
-
-  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
-
-  @NonNull
-  IMSQAErrorToMessageMapper getMessageMapper();
-
-  void postMetric();
+// Sign out only has SUCCESS & FAILURE metric
+public class MSQASignOutMessageMapper implements IMSQAErrorToMessageMapper {
+  @Override
+  public void map(
+      @NonNull MSQAMetric.MetricEvent event, @Nullable Object tResult, @Nullable Exception error) {
+    if ((tResult instanceof Boolean) && (Boolean) tResult) {
+      event.setMessage(MSQAMetricMessage.SUCCESS);
+    } else {
+      event
+          .setMessage(MSQAMetricMessage.FAILURE)
+          .setComments(error != null ? error.getMessage() : null);
+    }
+  }
 }

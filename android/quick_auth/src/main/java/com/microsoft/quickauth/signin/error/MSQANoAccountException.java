@@ -22,6 +22,8 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.error;
 
+import androidx.annotation.Nullable;
+
 /**
  * This error class is a wrapper msal no account error, created when error code is {@link
  * MSQAErrorString#NO_CURRENT_ACCOUNT}.
@@ -39,8 +41,11 @@ public class MSQANoAccountException extends MSQAException {
     super(errorCode, errorMessage, throwable);
   }
 
-  public static MSQANoAccountException create() {
+  public static MSQANoAccountException create(@Nullable Exception exception) {
     return new MSQANoAccountException(
-        MSQAErrorString.NO_CURRENT_ACCOUNT, MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
+        MSQAErrorString.NO_CURRENT_ACCOUNT,
+        exception != null
+            ? exception.getMessage()
+            : MSQAErrorString.NO_CURRENT_ACCOUNT_ERROR_MESSAGE);
   }
 }

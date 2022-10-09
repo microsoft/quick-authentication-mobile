@@ -143,7 +143,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     // If no account in cache return null.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQANoAccountException.create());
+      completeListener.onComplete(null, MSQANoAccountException.create(null));
     } else {
       // Start to request token silent.
       MSQALogger.getInstance()
@@ -174,7 +174,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<IAuthenticationResult> completeListener) {
     // If no account in cache return error.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQANoAccountException.create());
+      completeListener.onComplete(null, MSQANoAccountException.create(null));
     } else {
       MSQALogger.getInstance()
           .verbose(
@@ -215,7 +215,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final OnCompleteListener<IAuthenticationResult> completeListener) {
     // If no account in cache return error.
     if (iAccount == null) {
-      completeListener.onComplete(null, MSQANoAccountException.create());
+      completeListener.onComplete(null, MSQANoAccountException.create(null));
     } else {
       MSQALogger.getInstance()
           .verbose(
