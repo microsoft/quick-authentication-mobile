@@ -20,24 +20,33 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
-public interface IMSQAMetricController {
+public class MSQATestSafeCountDownLatch extends CountDownLatch {
 
-  @NonNull
-  MSQAMetric.MetricEvent getEvent();
+  public MSQATestSafeCountDownLatch(int count) {
+    super(count);
+  }
 
-  @Nullable
-  List<MSQAMetric.MetricEvent> getExtEvent();
+  @Override
+  public void await() {
+    try {
+      super.await();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
-
-  @NonNull
-  IMSQAErrorToMessageMapper getMessageMapper();
-
-  void postMetric();
+  @Override
+  public boolean await(long timeout, TimeUnit unit) {
+    try {
+      return super.await(timeout, unit);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 }

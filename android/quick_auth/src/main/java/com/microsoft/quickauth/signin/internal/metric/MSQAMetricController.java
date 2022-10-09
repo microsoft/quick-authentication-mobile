@@ -24,6 +24,7 @@ package com.microsoft.quickauth.signin.internal.metric;
 
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.BuildConfig;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.http.MSQAAPIConstant;
@@ -45,11 +46,18 @@ public class MSQAMetricController implements IMSQAMetricController {
   private final @NonNull MSQAMetric.MetricEvent mEvent;
   private List<MSQAMetric.MetricEvent> mExtensionEvent;
   private static final String mSessionId = UUID.randomUUID().toString();
+  private IMSQAErrorToMessageMapper mMessageMapper;
 
   public MSQAMetricController(@MSQAMetricEvent String eventName) {
+    this(eventName, new MSQAErrorToMessageMapper());
+  }
+
+  public MSQAMetricController(
+      @MSQAMetricEvent String eventName, @NonNull IMSQAErrorToMessageMapper mapper) {
     mTimeStamp = safeFormatTimeStamp(new Date());
     mStartTime = System.currentTimeMillis();
     mEvent = new MSQAMetric.MetricEvent(eventName).setTimestamp(mTimeStamp);
+    mMessageMapper = mapper;
 
     MSQALogger.getInstance().verbose(TAG, "start time update");
   }
@@ -65,6 +73,17 @@ public class MSQAMetricController implements IMSQAMetricController {
     if (TextUtils.isEmpty(event.getTimestamp())) event.setTimestamp(mTimeStamp);
     mExtensionEvent.add(event);
     return this;
+  }
+
+  @Override
+  public @Nullable List<MSQAMetric.MetricEvent> getExtEvent() {
+    return mExtensionEvent;
+  }
+
+  @NonNull
+  @Override
+  public IMSQAErrorToMessageMapper getMessageMapper() {
+    return mMessageMapper;
   }
 
   @Override

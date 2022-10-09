@@ -39,6 +39,12 @@ public class MSQASignInMetricListener<TResult> extends MSQAMetricListener<TResul
     mIsSignInButton = isSignInButton;
   }
 
+  public MSQASignInMetricListener(
+      @NonNull MSQAMetricController controller, boolean isSignInButton, boolean postMetric) {
+    super(controller, null, postMetric);
+    mIsSignInButton = isSignInButton;
+  }
+
   @Override
   public void onComplete(@Nullable TResult tResult, @Nullable MSQAException error) {
     String eventName =
