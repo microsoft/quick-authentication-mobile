@@ -30,7 +30,8 @@ import com.microsoft.quickauth.signin.error.MSQAException;
 public class MSQAMetricListener<TResult> implements OnCompleteListener<TResult> {
   protected final @NonNull MSQAMetricController mController;
   protected final @Nullable OnCompleteListener<TResult> mCompleteListener;
-  private final @NonNull MSQAErrorToMessageMapper mMessageMapper;
+  protected final @NonNull MSQAErrorToMessageMapper mMessageMapper;
+  protected boolean mPostMetric;
 
   public MSQAMetricListener(
       @NonNull MSQAMetricController controller,
@@ -45,12 +46,19 @@ public class MSQAMetricListener<TResult> implements OnCompleteListener<TResult> 
     mController = controller;
     mCompleteListener = completeListener;
     mMessageMapper = messageMapper;
+    mPostMetric = true;
+  }
+
+  public void setPostMetric(boolean postMetric) {
+    mPostMetric = postMetric;
   }
 
   @Override
   public void onComplete(@Nullable TResult tResult, @Nullable MSQAException error) {
     if (mCompleteListener != null) mCompleteListener.onComplete(tResult, error);
     mMessageMapper.map(mController.getEvent(), tResult, error);
-    mController.postMetric();
+    if (mPostMetric) {
+      mController.postMetric();
+    }
   }
 }

@@ -35,7 +35,8 @@ import java.lang.annotation.RetentionPolicy;
   MSQAMetricEvent.GET_CURRENT_ACCOUNT,
   MSQAMetricEvent.SIGN_IN,
   MSQAMetricEvent.ACQUIRE_TOKEN,
-  MSQAMetricEvent.ACQUIRE_TOKEN_SILENT
+  MSQAMetricEvent.ACQUIRE_TOKEN_SILENT,
+  MSQAMetricEvent.TEST
 })
 public @interface MSQAMetricEvent {
   String SIGN_IN_SUCCESS = "SignIn.Success";
@@ -46,4 +47,5 @@ public @interface MSQAMetricEvent {
   String SIGN_IN = "signIn";
   String ACQUIRE_TOKEN = "acquireToken";
   String ACQUIRE_TOKEN_SILENT = "acquireTokenSilent";
+  String TEST = "test";
 }

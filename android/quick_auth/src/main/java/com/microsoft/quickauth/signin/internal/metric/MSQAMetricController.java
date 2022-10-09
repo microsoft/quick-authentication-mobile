@@ -24,6 +24,7 @@ package com.microsoft.quickauth.signin.internal.metric;
 
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.BuildConfig;
 import com.microsoft.quickauth.signin.internal.MSQALogger;
 import com.microsoft.quickauth.signin.internal.http.MSQAAPIConstant;
@@ -65,6 +66,11 @@ public class MSQAMetricController implements IMSQAMetricController {
     if (TextUtils.isEmpty(event.getTimestamp())) event.setTimestamp(mTimeStamp);
     mExtensionEvent.add(event);
     return this;
+  }
+
+  @Override
+  public @Nullable List<MSQAMetric.MetricEvent> getExtEvent() {
+    return mExtensionEvent;
   }
 
   @Override

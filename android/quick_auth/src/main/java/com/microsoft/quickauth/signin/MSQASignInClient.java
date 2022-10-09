@@ -56,9 +56,9 @@ public final class MSQASignInClient {
   private final String[] mScopes;
   private final @NonNull MSQASingleSignInClientInternal mSignInClient;
 
-  private MSQASignInClient(@NonNull ISingleAccountPublicClientApplication signInClientApplication) {
+  private MSQASignInClient(@NonNull MSQASingleSignInClientInternal signInClient) {
     mScopes = new String[] {MSQASignInScopeInternal.READ};
-    mSignInClient = new MSQASingleSignInClientInternal(signInClientApplication);
+    mSignInClient = signInClient;
   }
 
   /**
@@ -75,6 +75,9 @@ public final class MSQASignInClient {
       @NonNull final Context context,
       @NonNull final MSQASignInOptions signInOptions,
       @NonNull final ClientCreatedListener listener) {
+    setEnableLogcatLog(signInOptions.isEnableLogcatLog());
+    setLogLevel(signInOptions.getLogLevel());
+    setExternalLogger(signInOptions.getExternalLogger());
     if (!isResourceExist(context, signInOptions.getConfigResourceId())) {
       MSQAException exception =
           new MSQAException(
@@ -92,10 +95,13 @@ public final class MSQASignInClient {
           @Override
           public void onCreated(ISingleAccountPublicClientApplication application) {
             MSQALogger.getInstance().init(context);
-            setEnableLogcatLog(signInOptions.isEnableLogcatLog());
-            setLogLevel(signInOptions.getLogLevel());
-            setExternalLogger(signInOptions.getExternalLogger());
-            MSQASignInClient client = new MSQASignInClient(application);
+            MSQASingleSignInClientInternal signInClient;
+            if (signInOptions.getTestSingleClientProvider() != null) {
+              signInClient = signInOptions.getTestSingleClientProvider().get(application);
+            } else {
+              signInClient = new MSQASingleSignInClientInternal(application);
+            }
+            MSQASignInClient client = new MSQASignInClient(signInClient);
             MSQALogger.getInstance().verbose(TAG, "client initialize success");
             listener.onCreated(client);
           }

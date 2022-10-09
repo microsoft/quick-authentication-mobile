@@ -26,6 +26,7 @@ import com.microsoft.identity.client.exception.MsalArgumentException;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.exception.MsalServiceException;
 import com.microsoft.identity.client.exception.MsalUiRequiredException;
+import com.microsoft.identity.client.exception.MsalUserCancelException;
 import com.microsoft.identity.client.internal.MsalUtils;
 
 public class MSQAException extends Exception {
@@ -101,7 +102,9 @@ public class MSQAException extends Exception {
 
     MSQAException msqaException;
     if (exception instanceof MsalException) {
-      if (MsalServiceException.ACCESS_DENIED.equals(((MsalException) exception).getErrorCode())) {
+      if (exception instanceof MsalUserCancelException
+          || MsalServiceException.ACCESS_DENIED.equals(
+              ((MsalException) exception).getErrorCode())) {
         msqaException = MSQACancelException.create(exception);
       } else if (exception instanceof MsalArgumentException
           && MsalArgumentException.SCOPE_ARGUMENT_NAME.equals(
