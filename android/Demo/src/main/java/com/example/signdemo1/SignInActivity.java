@@ -184,11 +184,17 @@ public class SignInActivity extends Activity {
       mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
       String userInfo =
           "MicrosoftAccountInfo{"
-              + ", fullName='"
+              + ", fullName="
               + accountInfo.getFullName()
-              + ", userName='"
+              + ", userName="
               + accountInfo.getUserName()
-              + ", id='"
+              + ", givenName="
+              + accountInfo.getGivenName()
+              + ", surname="
+              + accountInfo.getSurname()
+              + ", email="
+              + accountInfo.getEmail()
+              + ", id="
               + accountInfo.getId()
               + '}';
       mUserInfoResult.setText(userInfo);

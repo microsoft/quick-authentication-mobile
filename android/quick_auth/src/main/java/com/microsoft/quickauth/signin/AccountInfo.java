@@ -38,6 +38,24 @@ public interface AccountInfo {
   String getUserName();
 
   /**
+   * @return User given name.
+   */
+  @Nullable
+  String getGivenName();
+
+  /**
+   * @return User surname.
+   */
+  @Nullable
+  String getSurname();
+
+  /**
+   * @return User email.
+   */
+  @Nullable
+  String getEmail();
+
+  /**
    * @return CID for MSA.
    */
   @Nullable
