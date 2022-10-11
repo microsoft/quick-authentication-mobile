@@ -102,6 +102,6 @@ public class IdTokenActivity extends Activity {
   }
 
   private void getCurrentInfo() {
-    mSignInClient.getCurrentAccount(this, (accountInfo, error) -> {});
+    mSignInClient.getCurrentAccount((accountInfo, error) -> {});
   }
 }

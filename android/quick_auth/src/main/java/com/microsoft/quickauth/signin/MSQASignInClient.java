@@ -206,13 +206,10 @@ public final class MSQASignInClient {
    * Gets the current account. This method must be called whenever the application is resumed or
    * prior to running a scheduled background operation.
    *
-   * @param activity Activity that is used as the parent activity for get sign account
    * @param completeListener A callback to be invoked when complete and will return sign in account
    *     info {@link AccountInfo} if success
    */
-  public void getCurrentAccount(
-      @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+  public void getCurrentAccount(@NonNull final OnCompleteListener<AccountInfo> completeListener) {
     MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.GET_CURRENT_ACCOUNT);
     OnCompleteListener<AccountInfo> internalListener =
         new MSQAMetricListener<AccountInfo>(controller, null) {
@@ -231,15 +228,13 @@ public final class MSQASignInClient {
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override
           public void onAccountLoaded(@Nullable IAccount activeAccount) {
-            mSignInClient.getCurrentAccount(
-                activity, activeAccount, mScopes, false, internalListener);
+            mSignInClient.getCurrentAccount(activeAccount, mScopes, internalListener);
           }
 
           @Override
           public void onAccountChanged(
               @Nullable IAccount priorAccount, @Nullable IAccount currentAccount) {
-            mSignInClient.getCurrentAccount(
-                activity, currentAccount, mScopes, false, internalListener);
+            mSignInClient.getCurrentAccount(currentAccount, mScopes, internalListener);
           }
 
           @Override
