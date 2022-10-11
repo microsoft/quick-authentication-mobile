@@ -32,6 +32,7 @@
 
 #import "MSQAAccountData_Private.h"
 #import "MSQAConfiguration.h"
+#import "MSQALogger_Private.h"
 #import "MSQAPhotoFetcher.h"
 #import "MSQASilentTokenParameters.h"
 #import "MSQATelemetrySender.h"
@@ -89,6 +90,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)acquireTokenWithParameters:(MSQAInteractiveTokenParameters *)parameters
                    completionBlock:(MSQACompletionBlock)completionBlock {
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Start to acquire token."];
   [self acquireTokenWithParameters:parameters
                  willSendTelemetry:YES
                    completionBlock:completionBlock];
@@ -96,6 +99,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)acquireTokenSilentWithParameters:(MSQASilentTokenParameters *)parameters
                          completionBlock:(MSQACompletionBlock)completionBlock {
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Start to acquire token silently."];
   [self acquireTokenSilentWithParameters:parameters
                        willSendTelemetry:YES
                          completionBlock:completionBlock];
@@ -106,6 +111,8 @@ NS_ASSUME_NONNULL_BEGIN
   MSALParameters *parameters = [MSALParameters new];
   parameters.completionBlockQueue = dispatch_get_main_queue();
 
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Start to get current account."];
   [_msalPublicClientApplication
       getCurrentAccountWithParameters:parameters
                       completionBlock:^(MSALAccount *_Nullable account,
@@ -137,6 +144,8 @@ NS_ASSUME_NONNULL_BEGIN
   MSALParameters *parameters = [MSALParameters new];
   parameters.completionBlockQueue = dispatch_get_main_queue();
 
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Start to sign out."];
   [_msalPublicClientApplication
       getCurrentAccountWithParameters:parameters
                       completionBlock:^(MSALAccount *_Nullable account,
@@ -148,12 +157,18 @@ NS_ASSUME_NONNULL_BEGIN
                               removeAccount:account
                                       error:&localError];
                           completionBlock(localError);
+                          [MSQALogger.sharedInstance
+                              logWithLevel:MSQALogLevelVerbose
+                                    format:@"Sign out succeeded."];
                           [MSQATelemetrySender.sharedInstance
                               sendWithEvent:kSignOutEvent
                                     message:kSuccessMessage];
                           return;
                         }
                         completionBlock(error);
+                        [MSQALogger.sharedInstance
+                            logWithLevel:MSQALogLevelError
+                                  format:@"Sign out failed."];
                         [MSQATelemetrySender.sharedInstance
                             sendWithEvent:kSignOutEvent
                                   message:kFailureMessage];
@@ -215,6 +230,8 @@ NS_ASSUME_NONNULL_BEGIN
      willSendTelemetry:(BOOL)willSendTelemetry
        completionBlock:(MSQACompletionBlock)completionBlock {
   if (!scopes || scopes.count == 0) {
+    [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                     format:@"No scope provided."];
     if (willSendTelemetry) {
       [MSQATelemetrySender.sharedInstance sendWithEvent:event
                                                 message:kNoScopes];
@@ -266,9 +283,13 @@ NS_ASSUME_NONNULL_BEGIN
         isEqual:@"access_denied"];
 
     if (isCanceled) {
+      [MSQALogger.sharedInstance logWithLevel:MSQALogLevelWarning
+                                       format:@"User canceled."];
       [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
                                                 message:kCanceledMessage];
     } else {
+      [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                       format:@"Sign in failed."];
       [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
                                                 message:kFailureMessage];
     }
@@ -277,6 +298,8 @@ NS_ASSUME_NONNULL_BEGIN
     return;
   }
 
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Sign in succeeded."];
   [MSQATelemetrySender.sharedInstance sendWithEvent:kSignInSucessEvent
                                             message:message];
   [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
@@ -290,16 +313,24 @@ NS_ASSUME_NONNULL_BEGIN
   // The `account` and `error` can be `nil` both when no account presents in
   // cache.
   if (!account && !error) {
+    [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                     format:@"No account presents"];
     [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
                                               message:kNoAccountPresentMessage];
     return NO;
   }
   if (error) {
+    [MSQALogger.sharedInstance
+        logWithLevel:MSQALogLevelError
+              format:@"Failed to get the current account."];
     [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
                                               message:kFailureMessage];
     return NO;
   }
 
+  [MSQALogger.sharedInstance
+      logWithLevel:MSQALogLevelVerbose
+            format:@"Getting the current account succeeded"];
   [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
                                             message:kSuccessMessage];
   return YES;
@@ -366,6 +397,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)signInInternalWithViewController:(UIViewController *)controller
                          completionBlock:(MSQACompletionBlock)completionBlock {
+  [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                   format:@"Sign in starts."];
+
   MSQASilentTokenParameters *parameters =
       [[MSQASilentTokenParameters alloc] initWithScopes:DEFAULT_SCOPES];
 
@@ -443,18 +477,25 @@ NS_ASSUME_NONNULL_BEGIN
                           return;
                         }
 
-                        MSQACompletionBlock acquireTokenCompletionBlock =
-                            ^(MSQAAccountData *_Nullable account,
-                              NSError *_Nullable error) {
-                              if (willSendTelemetry) {
-                                NSString *message =
-                                    error ? kFailureMessage : kSuccessMessage;
-                                [MSQATelemetrySender.sharedInstance
-                                    sendWithEvent:kAcquireTokenSilentEvent
-                                          message:message];
-                              }
-                              completionBlock(account, error);
-                            };
+                        MSQACompletionBlock acquireTokenCompletionBlock = ^(
+                            MSQAAccountData *_Nullable account,
+                            NSError *_Nullable error) {
+                          NSString *logMessage =
+                              error ? @"Failed to acquire token."
+                                    : @"Acquiring token succeeded.";
+                          MSQALogLevel logLevel =
+                              error ? MSQALogLevelError : MSQALogLevelVerbose;
+                          [MSQALogger.sharedInstance logWithLevel:logLevel
+                                                           format:logMessage];
+                          if (willSendTelemetry) {
+                            NSString *message =
+                                error ? kFailureMessage : kSuccessMessage;
+                            [MSQATelemetrySender.sharedInstance
+                                sendWithEvent:kAcquireTokenSilentEvent
+                                      message:message];
+                          }
+                          completionBlock(account, error);
+                        };
                         [self acquireTokenSilentWithParameters:parameters
                                                        account:account
                                                completionBlock:
@@ -475,6 +516,10 @@ NS_ASSUME_NONNULL_BEGIN
   parameters.completionBlockQueue = dispatch_get_main_queue();
   MSQACompletionBlock acquireTokenCompletionBlock =
       ^(MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+        NSString *logMessage =
+            error ? @"Failed to acquire token." : @"Acquiring token succeeded.";
+        MSQALogLevel logLevel = error ? MSQALogLevelError : MSQALogLevelVerbose;
+        [MSQALogger.sharedInstance logWithLevel:logLevel format:logMessage];
         if (willSendTelemetry) {
           NSString *message = error ? kFailureMessage : kSuccessMessage;
           [MSQATelemetrySender.sharedInstance sendWithEvent:kAcquireTokenEvent

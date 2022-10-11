@@ -28,6 +28,7 @@
 #import "SampleAppDelegate.h"
 
 #import <MSQASignIn/MSQAConfiguration.h>
+#import <MSQASignIn/MSQALogger.h>
 #import <MSQASignIn/MSQASignIn.h>
 
 #import "SampleLoginViewController.h"
@@ -49,6 +50,10 @@
     MSQAConfiguration *config = [[MSQAConfiguration alloc]
         initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"];
     _msSignIn = [[MSQASignIn alloc] initWithConfiguration:config error:nil];
+    [MSQALogger.sharedInstance
+        setLogCallback:^(MSQALogLevel level, NSString *_Nullable message) {
+          NSLog(@"%@", message);
+        }];
   }
   return self;
 }
