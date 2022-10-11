@@ -93,30 +93,12 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
             }
           });
     } else {
-      // If has account in cache, request current account directly
+      // If has account in cache, request token directly, otherwise, calling MSAL signIn api will
+      // error.
       MSQALogger.getInstance()
           .verbose(
               TAG,
               "sign in started, has account in cache and will start request get current sign in account api");
-      getCurrentAccount(activity, iAccount, scopes, true, completeListener);
-    }
-  }
-
-  public void getCurrentAccount(
-      @NonNull final Activity activity,
-      @Nullable final IAccount iAccount,
-      @NonNull final String[] scopes,
-      final boolean silentTokenErrorRetry,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    // If no account in cache return null.
-    if (iAccount == null) {
-      completeListener.onComplete(null, MSQANoAccountException.create());
-    } else {
-      // Start to request token silent.
-      MSQALogger.getInstance()
-          .verbose(
-              TAG,
-              "get current sign in account started, has account in cache and will start request token silent api");
       acquireTokenSilent(
           iAccount,
           scopes,
@@ -126,7 +108,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                 @Nullable IAuthenticationResult tokenResult, @Nullable MSQAException error) {
               if (tokenResult != null) {
                 getUserInfo(tokenResult, completeListener);
-              } else if (silentTokenErrorRetry && error instanceof MSQAUiRequiredException) {
+              } else if (error instanceof MSQAUiRequiredException) {
                 MSQALogger.getInstance()
                     .verbose(
                         TAG,
@@ -147,6 +129,36 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                         }
                       }
                     });
+              } else {
+                completeListener.onComplete(null, error);
+              }
+            }
+          });
+    }
+  }
+
+  public void getCurrentAccount(
+      @Nullable final IAccount iAccount,
+      @NonNull final String[] scopes,
+      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+    // If no account in cache return null.
+    if (iAccount == null) {
+      completeListener.onComplete(null, MSQANoAccountException.create());
+    } else {
+      // Start to request token silent.
+      MSQALogger.getInstance()
+          .verbose(
+              TAG,
+              "get current sign in account started, has account in cache and will start request token silent api");
+      acquireTokenSilent(
+          iAccount,
+          scopes,
+          new OnCompleteListener<IAuthenticationResult>() {
+            @Override
+            public void onComplete(
+                @Nullable IAuthenticationResult tokenResult, @Nullable MSQAException error) {
+              if (tokenResult != null) {
+                getUserInfo(tokenResult, completeListener);
               } else {
                 completeListener.onComplete(null, error);
               }

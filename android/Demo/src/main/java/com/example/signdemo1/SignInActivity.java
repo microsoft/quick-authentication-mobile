@@ -214,7 +214,6 @@ public class SignInActivity extends Activity {
     mUserInfoResult.setText(null);
     mUserPhoto.setImageBitmap(null);
     mSignInClient.getCurrentAccount(
-        this,
         (accountInfo, error) -> {
           uploadSignInfo(accountInfo, error);
         });
