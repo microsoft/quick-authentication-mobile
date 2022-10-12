@@ -30,12 +30,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MSQAPhotoFetcher : NSObject
+@class MSQAAccountData;
 
-+ (instancetype)fetchPhotoWithToken:(NSString *)token
-                    completionBlock:
-                        (void (^)(NSString *_Nullable base64Photo,
-                                  NSError *_Nullable error))completionBlock;
+@interface MSQAUserInfoFetcher : NSObject
+
++ (instancetype)fetchUserInfoWithAccount:(MSQAAccountData *)account
+                         completionBlock:(void (^)(void))completionBlock;
 
 @end
 
