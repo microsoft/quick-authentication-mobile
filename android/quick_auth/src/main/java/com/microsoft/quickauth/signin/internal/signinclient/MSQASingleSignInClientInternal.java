@@ -270,8 +270,8 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                           }
                         });
 
-                // Start get user id from graph api
-                account.setId(getUserId(tokenResult));
+                // Start update user info with graph api
+                updateUserInfoWithGraph(account, tokenResult);
                 countDownLatch.countDown();
                 try {
                   countDownLatch.await();
@@ -320,8 +320,9 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
   }
 
   @WorkerThread
-  public String getUserId(@NonNull IAuthenticationResult tokenResult) {
-    MSQALogger.getInstance().verbose(TAG, "get user id started");
+  public void updateUserInfoWithGraph(
+      MSQAAccountInfoInternal account, @NonNull IAuthenticationResult tokenResult) {
+    MSQALogger.getInstance().verbose(TAG, "update user info with graph api started");
     MSQAHttpRequest httpRequest =
         new MSQAHttpRequest.Builder(MSQAAPIConstant.MS_GRAPH_USER_INFO_PATH)
             .addHeader("Content-Type", "application/json")
@@ -329,19 +330,29 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
                 "Authorization",
                 MSQAAPIConstant.MS_GRAPH_TK_REQUEST_PREFIX + tokenResult.getAccessToken())
             .builder();
-    String id = null;
     try {
       HttpURLConnection conn = MSQAHttpConnectionClient.get(httpRequest);
       String result = MSQAHttpConnectionClient.getStringResponse(conn);
       if (!TextUtils.isEmpty(result)) {
         JSONObject jsonObject = new JSONObject(result);
-        id = jsonObject.optString("id");
+        account.setId(jsonObject.optString("id"));
+        account.setGivenName(jsonObject.optString("givenName"));
+        account.setSurname(jsonObject.optString("surname"));
+        String userPrincipalName = jsonObject.optString("userPrincipalName");
+        if (canBeEmail(userPrincipalName)) {
+          account.setEmail(userPrincipalName);
+        }
       }
     } catch (Exception e) {
-      MSQALogger.getInstance().error(TAG, "get user id error", e);
+      MSQALogger.getInstance().error(TAG, "update user info with graph api error", e);
     }
-    MSQALogger.getInstance().verbose(TAG, "get user id finished");
-    return id;
+    MSQALogger.getInstance().verbose(TAG, "update user info with graph api finished");
+  }
+
+  private boolean canBeEmail(String str) {
+    // Very simple check. Just check for existence of '@'.
+    // This check is intentionally simple, since the usage scenarios are simple.
+    return !TextUtils.isEmpty(str) && str.indexOf('@') != -1;
   }
 
   private byte[] readAllBytes(InputStream inputStream) throws IOException {

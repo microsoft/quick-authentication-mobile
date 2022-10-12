@@ -31,6 +31,9 @@ import com.microsoft.quickauth.signin.AccountInfo;
 public class MSQAAccountInfoInternal implements AccountInfo {
   private String mFullName;
   private String mUserName;
+  private String mGivenName;
+  private String mSurname;
+  private String mEmail;
   private String mId;
   private String mBase64Photo;
   private String mIdToken;
@@ -83,6 +86,30 @@ public class MSQAAccountInfoInternal implements AccountInfo {
 
   public void setId(String id) {
     this.mId = id;
+  }
+
+  public String getGivenName() {
+    return mGivenName;
+  }
+
+  public void setGivenName(String mGivenName) {
+    this.mGivenName = mGivenName;
+  }
+
+  public String getSurname() {
+    return mSurname;
+  }
+
+  public void setSurname(String mSurname) {
+    this.mSurname = mSurname;
+  }
+
+  public String getEmail() {
+    return mEmail;
+  }
+
+  public void setEmail(String mEmail) {
+    this.mEmail = mEmail;
   }
 
   public static MSQAAccountInfoInternal getAccount(
