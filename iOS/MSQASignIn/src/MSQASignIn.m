@@ -357,12 +357,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)continueToFetchPhotoWithAccount:(MSQAAccountData *)account
                         completionBlock:(MSQACompletionBlock)completionBlock {
-  [MSQAUserInfoFetcher fetchUserInfoWithAccount:account
-                                completionBlock:^() {
-                                  [MSQASignIn runBlockAsyncOnMainThread:^{
-                                    completionBlock(account, nil);
-                                  }];
-                                }];
+  [MSQAUserInfoFetcher
+      fetchUserInfoWithAccount:account
+               completionBlock:^(NSError *_Nullable error) {
+                 if (error) {
+                   [MSQALogger.sharedInstance
+                       logWithLevel:MSQALogLevelError
+                             format:@"Fetch user info failed."];
+                 }
+                 [MSQASignIn runBlockAsyncOnMainThread:^{
+                   completionBlock(account, nil);
+                 }];
+               }];
 }
 
 - (instancetype)initPrivateWithConfiguration:(MSQAConfiguration *)configuration

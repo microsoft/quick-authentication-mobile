@@ -36,7 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 + (instancetype)fetchUserInfoWithAccount:(MSQAAccountData *)account
-                         completionBlock:(void (^)(void))completionBlock {
+                         completionBlock:
+                             (UserInfoFetcherCompletionBlock)completionBlock {
   MSQAUserInfoFetcher *fetcher =
       [[MSQAUserInfoFetcher alloc] initWithAccount:account];
   [fetcher startInternalWithCompletionBlock:completionBlock];
@@ -60,12 +61,16 @@ NS_ASSUME_NONNULL_BEGIN
   return self;
 }
 
-- (void)startInternalWithCompletionBlock:(void (^)(void))completionBlock {
+- (void)startInternalWithCompletionBlock:
+    (UserInfoFetcherCompletionBlock)completionBlock {
   [self getJSON:@"me"
-      completionBlock:^(NSDictionary *_Nullable json, NSError *_Nonnull error) {
+      completionBlock:^(NSDictionary *_Nullable json,
+                        NSError *_Nullable error) {
         if (!error && json) {
           [self getUserInfoFromJSON:json];
         }
+
+        // Continue to fetch the photo of the current account.
         [self fetchUserPhotoWithCompletingBlock:completionBlock];
       }];
 }
@@ -82,11 +87,12 @@ NS_ASSUME_NONNULL_BEGIN
   }
 }
 
-- (void)fetchUserPhotoWithCompletingBlock:(void (^)(void))completionBlock {
+- (void)fetchUserPhotoWithCompletingBlock:
+    (UserInfoFetcherCompletionBlock)completionBlock {
   [self getJSON:@"me/photo"
       completionBlock:^(NSDictionary *json, NSError *error) {
         if (error || !json) {
-          completionBlock();
+          completionBlock(error);
           return;
         }
 
@@ -97,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
                     [data base64EncodedStringWithOptions:
                               NSDataBase64EncodingEndLineWithLineFeed];
               }
-              completionBlock();
+              completionBlock(nil);
             }];
       }];
 }

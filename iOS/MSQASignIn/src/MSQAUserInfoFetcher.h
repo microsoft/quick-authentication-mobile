@@ -30,12 +30,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^UserInfoFetcherCompletionBlock)(NSError *_Nullable error);
+
 @class MSQAAccountData;
 
 @interface MSQAUserInfoFetcher : NSObject
 
 + (instancetype)fetchUserInfoWithAccount:(MSQAAccountData *)account
-                         completionBlock:(void (^)(void))completionBlock;
+                         completionBlock:
+                             (UserInfoFetcherCompletionBlock)completionBlock;
 
 @end
 
