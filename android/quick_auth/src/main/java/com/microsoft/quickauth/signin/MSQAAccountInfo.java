@@ -24,7 +24,7 @@ package com.microsoft.quickauth.signin;
 
 import androidx.annotation.Nullable;
 
-public interface AccountInfo {
+public interface MSQAAccountInfo {
   /**
    * @return User full name.
    */

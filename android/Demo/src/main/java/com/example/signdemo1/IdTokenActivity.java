@@ -32,7 +32,7 @@ import androidx.annotation.Nullable;
 import com.microsoft.quickauth.signin.ClientCreatedListener;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
-import com.microsoft.quickauth.signin.TokenResult;
+import com.microsoft.quickauth.signin.MSQATokenResult;
 import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.logger.LogLevel;
 
@@ -93,7 +93,7 @@ public class IdTokenActivity extends Activity {
         });
   }
 
-  private void uploadSignInfo(TokenResult tokenResult, Exception error) {
+  private void uploadSignInfo(MSQATokenResult tokenResult, Exception error) {
     if (tokenResult != null) {
       mTokenResult.setText("request success, token= " + tokenResult.getAccessToken());
     } else {

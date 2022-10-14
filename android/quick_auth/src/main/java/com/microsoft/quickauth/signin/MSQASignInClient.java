@@ -146,17 +146,17 @@ public final class MSQASignInClient {
    *
    * @param activity Activity that is used as the parent activity for launching sign in page.
    * @param completeListener A callback to be invoked when sign in success and will return sign in
-   *     account info {@link AccountInfo}.
+   *     account info {@link MSQAAccountInfo}.
    */
   public void signIn(
       @NonNull final Activity activity,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
-    OnCompleteListener<AccountInfo> internalListener = completeListener;
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
+    OnCompleteListener<MSQAAccountInfo> internalListener = completeListener;
     if (!(completeListener instanceof MSQAMetricListener)) {
       MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.SIGN_IN);
       internalListener = new MSQASignInMetricListener<>(controller, completeListener, false);
     }
-    OnCompleteListener<AccountInfo> finalInternalListener = internalListener;
+    OnCompleteListener<MSQAAccountInfo> finalInternalListener = internalListener;
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
           @Override
@@ -207,14 +207,16 @@ public final class MSQASignInClient {
    * prior to running a scheduled background operation.
    *
    * @param completeListener A callback to be invoked when complete and will return sign in account
-   *     info {@link AccountInfo} if success
+   *     info {@link MSQAAccountInfo} if success
    */
-  public void getCurrentAccount(@NonNull final OnCompleteListener<AccountInfo> completeListener) {
+  public void getCurrentAccount(
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.GET_CURRENT_ACCOUNT);
-    OnCompleteListener<AccountInfo> internalListener =
-        new MSQAMetricListener<AccountInfo>(controller, null) {
+    OnCompleteListener<MSQAAccountInfo> internalListener =
+        new MSQAMetricListener<MSQAAccountInfo>(controller, null) {
           @Override
-          public void onComplete(@Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
+          public void onComplete(
+              @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
             super.onComplete(accountInfo, error);
             // If no account return no error.
             if (error instanceof MSQANoAccountException) {
@@ -255,9 +257,9 @@ public final class MSQASignInClient {
   public void acquireToken(
       @NonNull final Activity activity,
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<TokenResult> completeListener) {
+      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
     MSQAMetricController controller = new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN);
-    OnCompleteListener<TokenResult> internalListener =
+    OnCompleteListener<MSQATokenResult> internalListener =
         new MSQAMetricListener<>(controller, completeListener);
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {
@@ -321,10 +323,10 @@ public final class MSQASignInClient {
    */
   public void acquireTokenSilent(
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<TokenResult> completeListener) {
+      @NonNull final OnCompleteListener<MSQATokenResult> completeListener) {
     MSQAMetricController controller =
         new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT);
-    OnCompleteListener<TokenResult> internalListener =
+    OnCompleteListener<MSQATokenResult> internalListener =
         new MSQAMetricListener<>(controller, completeListener);
     mSignInClient.getCurrentAccountAsync(
         new ISingleAccountPublicClientApplication.CurrentAccountCallback() {

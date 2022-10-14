@@ -41,7 +41,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-import com.microsoft.quickauth.signin.AccountInfo;
+import com.microsoft.quickauth.signin.MSQAAccountInfo;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.R;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
@@ -64,8 +64,8 @@ public class MSQASignInButton extends LinearLayout {
   private int mDefaultWidth;
   private Activity mActivity;
   private MSQASignInClient mClient;
-  private OnCompleteListener<AccountInfo> mListener;
-  private OnCompleteListener<AccountInfo> mInternalListener;
+  private OnCompleteListener<MSQAAccountInfo> mListener;
+  private OnCompleteListener<MSQAAccountInfo> mInternalListener;
   private MSQAMetricController mController;
 
   public MSQASignInButton(@NonNull Context context) {
@@ -141,7 +141,7 @@ public class MSQASignInButton extends LinearLayout {
   public void setSignInCallback(
       @NonNull Activity activity,
       @NonNull MSQASignInClient client,
-      @NonNull OnCompleteListener<AccountInfo> onCompleteListener) {
+      @NonNull OnCompleteListener<MSQAAccountInfo> onCompleteListener) {
     mActivity = activity;
     mClient = client;
     mListener = onCompleteListener;
@@ -240,10 +240,10 @@ public class MSQASignInButton extends LinearLayout {
     if (mActivity != null && mClient != null && mListener != null) {
       mController = new MSQAMetricController(MSQAMetricEvent.BUTTON_SIGN_IN);
       mInternalListener =
-          new MSQASignInMetricListener<AccountInfo>(mController, null, true) {
+          new MSQASignInMetricListener<MSQAAccountInfo>(mController, null, true) {
             @Override
             public void onComplete(
-                @Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
+                @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
               if (mListener != null) mListener.onComplete(accountInfo, error);
               super.onComplete(accountInfo, error);
             }
