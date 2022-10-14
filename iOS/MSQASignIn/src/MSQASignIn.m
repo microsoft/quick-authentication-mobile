@@ -33,9 +33,9 @@
 #import "MSQAAccountData_Private.h"
 #import "MSQAConfiguration.h"
 #import "MSQALogger_Private.h"
-#import "MSQAPhotoFetcher.h"
 #import "MSQASilentTokenParameters.h"
 #import "MSQATelemetrySender.h"
+#import "MSQAUserInfoFetcher.h"
 
 #define DEFAULT_SCOPES @[ @"User.Read" ]
 
@@ -357,16 +357,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)continueToFetchPhotoWithAccount:(MSQAAccountData *)account
                         completionBlock:(MSQACompletionBlock)completionBlock {
-  [MSQAPhotoFetcher fetchPhotoWithToken:account.accessToken
-                        completionBlock:^(NSString *_Nullable base64Photo,
-                                          NSError *_Nullable error) {
-                          if (base64Photo) {
-                            account.base64Photo = base64Photo;
-                          }
-                          [MSQASignIn runBlockAsyncOnMainThread:^{
-                            completionBlock(account, nil);
-                          }];
-                        }];
+  [MSQAUserInfoFetcher
+      fetchUserInfoWithAccount:account
+               completionBlock:^(NSError *_Nullable error) {
+                 if (error) {
+                   [MSQALogger.sharedInstance
+                       logWithLevel:MSQALogLevelError
+                             format:@"Fetch user info failed."];
+                 }
+                 [MSQASignIn runBlockAsyncOnMainThread:^{
+                   completionBlock(account, nil);
+                 }];
+               }];
 }
 
 - (instancetype)initPrivateWithConfiguration:(MSQAConfiguration *)configuration

@@ -46,4 +46,13 @@
 /// MSA account id token.
 @property(nonatomic, readonly, nullable) NSString *idToken;
 
+/// MSA user's surname.
+@property(nonatomic, readonly, nullable) NSString *surname;
+
+/// MSA user's given name.
+@property(nonatomic, readonly, nullable) NSString *givenName;
+
+/// MSA user's email.
+@property(nonatomic, readonly, nullable) NSString *email;
+
 @end

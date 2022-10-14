@@ -25,19 +25,21 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQAPhotoFetcher.h"
+#import "MSQAUserInfoFetcher.h"
+
+#import "MSQAAccountData_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation MSQAPhotoFetcher {
-  NSString *_token;
+@implementation MSQAUserInfoFetcher {
+  MSQAAccountData *_account;
 }
 
-+ (instancetype)fetchPhotoWithToken:(NSString *)token
-                    completionBlock:
-                        (void (^)(NSString *_Nullable base64Photo,
-                                  NSError *_Nullable error))completionBlock {
-  MSQAPhotoFetcher *fetcher = [[MSQAPhotoFetcher alloc] initWithToken:token];
++ (instancetype)fetchUserInfoWithAccount:(MSQAAccountData *)account
+                         completionBlock:
+                             (UserInfoFetcherCompletionBlock)completionBlock {
+  MSQAUserInfoFetcher *fetcher =
+      [[MSQAUserInfoFetcher alloc] initWithAccount:account];
   [fetcher startInternalWithCompletionBlock:completionBlock];
 
   return fetcher;
@@ -51,34 +53,57 @@ NS_ASSUME_NONNULL_BEGIN
   return [NSURL URLWithString:urlString];
 }
 
-- (instancetype)initWithToken:(NSString *)token {
+- (instancetype)initWithAccount:(MSQAAccountData *)account {
   if (!(self = [super init])) {
     return nil;
   }
-  _token = token;
+  _account = account;
   return self;
 }
 
 - (void)startInternalWithCompletionBlock:
-    (void (^)(NSString *_Nullable base64Photo,
-              NSError *_Nullable error))completionBlock {
+    (UserInfoFetcherCompletionBlock)completionBlock {
+  [self getJSON:@"me"
+      completionBlock:^(NSDictionary *_Nullable json,
+                        NSError *_Nullable error) {
+        if (!error && json) {
+          [self getUserInfoFromJSON:json];
+        }
+
+        // Continue to fetch the photo of the current account.
+        [self fetchUserPhotoWithCompletingBlock:completionBlock];
+      }];
+}
+
+- (void)getUserInfoFromJSON:(NSDictionary *)dict {
+  _account.givenName = dict[@"givenName"];
+  _account.surname = dict[@"surname"];
+
+  NSString *userPrincipalName = dict[@"userPrincipalName"];
+  BOOL isValidEmail =
+      userPrincipalName ? [userPrincipalName containsString:@"@"] : NO;
+  if (isValidEmail) {
+    _account.email = userPrincipalName;
+  }
+}
+
+- (void)fetchUserPhotoWithCompletingBlock:
+    (UserInfoFetcherCompletionBlock)completionBlock {
   [self getJSON:@"me/photo"
       completionBlock:^(NSDictionary *json, NSError *error) {
-        if (error) {
-          completionBlock(nil, error);
+        if (error || !json) {
+          completionBlock(error);
           return;
         }
 
         [self getData:@"me/photo/$value"
             completionBlock:^(NSData *data, NSError *error) {
-              if (error) {
-                completionBlock(nil, error);
-                return;
+              if (!error && data) {
+                _account.base64Photo =
+                    [data base64EncodedStringWithOptions:
+                              NSDataBase64EncodingEndLineWithLineFeed];
               }
-              completionBlock(
-                  [data base64EncodedStringWithOptions:
-                            NSDataBase64EncodingEndLineWithLineFeed],
-                  nil);
+              completionBlock(nil);
             }];
       }];
 }
@@ -106,10 +131,12 @@ NS_ASSUME_NONNULL_BEGIN
     completionBlock:(void (^)(NSData *_Nullable data,
                               NSError *_Nullable error))completionBlock {
   NSMutableURLRequest *urlRequest = [NSMutableURLRequest new];
-  urlRequest.URL = [MSQAPhotoFetcher graphURLWithPath:path];
+  urlRequest.URL = [MSQAUserInfoFetcher graphURLWithPath:path];
   urlRequest.HTTPMethod = @"GET";
-  urlRequest.allHTTPHeaderFields =
-      @{@"Authorization" : [NSString stringWithFormat:@"Bearer %@", _token]};
+  urlRequest.allHTTPHeaderFields = @{
+    @"Authorization" :
+        [NSString stringWithFormat:@"Bearer %@", _account.accessToken]
+  };
 
   NSURLSession *session = [NSURLSession sharedSession];
 
