@@ -17,23 +17,26 @@
 		0262E1A328D07DE2000DC8C8 /* Microsoft-Brand-12.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19D28D07DE2000DC8C8 /* Microsoft-Brand-12.png */; };
 		0262E1A428D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19E28D07DE2000DC8C8 /* Microsoft-Brand-12@3x.png */; };
 		0262E1A528D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0262E19F28D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png */; };
-		295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 295C620C28E453C400B0D807 /* MSQALogger_Private.h */; };
+		2903638128F92E9700142C95 /* MSQATokenResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 2903637F28F92E9700142C95 /* MSQATokenResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2903638228F92E9700142C95 /* MSQATokenResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2903638028F92E9700142C95 /* MSQATokenResult.m */; };
+		2903638428F931DA00142C95 /* MSQATokenResult_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2903638328F931DA00142C95 /* MSQATokenResult_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 295C620C28E453C400B0D807 /* MSQALogger_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		296E2DD628D1D2D000EC06EE /* MSQASilentTokenParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */; };
 		2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */; };
 		29BCDAF128D45CF100AC4047 /* Pods_MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */; };
-		29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */; };
+		29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29BCDAF728DB0F5300AC4047 /* MSQATelemetrySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */; };
 		29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC397028A6551300699274 /* MSQASignIn_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 292FB4D528B755D000E846A5 /* MSQASignInButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC394428A63F6E00699274 /* MSQASignIn.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993A28AB86850029F4FB /* MSQAAccountData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29E06DDC28B8C6B8003D558A /* MSQASignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DC396D28A64EFF00699274 /* MSQASignIn.m */; };
-		29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		29E06DDA28B8C6B1003D558A /* MSQASignInClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC394428A63F6E00699274 /* MSQASignInClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29E06DDB28B8C6B1003D558A /* MSQAAccountInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993A28AB86850029F4FB /* MSQAAccountInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29E06DDC28B8C6B8003D558A /* MSQASignInClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DC396D28A64EFF00699274 /* MSQASignInClient.m */; };
+		29E06DDD28B8C6B8003D558A /* MSQAAccountInfo_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29AD993E28ACFFC10029F4FB /* MSQAAccountInfo_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29E06DDE28B8C6B8003D558A /* MSQAUserInfoFetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 29F7C82728B32DB1003FF9F2 /* MSQAUserInfoFetcher.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29E06DDF28B8C6B8003D558A /* MSQAUserInfoFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7C82828B32DB1003FF9F2 /* MSQAUserInfoFetcher.m */; };
-		29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */ = {isa = PBXBuildFile; fileRef = 29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */; };
+		29E06DE028B8C6B8003D558A /* MSQAAccountInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 29AD993C28AB89CD0029F4FB /* MSQAAccountInfo.m */; };
 		29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 292FB4D628B755D000E846A5 /* MSQASignInButton.m */; };
 		29EA75B028C71BB900501E0E /* MSQALogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 29EA75AE28C71BB900501E0E /* MSQALogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29EA75B128C71BB900501E0E /* MSQALogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 29EA75AF28C71BB900501E0E /* MSQALogger.m */; };
@@ -65,6 +68,9 @@
 		0262E19F28D07DE2000DC8C8 /* Microsoft-Brand-12@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Microsoft-Brand-12@2x.png"; sourceTree = "<group>"; };
 		24962992F81A856753ED96CB /* Pods-MSQASignIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignIn.release.xcconfig"; path = "Target Support Files/Pods-MSQASignIn/Pods-MSQASignIn.release.xcconfig"; sourceTree = "<group>"; };
 		2900BB6628AA5A800025CF91 /* Podfile.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Podfile.md; sourceTree = "<group>"; };
+		2903637F28F92E9700142C95 /* MSQATokenResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATokenResult.h; sourceTree = "<group>"; };
+		2903638028F92E9700142C95 /* MSQATokenResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATokenResult.m; sourceTree = "<group>"; };
+		2903638328F931DA00142C95 /* MSQATokenResult_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATokenResult_Private.h; sourceTree = "<group>"; };
 		292FB4D528B755D000E846A5 /* MSQASignInButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInButton.h; sourceTree = "<group>"; };
 		292FB4D628B755D000E846A5 /* MSQASignInButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignInButton.m; sourceTree = "<group>"; };
 		295C620C28E453C400B0D807 /* MSQALogger_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQALogger_Private.h; sourceTree = "<group>"; };
@@ -77,16 +83,16 @@
 		29A9925F28BF532900C2F474 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A9926428BF53BB00C2F474 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_MSQASignIn.framework; path = "../../Library/Developer/Xcode/DerivedData/MQASignIn-awsapmvimhyqyhgaqztbskkqntbz/Build/Products/Debug-iphonesimulator/Pods_MSQASignIn.framework"; sourceTree = "<group>"; };
 		29A9926628BF53C900C2F474 /* MSAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSAL.framework; path = "../../Library/Developer/Xcode/DerivedData/MQASignIn-awsapmvimhyqyhgaqztbskkqntbz/Build/Products/Debug-iphonesimulator/MSAL/MSAL.framework"; sourceTree = "<group>"; };
-		29AD993A28AB86850029F4FB /* MSQAAccountData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountData.h; sourceTree = "<group>"; };
-		29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountData.m; sourceTree = "<group>"; };
-		29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountData_Private.h; sourceTree = "<group>"; };
+		29AD993A28AB86850029F4FB /* MSQAAccountInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountInfo.h; sourceTree = "<group>"; };
+		29AD993C28AB89CD0029F4FB /* MSQAAccountInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountInfo.m; sourceTree = "<group>"; };
+		29AD993E28ACFFC10029F4FB /* MSQAAccountInfo_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountInfo_Private.h; sourceTree = "<group>"; };
 		29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATelemetrySender.h; sourceTree = "<group>"; };
 		29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATelemetrySender.m; sourceTree = "<group>"; };
-		29DC394428A63F6E00699274 /* MSQASignIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn.h; sourceTree = "<group>"; };
+		29DC394428A63F6E00699274 /* MSQASignInClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInClient.h; sourceTree = "<group>"; };
 		29DC394528A63F6E00699274 /* MSQASignIn.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MSQASignIn.docc; sourceTree = "<group>"; };
 		29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSQASignInTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		29DC396D28A64EFF00699274 /* MSQASignIn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignIn.m; sourceTree = "<group>"; };
+		29DC396D28A64EFF00699274 /* MSQASignInClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQASignInClient.m; sourceTree = "<group>"; };
 		29DC397028A6551300699274 /* MSQASignIn_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignIn_Private.h; sourceTree = "<group>"; };
 		29E06DD128B8C695003D558A /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29EA75AE28C71BB900501E0E /* MSQALogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQALogger.h; sourceTree = "<group>"; };
@@ -174,15 +180,17 @@
 				295C620C28E453C400B0D807 /* MSQALogger_Private.h */,
 				29EA75AF28C71BB900501E0E /* MSQALogger.m */,
 				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
-				29DC396D28A64EFF00699274 /* MSQASignIn.m */,
-				29AD993E28ACFFC10029F4FB /* MSQAAccountData_Private.h */,
+				2903638328F931DA00142C95 /* MSQATokenResult_Private.h */,
+				29DC396D28A64EFF00699274 /* MSQASignInClient.m */,
+				29AD993E28ACFFC10029F4FB /* MSQAAccountInfo_Private.h */,
 				29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */,
 				29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */,
 				2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */,
 				29F7C82728B32DB1003FF9F2 /* MSQAUserInfoFetcher.h */,
 				29F7C82828B32DB1003FF9F2 /* MSQAUserInfoFetcher.m */,
-				29AD993C28AB89CD0029F4FB /* MSQAAccountData.m */,
+				29AD993C28AB89CD0029F4FB /* MSQAAccountInfo.m */,
 				292FB4D628B755D000E846A5 /* MSQASignInButton.m */,
+				2903638028F92E9700142C95 /* MSQATokenResult.m */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -192,9 +200,10 @@
 			children = (
 				292FB4D528B755D000E846A5 /* MSQASignInButton.h */,
 				2980A2F328BE0F59004F1295 /* MSQAConfiguration.h */,
-				29DC394428A63F6E00699274 /* MSQASignIn.h */,
+				29DC394428A63F6E00699274 /* MSQASignInClient.h */,
 				29EA75AE28C71BB900501E0E /* MSQALogger.h */,
-				29AD993A28AB86850029F4FB /* MSQAAccountData.h */,
+				2903637F28F92E9700142C95 /* MSQATokenResult.h */,
+				29AD993A28AB86850029F4FB /* MSQAAccountInfo.h */,
 				296E2DD328D1D2D000EC06EE /* MSQASilentTokenParameters.h */,
 			);
 			path = public;
@@ -229,15 +238,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29E06DDA28B8C6B1003D558A /* MSQASignIn.h in Headers */,
-				29E06DDB28B8C6B1003D558A /* MSQAAccountData.h in Headers */,
+				29E06DDA28B8C6B1003D558A /* MSQASignInClient.h in Headers */,
+				29E06DDB28B8C6B1003D558A /* MSQAAccountInfo.h in Headers */,
 				2980A2F528BE0F59004F1295 /* MSQAConfiguration.h in Headers */,
-				295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */,
-				29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */,
+				2903638128F92E9700142C95 /* MSQATokenResult.h in Headers */,
 				296E2DD528D1D2D000EC06EE /* MSQASilentTokenParameters.h in Headers */,
 				29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */,
+				295C620D28E453C400B0D807 /* MSQALogger_Private.h in Headers */,
 				29EA75B028C71BB900501E0E /* MSQALogger.h in Headers */,
-				29E06DDD28B8C6B8003D558A /* MSQAAccountData_Private.h in Headers */,
+				29BCDAF628DB0F5300AC4047 /* MSQATelemetrySender.h in Headers */,
+				2903638428F931DA00142C95 /* MSQATokenResult_Private.h in Headers */,
+				29E06DDD28B8C6B8003D558A /* MSQAAccountInfo_Private.h in Headers */,
 				29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */,
 				29E06DDE28B8C6B8003D558A /* MSQAUserInfoFetcher.h in Headers */,
 			);
@@ -384,12 +395,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				296E2DD628D1D2D000EC06EE /* MSQASilentTokenParameters.m in Sources */,
-				29E06DDC28B8C6B8003D558A /* MSQASignIn.m in Sources */,
+				29E06DDC28B8C6B8003D558A /* MSQASignInClient.m in Sources */,
 				29BCDAF728DB0F5300AC4047 /* MSQATelemetrySender.m in Sources */,
+				2903638228F92E9700142C95 /* MSQATokenResult.m in Sources */,
 				29E06DDF28B8C6B8003D558A /* MSQAUserInfoFetcher.m in Sources */,
 				2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */,
 				29E06DE128B8C6B8003D558A /* MSQASignInButton.m in Sources */,
-				29E06DE028B8C6B8003D558A /* MSQAAccountData.m in Sources */,
+				29E06DE028B8C6B8003D558A /* MSQAAccountInfo.m in Sources */,
 				29EA75B128C71BB900501E0E /* MSQALogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
