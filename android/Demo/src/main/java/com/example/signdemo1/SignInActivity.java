@@ -33,11 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.signdemo1.util.ByteCodeUtil;
 import com.example.signdemo1.view.SignInButtonSettingPop;
-import com.microsoft.quickauth.signin.AccountInfo;
 import com.microsoft.quickauth.signin.ClientCreatedListener;
+import com.microsoft.quickauth.signin.MSQAAccountInfo;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
-import com.microsoft.quickauth.signin.TokenResult;
+import com.microsoft.quickauth.signin.MSQATokenResult;
 import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.error.MSQAUiRequiredException;
 import com.microsoft.quickauth.signin.logger.LogLevel;
@@ -179,7 +179,7 @@ public class SignInActivity extends Activity {
         this, scops, (tokenResult, error) -> updateTokenResult(tokenResult, error));
   }
 
-  private void uploadSignInfo(AccountInfo accountInfo, Exception error) {
+  private void uploadSignInfo(MSQAAccountInfo accountInfo, Exception error) {
     if (accountInfo != null) {
       mUserPhoto.setImageBitmap(ByteCodeUtil.base642Bitmap(accountInfo.getBase64Photo()));
       String userInfo =
@@ -225,7 +225,7 @@ public class SignInActivity extends Activity {
         });
   }
 
-  private void updateTokenResult(TokenResult tokenResult, Exception error) {
+  private void updateTokenResult(MSQATokenResult tokenResult, Exception error) {
     mTokenResult.setText(
         tokenResult != null
             ? tokenResult.getAccessToken()

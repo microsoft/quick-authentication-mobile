@@ -34,7 +34,7 @@ import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
 import com.microsoft.identity.client.exception.MsalException;
-import com.microsoft.quickauth.signin.AccountInfo;
+import com.microsoft.quickauth.signin.MSQAAccountInfo;
 import com.microsoft.quickauth.signin.callback.OnCompleteListener;
 import com.microsoft.quickauth.signin.error.MSQACancelException;
 import com.microsoft.quickauth.signin.error.MSQAException;
@@ -65,7 +65,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
       @NonNull final Activity activity,
       @Nullable final IAccount iAccount,
       @NonNull String[] scopes,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     // If no account in cache, start request sign-in api.
     if (iAccount == null) {
       MSQALogger.getInstance().verbose(TAG, "sign in started with no account in cache");
@@ -140,7 +140,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
   public void getCurrentAccount(
       @Nullable final IAccount iAccount,
       @NonNull final String[] scopes,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     // If no account in cache return null.
     if (iAccount == null) {
       completeListener.onComplete(null, MSQANoAccountException.create());
@@ -246,7 +246,7 @@ public class MSQASingleSignInClientInternal extends MSALSingleClientWrapper {
 
   public void getUserInfo(
       @NonNull final IAuthenticationResult tokenResult,
-      @NonNull final OnCompleteListener<AccountInfo> completeListener) {
+      @NonNull final OnCompleteListener<MSQAAccountInfo> completeListener) {
     // Post user info task in background thread.
     MSQATaskExecutor.background()
         .execute(
