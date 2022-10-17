@@ -29,7 +29,7 @@
 
 #import <MSQASignIn/MSQAConfiguration.h>
 #import <MSQASignIn/MSQALogger.h>
-#import <MSQASignIn/MSQASignIn.h>
+#import <MSQASignIn/MSQASignInClient.h>
 
 #import "SampleLoginViewController.h"
 #import "SampleMainViewController.h"
@@ -37,7 +37,7 @@
 @interface SampleAppDelegate () {
   UIViewController *_rootController;
   UIViewController *_currentController;
-  MSQASignIn *_msSignIn;
+  MSQASignInClient *_msSignIn;
 }
 
 @end
@@ -49,7 +49,8 @@
   if (self) {
     MSQAConfiguration *config = [[MSQAConfiguration alloc]
         initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"];
-    _msSignIn = [[MSQASignIn alloc] initWithConfiguration:config error:nil];
+    _msSignIn = [[MSQASignInClient alloc] initWithConfiguration:config
+                                                          error:nil];
     [MSQALogger.sharedInstance
         setLogCallback:^(MSQALogLevel level, NSString *_Nullable message) {
           NSLog(@"%@", message);
@@ -69,7 +70,7 @@
   if (_msSignIn) {
     [_msSignIn
         getCurrentAccountWithCompletionBlock:^(
-            MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+            MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
           if (account && !error) {
             SampleMainViewController *controller =
                 [SampleMainViewController sharedViewController];

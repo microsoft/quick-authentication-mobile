@@ -25,11 +25,11 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQAAccountData_Private.h"
+#import "MSQAAccountInfo_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@implementation MSQAAccountData
+@implementation MSQAAccountInfo
 
 - (instancetype)initWithFullName:(NSString *)fullName
                         userName:(NSString *)userName

@@ -27,16 +27,17 @@
 
 #import "SampleMainViewController.h"
 
-#import <MSQASignIn/MSQAAccountData.h>
-#import <MSQASignIn/MSQASignIn.h>
+#import <MSQASignIn/MSQAAccountInfo.h>
+#import <MSQASignIn/MSQASignInClient.h>
 #import <MSQASignIn/MSQASilentTokenParameters.h>
+#import <MSQASignIn/MSQATokenResult.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleLoginViewController.h"
 
 @implementation SampleMainViewController {
-  MSQAAccountData *_accountData;
-  MSQASignIn *_msSignIn;
+  MSQAAccountInfo *_accountData;
+  MSQASignInClient *_msSignIn;
 }
 
 + (instancetype)sharedViewController {
@@ -68,8 +69,8 @@
   _profileImageView.clipsToBounds = YES;
 }
 
-- (void)setAccountInfo:(MSQAAccountData *)accountData
-              msSignIn:(MSQASignIn *)msSignIn {
+- (void)setAccountInfo:(MSQAAccountInfo *)accountData
+              msSignIn:(MSQASignInClient *)msSignIn {
   _accountData = accountData;
   _msSignIn = msSignIn;
 }
@@ -105,11 +106,11 @@
   MSQASilentTokenParameters *parameters =
       [[MSQASilentTokenParameters alloc] initWithScopes:@[ @"User.Read" ]];
   [_msSignIn acquireTokenSilentWithParameters:parameters
-                              completionBlock:^(MSQAAccountData *account,
+                              completionBlock:^(MSQATokenResult *tokenResult,
                                                 NSError *error) {
-                                self->_tokenLabel.text =
-                                    [NSString stringWithFormat:@"ID token: %@",
-                                                               account.idToken];
+                                self->_tokenLabel.text = [NSString
+                                    stringWithFormat:@"Access token: %@",
+                                                     tokenResult.accessToken];
                               }];
 }
 
@@ -121,18 +122,19 @@
              initWithScopes:@[ @"User.Read", @"Calendars.Read" ]
           webviewParameters:webParameters];
 
-  [_msSignIn acquireTokenWithParameters:parameters
-                        completionBlock:^(MSQAAccountData *_Nullable account,
-                                          NSError *_Nullable error) {
-                          self->_tokenLabel.text =
-                              [NSString stringWithFormat:@"ID token: %@",
-                                                         account.idToken];
-                        }];
+  [_msSignIn
+      acquireTokenWithParameters:parameters
+                 completionBlock:^(MSQATokenResult *_Nullable tokenResult,
+                                   NSError *_Nullable error) {
+                   self->_tokenLabel.text =
+                       [NSString stringWithFormat:@"Access token: %@",
+                                                  tokenResult.accessToken];
+                 }];
 }
 
 - (IBAction)getCurrentAccount:(id)sender {
   [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
     if (account) {
       NSString *message =
           [NSString stringWithFormat:@"FullName: %@\nEmail: %@",

@@ -25,13 +25,28 @@
 //
 //------------------------------------------------------------------------------
 
-#import <UIKit/UIKit.h>
+#import "MSQAAccountInfo.h"
 
-@interface SampleLoginViewController : UIViewController {
-}
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)sharedViewController;
+@interface MSQAAccountInfo ()
 
-- (void)setMSQASignIn:(MSQASignInClient *)msSignIn;
+@property(nonatomic, readonly, nullable) NSString *accessToken;
+
+- (instancetype)initWithFullName:(NSString *)fullName
+                        userName:(NSString *)userName
+                          userId:(NSString *)userId
+                         idToken:(nullable NSString *)idToken
+                     accessToken:(nullable NSString *)accessToken;
+
+- (void)setBase64Photo:(NSString *)base64Photo;
+
+- (void)setSurname:(NSString *)surname;
+
+- (void)setGivenName:(NSString *)givenName;
+
+- (void)setEmail:(NSString *)email;
 
 @end
+
+NS_ASSUME_NONNULL_END

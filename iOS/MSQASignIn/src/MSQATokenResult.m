@@ -25,13 +25,28 @@
 //
 //------------------------------------------------------------------------------
 
-#import <UIKit/UIKit.h>
+#import "MSQATokenResult_Private.h"
 
-@interface SampleLoginViewController : UIViewController {
+@implementation MSQATokenResult
+
+- (instancetype)initWithAccessToken:(NSString *)accessToken
+                authorizationHeader:(NSString *)authorizationHeader
+                authorizationScheme:(NSString *)authorizationScheme
+                          expiresOn:(NSDate *)expiresOn
+                           tenantId:(nullable NSString *)tenantId
+                             scopes:(NSArray<NSString *> *)scopes
+                      correlationId:(nullable NSUUID *)correlationId {
+  self = [super init];
+  if (self) {
+    _accessToken = accessToken;
+    _authorizationHeader = authorizationHeader;
+    _authorizationScheme = authorizationScheme;
+    _expiresOn = expiresOn;
+    _tenantId = tenantId;
+    _scopes = scopes;
+    _correlationId = correlationId;
+  }
+  return self;
 }
-
-+ (instancetype)sharedViewController;
-
-- (void)setMSQASignIn:(MSQASignInClient *)msSignIn;
 
 @end

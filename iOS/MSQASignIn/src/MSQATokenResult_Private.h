@@ -23,36 +23,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "MSQATokenResult.h"
 
-/// This class represents a MSA account.
-@interface MSQAAccountData : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-/// MSA user's full name.
-@property(nonatomic, readonly, nullable) NSString *fullName;
+@interface MSQATokenResult ()
 
-/// MSA user's email address or phone number.
-@property(nonatomic, readonly, nonnull) NSString *userName;
-
-/// CID for MSA account.
-@property(nonatomic, readonly, nonnull) NSString *userId;
-
-/// The user's photo in Base64.
-@property(nonatomic, readonly, nullable) NSString *base64Photo;
-
-/// MSA account id token.
-@property(nonatomic, readonly, nullable) NSString *idToken;
-
-/// MSA user's surname.
-@property(nonatomic, readonly, nullable) NSString *surname;
-
-/// MSA user's given name.
-@property(nonatomic, readonly, nullable) NSString *givenName;
-
-/// MSA user's email.
-@property(nonatomic, readonly, nullable) NSString *email;
+- (instancetype)initWithAccessToken:(NSString *)accessToken
+                authorizationHeader:(NSString *)authorizationHeader
+                authorizationScheme:(NSString *)authorizationScheme
+                          expiresOn:(NSDate *)expiresOn
+                           tenantId:(nullable NSString *)tenantId
+                             scopes:(NSArray<NSString *> *)scopes
+                      correlationId:(nullable NSUUID *)correlationId;
 
 @end
+
+NS_ASSUME_NONNULL_END

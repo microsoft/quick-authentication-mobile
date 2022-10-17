@@ -26,39 +26,38 @@
 //------------------------------------------------------------------------------
 
 #import <MSQASignIn/MSQAConfiguration.h>
-#import <MSQASignIn/MSQASignIn.h>
 #import <MSQASignIn/MSQASignInButton.h>
+#import <MSQASignIn/MSQASignInClient.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleLoginViewController.h"
 #import "SampleMainViewController.h"
 
-@interface SampleLoginViewController () <UITableViewDelegate,
-                                         UITableViewDataSource,
-                                         UIPickerViewDelegate,
-                                         UIPickerViewDataSource>
+@interface SampleLoginViewController () <
+    UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate,
+    UIPickerViewDataSource>
 
-@property(nonatomic, weak) IBOutlet MSQASignInButton* signInButton;
+@property(nonatomic, weak) IBOutlet MSQASignInButton *signInButton;
 
-@property(nonatomic, strong) UITableView* configurationTableView;
+@property(nonatomic, strong) UITableView *configurationTableView;
 
-@property(nonatomic, strong) NSArray* configurationTableCellLabel;
+@property(nonatomic, strong) NSArray *configurationTableCellLabel;
 
-@property(nonatomic, strong) NSArray<NSArray*>* configrationPickerLabel;
+@property(nonatomic, strong) NSArray<NSArray *> *configrationPickerLabel;
 
 @property(nonatomic, strong)
-    NSMutableArray<NSNumber*>* currentConfigurationState;
+    NSMutableArray<NSNumber *> *currentConfigurationState;
 
 @property(nonatomic, assign) NSUInteger selectedConfigurationIndex;
 
 @end
 
 @implementation SampleLoginViewController {
-  MSQASignIn *_msSignIn;
+  MSQASignInClient *_msSignIn;
 }
 
 + (instancetype)sharedViewController {
-  static SampleLoginViewController* s_controller = nil;
+  static SampleLoginViewController *s_controller = nil;
   static dispatch_once_t once;
 
   dispatch_once(&once, ^{
@@ -70,8 +69,8 @@
   return s_controller;
 }
 
-- (instancetype)initWithNibName:(NSString*)nibNameOrNil
-                         bundle:(NSBundle*)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil
+                         bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
     [MSQASignInButton class];
@@ -107,7 +106,7 @@
 
   // Switch to main view if already logged in.
   [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
     if (account && !error) {
       SampleMainViewController *controller =
           [SampleMainViewController sharedViewController];
@@ -117,7 +116,7 @@
   }];
 
   // Padding View
-  UIView* paddingView = [[UIView alloc] init];
+  UIView *paddingView = [[UIView alloc] init];
   paddingView.translatesAutoresizingMaskIntoConstraints = NO;
   [self.view addSubview:paddingView];
   [NSLayoutConstraint activateConstraints:@[
@@ -162,7 +161,7 @@
 
 - (IBAction)signIn:(id)sender {
   [_msSignIn signInWithViewController:self
-                      completionBlock:^(MSQAAccountData *_Nonnull account,
+                      completionBlock:^(MSQAAccountInfo *_Nonnull account,
                                         NSError *_Nonnull error) {
                         SampleMainViewController *controller =
                             [SampleMainViewController sharedViewController];
@@ -173,7 +172,7 @@
 
 - (IBAction)getCurrentButton:(id)sender {
   [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountData *_Nullable account, NSError *_Nullable error) {
+                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
     SampleMainViewController *controller =
         [SampleMainViewController sharedViewController];
     [controller setAccountInfo:account msSignIn:_msSignIn];
@@ -181,7 +180,7 @@
   }];
 }
 
-- (void)setMSQASignIn:(MSQASignIn *)msSignIn {
+- (void)setMSQASignIn:(MSQASignInClient *)msSignIn {
   _msSignIn = msSignIn;
 }
 
@@ -196,15 +195,15 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView*)tableView
+- (NSInteger)tableView:(UITableView *)tableView
     numberOfRowsInSection:(NSInteger)section {
   return self.configurationTableCellLabel.count;
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView
-        cellForRowAtIndexPath:(NSIndexPath*)indexPath {
-  NSString* label = self.configurationTableCellLabel[indexPath.row];
-  UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:label];
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  NSString *label = self.configurationTableCellLabel[indexPath.row];
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:label];
   if (!cell) {
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
                                   reuseIdentifier:label];
@@ -219,23 +218,23 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView*)tableView
-    didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+- (void)tableView:(UITableView *)tableView
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   [tableView deselectRowAtIndexPath:indexPath animated:YES];
   self.selectedConfigurationIndex = indexPath.row;
-  UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+  UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
-  UIPickerView* pickerView = [[UIPickerView alloc] init];
+  UIPickerView *pickerView = [[UIPickerView alloc] init];
   pickerView.dataSource = self;
   pickerView.delegate = self;
 
-  UIViewController* viewController = [[UIViewController alloc] init];
+  UIViewController *viewController = [[UIViewController alloc] init];
   viewController.view = pickerView;
 
-  NSString* title =
+  NSString *title =
       [NSString stringWithFormat:@"Select %@", cell.textLabel.text];
 
-  UIAlertController* alertController = [UIAlertController
+  UIAlertController *alertController = [UIAlertController
       alertControllerWithTitle:title
                        message:nil
                 preferredStyle:UIAlertControllerStyleActionSheet];
@@ -249,27 +248,27 @@
 
 #pragma mark - UIPickerViewDataSource
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView*)pickerView {
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
   return 1;
 }
 
-- (NSInteger)pickerView:(UIPickerView*)pickerView
+- (NSInteger)pickerView:(UIPickerView *)pickerView
     numberOfRowsInComponent:(NSInteger)component {
   return self.configrationPickerLabel[self.selectedConfigurationIndex].count;
 }
 
 #pragma mark - UIPickerViewDelegate
 
-- (NSString*)pickerView:(UIPickerView*)pickerView
-            titleForRow:(NSInteger)row
-           forComponent:(NSInteger)component {
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component {
   return self.configrationPickerLabel[self.selectedConfigurationIndex][row];
 }
 
-- (void)pickerView:(UIPickerView*)pickerView
+- (void)pickerView:(UIPickerView *)pickerView
       didSelectRow:(NSInteger)row
        inComponent:(NSInteger)component {
-  UITableViewCell* cell = [self.configurationTableView
+  UITableViewCell *cell = [self.configurationTableView
       cellForRowAtIndexPath:[NSIndexPath
                                 indexPathForRow:self.selectedConfigurationIndex
                                       inSection:0]];

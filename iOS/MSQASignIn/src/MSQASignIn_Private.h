@@ -25,11 +25,11 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQASignIn.h"
+#import "MSQASignInClient.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MSQASignIn ()
+@interface MSQASignInClient ()
 
 - (void)signInByButtonWithViewController:(UIViewController *)controller
                          completionBlock:(MSQACompletionBlock)completionBlock;

@@ -27,15 +27,15 @@
 
 #import "MSQAUserInfoFetcher.h"
 
-#import "MSQAAccountData_Private.h"
+#import "MSQAAccountInfo_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation MSQAUserInfoFetcher {
-  MSQAAccountData *_account;
+  MSQAAccountInfo *_account;
 }
 
-+ (instancetype)fetchUserInfoWithAccount:(MSQAAccountData *)account
++ (instancetype)fetchUserInfoWithAccount:(MSQAAccountInfo *)account
                          completionBlock:
                              (UserInfoFetcherCompletionBlock)completionBlock {
   MSQAUserInfoFetcher *fetcher =
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
   return [NSURL URLWithString:urlString];
 }
 
-- (instancetype)initWithAccount:(MSQAAccountData *)account {
+- (instancetype)initWithAccount:(MSQAAccountInfo *)account {
   if (!(self = [super init])) {
     return nil;
   }
