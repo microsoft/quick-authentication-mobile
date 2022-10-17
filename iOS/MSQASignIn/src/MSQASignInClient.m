@@ -252,8 +252,7 @@ NS_ASSUME_NONNULL_BEGIN
 // with an error asycly and returns `No`, otherwise, returns `YES`.
 + (BOOL)validateScopes:(nonnull NSArray *)scopes
                  event:(NSString *)event
-     willSendTelemetry:(BOOL)willSendTelemetry
-       completionBlock:(MSALCompletionBlock)completionBlock {
+     willSendTelemetry:(BOOL)willSendTelemetry {
   if (!scopes || scopes.count == 0) {
     [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
                                      format:@"No scope provided."];
@@ -261,8 +260,6 @@ NS_ASSUME_NONNULL_BEGIN
       [MSQATelemetrySender.sharedInstance sendWithEvent:event
                                                 message:kNoScopes];
     }
-    [MSQASignInClient callCompletionBlockOnMainthread:completionBlock
-                                             errorStr:kEmptyScopesError];
     return NO;
   }
   return YES;
@@ -441,6 +438,13 @@ NS_ASSUME_NONNULL_BEGIN
 
                            return;
                          }
+                         if (error && error.code != MSALErrorInteractionRequired) {
+                           [MSQASignInClient callBlockOnMainThread:^{
+                             completionBlock(nil, error);
+                           }];
+                           return;
+                         }
+
                          MSQAInteractiveTokenParameters *interactiveParams =
                              [MSQASignInClient
                                  createInteractiveTokenParametersWithController:
@@ -486,8 +490,9 @@ NS_ASSUME_NONNULL_BEGIN
 
   if (![MSQASignInClient validateScopes:parameters.scopes
                                   event:kAcquireTokenSilentEvent
-                      willSendTelemetry:willSendTelemetry
-                        completionBlock:completionBlock]) {
+                      willSendTelemetry:willSendTelemetry]) {
+    [MSQASignInClient callCompletionBlockOnMainthread:completionBlock
+                                             errorStr:kEmptyScopesError];
     return;
   }
 
@@ -537,8 +542,9 @@ NS_ASSUME_NONNULL_BEGIN
                    completionBlock:(MSALCompletionBlock)completionBlock {
   if (![MSQASignInClient validateScopes:parameters.scopes
                                   event:kAcquireTokenEvent
-                      willSendTelemetry:willSendTelemetry
-                        completionBlock:completionBlock]) {
+                      willSendTelemetry:willSendTelemetry]) {
+    [MSQASignInClient callCompletionBlockOnMainthread:completionBlock
+                                             errorStr:kEmptyScopesError];
     return;
   }
 

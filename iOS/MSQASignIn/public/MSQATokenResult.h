@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The access token.
 @property(nonatomic, readonly, nonnull) NSString *accessToken;
 
-/// The authorization header for the specific authentication scheme . For
+/// The authorization header for the specific authentication scheme. For
 /// instance “Bearer …” or “Pop …”.
 @property(nonatomic, readonly, nonnull) NSString *authorizationHeader;
 
