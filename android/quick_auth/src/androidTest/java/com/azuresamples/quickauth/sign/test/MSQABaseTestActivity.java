@@ -30,6 +30,7 @@ import com.microsoft.quickauth.signin.ClientCreatedListener;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.MSQASignInOptions;
 import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.internal.signinclient.MSQASignInClientFactory;
 import com.microsoft.quickauth.signin.test.R;
 import junit.framework.Assert;
 
@@ -43,18 +44,18 @@ public class MSQABaseTestActivity extends Activity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    MSQASignInClientFactory.setTestSingleClientProvider(
+        signInClientApplication -> {
+          mSignInClientInternal = new MSQATestSingleSignInClient(signInClientApplication, this);
+          return mSignInClientInternal;
+        });
+
     MSQASignInClient.create(
         this,
         new MSQASignInOptions.Builder()
             .setConfigResourceId(R.raw.msqa_test_config_single_account)
             .setEnableLogcatLog(true)
-            .build()
-            .setTestSingleClientProvider(
-                signInClientApplication -> {
-                  mSignInClientInternal =
-                      new MSQATestSingleSignInClient(signInClientApplication, this);
-                  return mSignInClientInternal;
-                }),
+            .build(),
         new ClientCreatedListener() {
           @Override
           public void onCreated(@NonNull MSQASignInClient client) {

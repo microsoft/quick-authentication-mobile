@@ -26,7 +26,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import com.azuresamples.quickauth.sign.test.MSQABaseTestActivity;
 import com.azuresamples.quickauth.sign.test.MSQATestSingleSignInClient;
-import com.microsoft.quickauth.signin.AccountInfo;
+import com.microsoft.quickauth.signin.MSQAAccountInfo;
 import com.microsoft.quickauth.signin.MSQASignInClient;
 import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
@@ -54,10 +54,11 @@ public class MSQASignInButtonTestActivity extends MSQABaseTestActivity {
     mSignInButton.setSignInCallback(
         this,
         client,
-        new MSQASignInMetricListener<AccountInfo>(
+        new MSQASignInMetricListener<MSQAAccountInfo>(
             new MSQAMetricController(MSQAMetricEvent.BUTTON_SIGN_IN), true, false) {
           @Override
-          public void onComplete(@Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
+          public void onComplete(
+              @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
             super.onComplete(accountInfo, error);
             if (mTestListener != null) mTestListener.onResult(getController(), accountInfo, error);
           }

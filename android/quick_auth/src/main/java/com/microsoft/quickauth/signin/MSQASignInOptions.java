@@ -24,7 +24,6 @@ package com.microsoft.quickauth.signin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.microsoft.quickauth.signin.internal.TestSingleClientProvider;
 import com.microsoft.quickauth.signin.logger.ILogger;
 import com.microsoft.quickauth.signin.logger.LogLevel;
 
@@ -47,8 +46,6 @@ public class MSQASignInOptions {
    * logging.
    */
   private final @LogLevel int mLogLevel;
-
-  private TestSingleClientProvider mSingleClientProvider;
 
   public MSQASignInOptions(MSQASignInOptions.Builder builder) {
     mConfigResourceId = builder.mConfigResourceId;
@@ -84,19 +81,6 @@ public class MSQASignInOptions {
    */
   public int getLogLevel() {
     return mLogLevel;
-  }
-
-  /**
-   * @return Test single client provider for test.
-   */
-  public TestSingleClientProvider getTestSingleClientProvider() {
-    return mSingleClientProvider;
-  }
-
-  public MSQASignInOptions setTestSingleClientProvider(
-      TestSingleClientProvider singleClientProvider) {
-    mSingleClientProvider = singleClientProvider;
-    return this;
   }
 
   public static final class Builder {
