@@ -27,8 +27,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import com.azuresamples.quickauth.sign.test.MSQABaseTestActivity;
 import com.azuresamples.quickauth.sign.test.MSQATestFlag;
-import com.microsoft.quickauth.signin.AccountInfo;
-import com.microsoft.quickauth.signin.TokenResult;
+import com.microsoft.quickauth.signin.MSQAAccountInfo;
+import com.microsoft.quickauth.signin.MSQATokenResult;
 import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.metric.MSQAGetCurrentAccountMessageMapper;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
@@ -52,11 +52,11 @@ public class MSQAApiTestActivity extends MSQABaseTestActivity {
     getClient()
         .signIn(
             this,
-            new MSQASignInMetricListener<AccountInfo>(
+            new MSQASignInMetricListener<MSQAAccountInfo>(
                 new MSQAMetricController(MSQAMetricEvent.SIGN_IN), false, false) {
               @Override
               public void onComplete(
-                  @Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
+                  @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
                 super.onComplete(accountInfo, error);
                 if (mTestListener != null)
                   mTestListener.onResult(getController(), accountInfo, error);
@@ -95,13 +95,13 @@ public class MSQAApiTestActivity extends MSQABaseTestActivity {
     getSignInClientInternal().setFlag(MSQATestFlag.SUCCESS);
     getClient()
         .getCurrentAccount(
-            new MSQAMetricListener<AccountInfo>(
+            new MSQAMetricListener<MSQAAccountInfo>(
                 new MSQAMetricController(
                     MSQAMetricEvent.GET_CURRENT_ACCOUNT, new MSQAGetCurrentAccountMessageMapper()),
                 false) {
               @Override
               public void onComplete(
-                  @Nullable AccountInfo accountInfo, @Nullable MSQAException error) {
+                  @Nullable MSQAAccountInfo accountInfo, @Nullable MSQAException error) {
                 super.onComplete(accountInfo, error);
                 if (mTestListener != null)
                   mTestListener.onResult(getController(), accountInfo, error);
@@ -115,11 +115,11 @@ public class MSQAApiTestActivity extends MSQABaseTestActivity {
         .acquireToken(
             this,
             scopes,
-            new MSQAMetricListener<TokenResult>(
+            new MSQAMetricListener<MSQATokenResult>(
                 new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN), false) {
               @Override
               public void onComplete(
-                  @Nullable TokenResult tokenResult, @Nullable MSQAException error) {
+                  @Nullable MSQATokenResult tokenResult, @Nullable MSQAException error) {
                 super.onComplete(tokenResult, error);
                 if (mTestListener != null)
                   mTestListener.onResult(getController(), tokenResult, error);
@@ -148,11 +148,11 @@ public class MSQAApiTestActivity extends MSQABaseTestActivity {
     getClient()
         .acquireTokenSilent(
             scopes,
-            new MSQAMetricListener<TokenResult>(
+            new MSQAMetricListener<MSQATokenResult>(
                 new MSQAMetricController(MSQAMetricEvent.ACQUIRE_TOKEN_SILENT), false) {
               @Override
               public void onComplete(
-                  @Nullable TokenResult tokenResult, @Nullable MSQAException error) {
+                  @Nullable MSQATokenResult tokenResult, @Nullable MSQAException error) {
                 super.onComplete(tokenResult, error);
                 if (mTestListener != null)
                   mTestListener.onResult(getController(), tokenResult, error);

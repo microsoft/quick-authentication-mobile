@@ -46,6 +46,7 @@ import com.microsoft.quickauth.signin.internal.metric.MSQAMetricEvent;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricListener;
 import com.microsoft.quickauth.signin.internal.metric.MSQASignInMetricListener;
 import com.microsoft.quickauth.signin.internal.metric.MSQASignOutMessageMapper;
+import com.microsoft.quickauth.signin.internal.signinclient.MSQASignInClientFactory;
 import com.microsoft.quickauth.signin.internal.signinclient.MSQASingleSignInClientInternal;
 import com.microsoft.quickauth.signin.logger.ILogger;
 import com.microsoft.quickauth.signin.logger.LogLevel;
@@ -97,13 +98,8 @@ public final class MSQASignInClient {
           @Override
           public void onCreated(ISingleAccountPublicClientApplication application) {
             MSQALogger.getInstance().init(context);
-            MSQASingleSignInClientInternal signInClient;
-            if (signInOptions.getTestSingleClientProvider() != null) {
-              signInClient = signInOptions.getTestSingleClientProvider().get(application);
-            } else {
-              signInClient = new MSQASingleSignInClientInternal(application);
-            }
-            MSQASignInClient client = new MSQASignInClient(signInClient);
+            MSQASignInClient client =
+                new MSQASignInClient(MSQASignInClientFactory.createClient(application));
             MSQALogger.getInstance().verbose(TAG, "client initialize success");
             listener.onCreated(client);
           }
