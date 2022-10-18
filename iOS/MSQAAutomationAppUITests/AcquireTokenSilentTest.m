@@ -28,6 +28,7 @@
 #import "MSQABaseUITest.h"
 
 #import "MSQAAccountInfo+Testing.h"
+#import "MSQATokenResult+Testing.h"
 #import "TestData.h"
 
 @interface AcquireTokenSilentTest : MSQABaseUITest
@@ -61,9 +62,8 @@
   [self waitForResultStatus:resultStatus];
 
   XCUIElement *resultInfo = app.textViews[@"Result Info"];
-  MSQAAccountInfo *expected =
-      [MSQAAccountInfo fromJSONString:kExpectedMSQAAccount];
-  MSQAAccountInfo *actual = [MSQAAccountInfo fromJSONString:resultInfo.value];
+  MSQATokenResult *expected = [MSQATokenResult fromJSONString:kFakeMSALResult];
+  MSQATokenResult *actual = [MSQATokenResult fromJSONString:resultInfo.value];
   XCTAssertTrue([actual isEqual:expected]);
 }
 

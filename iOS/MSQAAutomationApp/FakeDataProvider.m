@@ -29,6 +29,7 @@
 
 #import <MSAL/MSAL.h>
 
+#import "FakeMSALResult.h"
 #import "TestData.h"
 
 @protocol MSALAuthenticationSchemeProtocolInternal;
@@ -103,22 +104,7 @@
 }
 
 + (MSALResult *)getFakeMSALResult {
-  NSDictionary *resultDict =
-      [FakeDataProvider getDictFromString:kFakeMSAResult];
-  MSALResult *result =
-      [MSALResult resultWithAccessToken:resultDict[@"accessToken"]
-                              expiresOn:[NSDate date]
-                isExtendedLifetimeToken:YES
-                               tenantId:resultDict[@"tenantId"]
-                          tenantProfile:nil
-                                account:[self getFakeMSALAccount]
-                                idToken:resultDict[@"idToken"]
-                               uniqueId:resultDict[@"uniqueId"]
-                                 scopes:nil
-                              authority:nil
-                          correlationId:nil
-                             authScheme:nil];
-  return result;
+  return [[FakeMSALResult alloc] initWithString:kFakeMSALResult];
 }
 
 @end

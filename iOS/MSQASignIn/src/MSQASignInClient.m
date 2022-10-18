@@ -219,7 +219,7 @@ NS_ASSUME_NONNULL_BEGIN
   return
       [[MSQATokenResult alloc] initWithAccessToken:result.accessToken
                                authorizationHeader:result.authorizationHeader
-                               authorizationScheme:result.authenticationScheme
+                              authenticationScheme:result.authenticationScheme
                                          expiresOn:result.expiresOn
                                           tenantId:result.tenantProfile.tenantId
                                             scopes:result.scopes
@@ -440,7 +440,8 @@ NS_ASSUME_NONNULL_BEGIN
 
                            return;
                          }
-                         if (error && error.code != MSALErrorInteractionRequired) {
+                         if (error &&
+                             error.code != MSALErrorInteractionRequired) {
                            [MSQASignInClient callBlockOnMainThread:^{
                              completionBlock(nil, error);
                            }];

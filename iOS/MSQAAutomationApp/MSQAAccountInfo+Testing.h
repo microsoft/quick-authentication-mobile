@@ -49,6 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
                          idToken:(nullable NSString *)idToken
                      accessToken:(nullable NSString *)accessToken;
 
+- (void)setSurname:(NSString *)surname;
+
+- (void)setGivenName:(NSString *)givenName;
+
+- (void)setEmail:(NSString *)email;
+
 @end
 
 NS_ASSUME_NONNULL_END

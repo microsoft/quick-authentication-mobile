@@ -31,7 +31,7 @@
 
 - (instancetype)initWithAccessToken:(NSString *)accessToken
                 authorizationHeader:(NSString *)authorizationHeader
-                authorizationScheme:(NSString *)authorizationScheme
+               authenticationScheme:(NSString *)authenticationScheme
                           expiresOn:(NSDate *)expiresOn
                            tenantId:(nullable NSString *)tenantId
                              scopes:(NSArray<NSString *> *)scopes
@@ -40,7 +40,7 @@
   if (self) {
     _accessToken = accessToken;
     _authorizationHeader = authorizationHeader;
-    _authorizationScheme = authorizationScheme;
+    _authenticationScheme = authenticationScheme;
     _expiresOn = expiresOn;
     _tenantId = tenantId;
     _scopes = scopes;

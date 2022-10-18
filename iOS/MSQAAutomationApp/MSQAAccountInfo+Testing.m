@@ -34,7 +34,10 @@
     @"fullName" : self.fullName,
     @"userName" : self.userName,
     @"userId" : self.userId,
-    @"idToken" : self.idToken
+    @"idToken" : self.idToken,
+    @"surname" : self.surname,
+    @"givenName" : self.givenName,
+    @"email" : self.email
   };
   NSData *resultData = [NSJSONSerialization dataWithJSONObject:dict
                                                        options:0
@@ -48,18 +51,26 @@
   NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data
                                                        options:0
                                                          error:nil];
-  return [[MSQAAccountInfo alloc] initWithFullName:dict[@"fullName"]
-                                          userName:dict[@"userName"]
-                                            userId:dict[@"userId"]
-                                           idToken:dict[@"idToken"]
-                                       accessToken:nil];
+  MSQAAccountInfo *account =
+      [[MSQAAccountInfo alloc] initWithFullName:dict[@"fullName"]
+                                       userName:dict[@"userName"]
+                                         userId:dict[@"userId"]
+                                        idToken:dict[@"idToken"]
+                                    accessToken:nil];
+  [account setSurname:dict[@"surname"]];
+  [account setGivenName:dict[@"givenName"]];
+  [account setEmail:dict[@"email"]];
+  return account;
 }
 
 - (BOOL)isEqual:(MSQAAccountInfo *)account {
   return [self.fullName isEqualToString:account.fullName] &&
          [self.userName isEqualToString:account.userName] &&
          [self.userId isEqualToString:account.userId] &&
-         [self.idToken isEqualToString:account.idToken];
+         [self.idToken isEqualToString:account.idToken] &&
+         [self.surname isEqualToString:account.surname] &&
+         [self.givenName isEqualToString:account.givenName] &&
+         [self.email isEqualToString:account.email];
 }
 
 @end

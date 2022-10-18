@@ -36,14 +36,18 @@ NSString *const kFakeMSALAccount =
     @"\"environment\":\"login.windows.net\", \"accountClaims\" : {\"name\": "
     @"\"FirstName LastName\"}}";
 
-NSString *const kFakeMSAResult =
-    @"{\"accessToken\" : \"access_token\", \"tenantId\": "
-    @"\"9188040d-6c67-4c5b-b112-36a304b66dad\", \"idToken\":\"id_token\", "
-    @"\"uniqueId\":\"00000000-0000-0000-111b-b81e2ee60a77\"}";
-
 NSString *const kExpectedMSQAAccount =
     @"{\"fullName\":\"FirstName LastName\", \"userName\": "
     @"\"user@hotmail.com\", "
     @"\"userId\":\"111bb81e2ee60a77\",\"idToken\":\"id_token\"}";
+
+NSString *const kFakeMSALResult =
+    @"{\"accessToken\":\"accesst_token\", "
+    @"\"authorizationHeader\":\"authorization_header\", "
+    @"\"authenticationScheme\": \"authentication_scheme\", "
+    @"\"expiresOn\": \"2025-01-01\", "
+    @"\"tenantId\":\"tenant_id\", "
+    @"\"scopes\":[\"User.Read\"],\"correlationId\": "
+    @"\"E621E1F8-C36C-495A-93FC-0C247A3E6E5F\"}";
 
 NSString *const kNoCachedAccount = @"no-cached-account";

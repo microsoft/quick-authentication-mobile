@@ -32,7 +32,7 @@
 
 #import "AppDelegate.h"
 #import "FakeMSALPublicClientApplication.h"
-#import "MSQAAccountInfo+Testing.h"
+#import "MSQATokenResult+Testing.h"
 #import "TestData.h"
 
 @interface ViewController ()
@@ -85,6 +85,9 @@
   [_msSignIn acquireTokenSilentWithParameters:parameters
                               completionBlock:^(MSQATokenResult *token,
                                                 NSError *error) {
+                                if (token && !error) {
+                                  self->_resultInfo.text = [token toJSONString];
+                                }
                                 self->_resultStatus.text = @"done";
                               }];
 }

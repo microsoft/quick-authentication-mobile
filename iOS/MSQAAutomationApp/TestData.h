@@ -28,7 +28,7 @@
 // Test account that `FakeMSALPublicClientApplication` will provide.
 extern NSString *const kFakeHomeAccountId;
 extern NSString *const kFakeMSALAccount;
-extern NSString *const kFakeMSAResult;
+extern NSString *const kFakeMSALResult;
 
 // The expected account that the automation test will verify with.
 extern NSString *const kExpectedMSQAAccount;
