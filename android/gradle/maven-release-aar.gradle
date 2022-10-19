@@ -60,27 +60,28 @@ publishing {
 
             pom {
                 name = ARTIFACT_ID
-                description = 'Quick auth sdk.'
-                url = 'https://github.com/microsoft/quick-authentication-mobile'
+                description = 'Quick Auth Android SDK.'
+                url = rootProject.ext.github_url
                 licenses {
                     license {
-                        name = 'MIT License'
+                        name = rootProject.ext.license_type
+                        url = rootProject.ext.license_url
                     }
                 }
                 developers {
                     developer {
-                        id = "microsoft"
-                        name = "Microsoft"
+                        id = rootProject.ext.developer_id
+                        name = rootProject.ext.developer_name
+                        email = rootProject.ext.developer_email
                     }
                 }
                 scm {
-                    connection = 'scm:git:github.com/microsoft/quick-authentication-mobile.git'
-                    developerConnection = 'scm:git:ssh://github.com/microsoft/quick-authentication-mobile.git'
-                    url = 'https://github.com/microsoft/quick-authentication-mobile/tree/master'
+                    connection = rootProject.ext.scm_connection
+                    developerConnection = rootProject.ext.scm_dev_connection
+                    url = rootProject.ext.scm_url
                 }
                 withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
-
                     project.configurations.implementation.allDependencies.each {
                         def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', it.group)
@@ -97,15 +98,8 @@ publishing {
     }
     repositories {
         maven {
-            url '/home/jingjinggu/develop/microsoft/quick-authentication/demos/android-demo/aar'
-            name 'QuickAuth'
-//            authentication {
-//                basic(BasicAuthentication)
-//            }
-//            credentials {
-//                username repoUsername
-//                password repoUserToken
-//            }
+            name = "local"
+            url rootProject.buildDir.path + '/artifacts'
         }
     }
 }

@@ -1,6 +1,17 @@
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: master
+  - repository: common
+    type: github
+    name: AzureAD/microsoft-authentication-library-common-for-android
+    ref: dev
+    endpoint: ANDROID_GITHUB
+
 jobs:
-  - job: quick_auth_release
-    displayName: Quick Auth Release Build Tasks
+  - job: sdl_maven
+    displayName: SDL and Maven Tasks
     cancelTimeoutInMinutes: 1
     steps:
       - checkout: self
@@ -56,3 +67,52 @@ jobs:
         inputs:
           ArtifactName: BuildOutputs
           TargetPath: $(Build.ArtifactStagingDirectory)
+  - job: gpg_siging
+    variables:
+      BuildOutputs: build_outputs
+    displayName: GPG Signing
+    cancelTimeoutInMinutes: 1
+    dependsOn: sdl_maven
+    steps:
+    - checkout: common
+      clean: true
+    - task: DownloadPipelineArtifact@2
+      displayName: Download Pipeline Artifacts
+      inputs:
+        artifact: BuildOutputs
+        path: $(Build.SourcesDirectory)/$(BuildOutputs)
+    - task: DownloadSecureFile@1
+      name: private
+      displayName: Download GPG private key
+      inputs:
+        secureFile: private.gpg
+        retryCount: 5
+    - task: DownloadSecureFile@1
+      name: public
+      displayName: Download GPG public key
+      inputs:
+        secureFile: public.gpg
+        retryCount: 5
+    - task: DownloadSecureFile@1
+      name: passphrase
+      displayName: Download GPG passphrase
+      inputs:
+        secureFile: passphrase.txt
+        retryCount: 5
+    - task: Bash@3
+      displayName: GPG Signing
+      inputs:
+        targetType: filePath
+        filePath: azure-pipelines/templates/steps/maven-release/gpg-signing.sh
+        workingDirectory: $(Build.SourcesDirectory)/$(BuildOutputs)
+      env:
+        PROJECT: quick_auth
+        PROJECTVERSION: 1.0.0
+        JAR: false
+        AAR: true
+        SOURCESJAR: true
+        JAVADOCJAR: true
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: $(Build.SourcesDirectory)/$(BuildOutputs)
+        targetFolder: $(Build.ArtifactStagingDirectory)
