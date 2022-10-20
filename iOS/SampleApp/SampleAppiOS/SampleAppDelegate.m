@@ -37,7 +37,7 @@
 @interface SampleAppDelegate () {
   UIViewController *_rootController;
   UIViewController *_currentController;
-  MSQASignInClient *_msSignIn;
+  MSQASignInClient *_msSignInClient;
 }
 
 @end
@@ -49,8 +49,8 @@
   if (self) {
     MSQAConfiguration *config = [[MSQAConfiguration alloc]
         initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"];
-    _msSignIn = [[MSQASignInClient alloc] initWithConfiguration:config
-                                                          error:nil];
+    _msSignInClient = [[MSQASignInClient alloc] initWithConfiguration:config
+                                                                error:nil];
     [MSQALogger.sharedInstance
         setLogCallback:^(MSQALogLevel level, NSString *_Nullable message) {
           NSLog(@"%@", message);
@@ -67,19 +67,19 @@
 
   _rootController = [UIViewController new];
 
-  if (_msSignIn) {
-    [_msSignIn
+  if (_msSignInClient) {
+    [_msSignInClient
         getCurrentAccountWithCompletionBlock:^(
             MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
           if (account && !error) {
             SampleMainViewController *controller =
                 [SampleMainViewController sharedViewController];
-            [controller setAccountInfo:account msSignIn:_msSignIn];
+            [controller setAccountInfo:account signInClient:_msSignInClient];
             [self setCurrentViewController:controller];
             return;
           }
           [[SampleLoginViewController sharedViewController]
-              setMSQASignIn:_msSignIn];
+              setSignInClient:_msSignInClient];
           [self setCurrentViewController:[SampleLoginViewController
                                              sharedViewController]];
         }];
@@ -95,10 +95,11 @@
             openURL:(NSURL *)url
             options:
                 (NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-  if (_msSignIn) {
-    return [_msSignIn handleURL:url
-              sourceApplication:
-                  options[UIApplicationOpenURLOptionsSourceApplicationKey]];
+  if (_msSignInClient) {
+    return
+        [_msSignInClient handleURL:url
+                 sourceApplication:
+                     options[UIApplicationOpenURLOptionsSourceApplicationKey]];
   }
   return NO;
 }

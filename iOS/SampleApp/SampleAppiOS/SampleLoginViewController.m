@@ -53,7 +53,7 @@
 @end
 
 @implementation SampleLoginViewController {
-  MSQASignInClient *_msSignIn;
+  MSQASignInClient *_msSignInClient;
 }
 
 + (instancetype)sharedViewController {
@@ -105,15 +105,16 @@
   [super viewDidLoad];
 
   // Switch to main view if already logged in.
-  [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
-    if (account && !error) {
-      SampleMainViewController *controller =
-          [SampleMainViewController sharedViewController];
-      [controller setAccountInfo:account msSignIn:_msSignIn];
-      [SampleAppDelegate setCurrentViewController:controller];
-    }
-  }];
+  [_msSignInClient
+      getCurrentAccountWithCompletionBlock:^(MSQAAccountInfo *_Nullable account,
+                                             NSError *_Nullable error) {
+        if (account && !error) {
+          SampleMainViewController *controller =
+              [SampleMainViewController sharedViewController];
+          [controller setAccountInfo:account signInClient:_msSignInClient];
+          [SampleAppDelegate setCurrentViewController:controller];
+        }
+      }];
 
   // Padding View
   UIView *paddingView = [[UIView alloc] init];
@@ -141,6 +142,18 @@
     [self.signInButton.centerXAnchor
         constraintEqualToAnchor:self.view.safeAreaLayoutGuide.centerXAnchor]
   ]];
+  [self.signInButton
+      setSignInClient:_msSignInClient
+       viewController:self
+      completionBlock:^(MSQAAccountInfo *_Nullable account,
+                        NSError *_Nullable error) {
+        if (account && !error) {
+          SampleMainViewController *controller =
+              [SampleMainViewController sharedViewController];
+          [controller setAccountInfo:account signInClient:_msSignInClient];
+          [SampleAppDelegate setCurrentViewController:controller];
+        }
+      }];
 
   // Setup Table View Configuration
   [self.view addSubview:self.configurationTableView];
@@ -159,29 +172,8 @@
   ]];
 }
 
-- (IBAction)signIn:(id)sender {
-  [_msSignIn signInWithViewController:self
-                      completionBlock:^(MSQAAccountInfo *_Nonnull account,
-                                        NSError *_Nonnull error) {
-                        SampleMainViewController *controller =
-                            [SampleMainViewController sharedViewController];
-                        [controller setAccountInfo:account msSignIn:_msSignIn];
-                        [SampleAppDelegate setCurrentViewController:controller];
-                      }];
-}
-
-- (IBAction)getCurrentButton:(id)sender {
-  [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
-    SampleMainViewController *controller =
-        [SampleMainViewController sharedViewController];
-    [controller setAccountInfo:account msSignIn:_msSignIn];
-    [SampleAppDelegate setCurrentViewController:controller];
-  }];
-}
-
-- (void)setMSQASignIn:(MSQASignInClient *)msSignIn {
-  _msSignIn = msSignIn;
+- (void)setSignInClient:(MSQASignInClient *)msSignInClient {
+  _msSignInClient = msSignInClient;
 }
 
 - (void)applyUserPreferences {
