@@ -72,6 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation MSQASignInClient {
   MSALPublicClientApplication *_msalPublicClientApplication;
   MSQAConfiguration *_configuration;
+  Class _userInfoFetcherForTesting;
 }
 
 #pragma mark - Public methods
@@ -356,18 +357,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)continueToFetchPhotoWithAccount:(MSQAAccountInfo *)account
                         completionBlock:(MSQACompletionBlock)completionBlock {
-  [MSQAUserInfoFetcher
-      fetchUserInfoWithAccount:account
-               completionBlock:^(NSError *_Nullable error) {
-                 if (error) {
-                   [MSQALogger.sharedInstance
-                       logWithLevel:MSQALogLevelError
-                             format:@"Fetch user info failed."];
-                 }
-                 [MSQASignInClient callBlockOnMainThread:^{
-                   completionBlock(account, nil);
-                 }];
-               }];
+  Class cls = _userInfoFetcherForTesting ? _userInfoFetcherForTesting
+                                         : [MSQAUserInfoFetcher class];
+  [cls fetchUserInfoWithAccount:account
+                completionBlock:^(NSError *_Nullable error) {
+                  if (error) {
+                    [MSQALogger.sharedInstance
+                        logWithLevel:MSQALogLevelError
+                              format:@"Fetch user info failed."];
+                  }
+                  [MSQASignInClient callBlockOnMainThread:^{
+                    completionBlock(account, nil);
+                  }];
+                }];
 }
 
 - (instancetype)initPrivateWithConfiguration:(MSQAConfiguration *)configuration
@@ -591,6 +593,10 @@ NS_ASSUME_NONNULL_BEGIN
   [_msalPublicClientApplication
       acquireTokenSilentWithParameters:silentTokenParameters
                        completionBlock:block];
+}
+
+- (void)setMSQAUserInfoFetcherForTesting:(Class)cls {
+  _userInfoFetcherForTesting = cls;
 }
 
 @end

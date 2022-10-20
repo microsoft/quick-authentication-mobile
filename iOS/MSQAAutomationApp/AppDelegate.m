@@ -38,12 +38,13 @@
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   MSQAConfiguration *config = [[MSQAConfiguration alloc]
       initWithClientID:@"c4e50099-e6cd-43e4-a7c6-ffb3cebce505"];
-  _msSignIn = [[MSQASignInClient alloc]
+  _msSignInClient = [[MSQASignInClient alloc]
       initWithConfiguration:config
                         cls:[FakeMSALPublicClientApplication class]
                       error:nil];
   ;
-  _application = (FakeMSALPublicClientApplication *)[_msSignIn getApplication];
+  _application =
+      (FakeMSALPublicClientApplication *)[_msSignInClient getApplication];
 
   return YES;
 }

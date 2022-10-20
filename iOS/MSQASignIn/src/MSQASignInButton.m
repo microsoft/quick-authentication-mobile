@@ -418,6 +418,13 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 }
 
 - (void)onButtonClicked {
+  // Performing selector `willSignIn:` is needed by the automation test where we
+  // will set the MSAL status before starting to sign in.
+  if (_viewController &&
+      [_viewController respondsToSelector:@selector(willSignIn:)]) {
+    [_viewController performSelector:@selector(willSignIn:) withObject:self];
+  }
+
   if (_msSignInClient) {
     [_msSignInClient signInByButtonWithViewController:_viewController
                                       completionBlock:_completionBlock];

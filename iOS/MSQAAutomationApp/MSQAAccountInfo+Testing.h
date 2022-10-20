@@ -55,6 +55,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setEmail:(NSString *)email;
 
+- (void)setBase64Photo:(NSString *)base64Photo;
+
 @end
 
 NS_ASSUME_NONNULL_END

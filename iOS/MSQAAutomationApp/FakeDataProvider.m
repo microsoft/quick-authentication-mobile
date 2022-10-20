@@ -53,26 +53,6 @@
 
 @end
 
-@interface MSALResult (Testing)
-
-+ (MSALResult *)resultWithAccessToken:(NSString *)accessToken
-                            expiresOn:(NSDate *)expiresOn
-              isExtendedLifetimeToken:(BOOL)isExtendedLifetimeToken
-                             tenantId:(NSString *)tenantId
-                        tenantProfile:(MSALTenantProfile *)tenantProfile
-                              account:(MSALAccount *)account
-                              idToken:(NSString *)idToken
-                             uniqueId:(NSString *)uniqueId
-                               scopes:(NSArray<NSString *> *)scopes
-                            authority:(MSALAuthority *)authority
-                        correlationId:(NSUUID *)correlationId
-                           authScheme:
-                               (id<MSALAuthenticationSchemeProtocol,
-                                   MSALAuthenticationSchemeProtocolInternal>)
-                                   authScheme;
-
-@end
-
 @implementation FakeDataProvider
 
 + (NSDictionary *)getDictFromString:(NSString *)str {
@@ -104,7 +84,10 @@
 }
 
 + (MSALResult *)getFakeMSALResult {
-  return [[FakeMSALResult alloc] initWithString:kFakeMSALResult];
+  FakeMSALResult *result = [[FakeMSALResult alloc]
+      initWithString:kFakeMSALResult
+             account:[FakeDataProvider getFakeMSALAccount]];
+  return result;
 }
 
 @end

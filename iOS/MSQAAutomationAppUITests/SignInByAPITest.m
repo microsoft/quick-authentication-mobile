@@ -27,33 +27,33 @@
 
 #import "MSQABaseUITest.h"
 
-#import "MSQATokenResult+Testing.h"
+#import "MSQAAccountInfo+Testing.h"
 #import "TestData.h"
 
-@interface AcquireTokenSilentTest : MSQABaseUITest
+@interface SignInByAPITest : MSQABaseUITest
 
 @end
 
-@implementation AcquireTokenSilentTest
+@implementation SignInByAPITest
 
-- (void)testAcquireTokenSilent_beforeSignIn {
+- (void)testSignIn_withPromptCanceled {
   XCUIApplication *app = [[XCUIApplication alloc] init];
   [app launch];
-
-  XCUIElement *button = app.buttons[@"fetch token silent before signin"];
+  XCUIElement *button = app.buttons[@"sign in with cancel"];
   [self waitForElement:button];
   [button tap];
 
   XCUIElement *resultStatus = app.textViews[@"Result Status"];
   [self waitForResultStatus:resultStatus];
+
   XCUIElement *resultInfo = app.textViews[@"Result Info"];
-  XCTAssertTrue([resultInfo.value isEqualToString:@"no-cached-account"]);
+  XCTAssertTrue([resultInfo.value isEqual:@"access_denied"]);
 }
 
-- (void)testAcquireTokenSilent_afterSignIn {
+- (void)testSignIn_withPromptAccepted {
   XCUIApplication *app = [[XCUIApplication alloc] init];
   [app launch];
-  XCUIElement *button = app.buttons[@"fetch token silent after signin"];
+  XCUIElement *button = app.buttons[@"sign in with accept"];
   [self waitForElement:button];
   [button tap];
 
@@ -61,8 +61,9 @@
   [self waitForResultStatus:resultStatus];
 
   XCUIElement *resultInfo = app.textViews[@"Result Info"];
-  MSQATokenResult *expected = [MSQATokenResult fromJSONString:kFakeMSALResult];
-  MSQATokenResult *actual = [MSQATokenResult fromJSONString:resultInfo.value];
+  MSQAAccountInfo *actual = [MSQAAccountInfo fromJSONString:resultInfo.value];
+  MSQAAccountInfo *expected =
+      [MSQAAccountInfo fromJSONString:kExpectedMSQAAccount];
   XCTAssertTrue([actual isEqual:expected]);
 }
 

@@ -27,43 +27,44 @@
 
 #import "MSQABaseUITest.h"
 
-#import "MSQATokenResult+Testing.h"
+#import "MSQAAccountInfo+Testing.h"
 #import "TestData.h"
 
-@interface AcquireTokenSilentTest : MSQABaseUITest
+@interface GetCurrentAccountTest : MSQABaseUITest
 
 @end
 
-@implementation AcquireTokenSilentTest
+@implementation GetCurrentAccountTest
 
-- (void)testAcquireTokenSilent_beforeSignIn {
+- (void)testGetCurrentAccount_beforeSignIn {
   XCUIApplication *app = [[XCUIApplication alloc] init];
   [app launch];
 
-  XCUIElement *button = app.buttons[@"fetch token silent before signin"];
+  XCUIElement *button = app.buttons[@"get current account before signin"];
   [self waitForElement:button];
   [button tap];
 
   XCUIElement *resultStatus = app.textViews[@"Result Status"];
   [self waitForResultStatus:resultStatus];
   XCUIElement *resultInfo = app.textViews[@"Result Info"];
-  XCTAssertTrue([resultInfo.value isEqualToString:@"no-cached-account"]);
+  XCTAssertTrue([resultInfo.value isEqualToString:@"No account presents"]);
 }
 
-- (void)testAcquireTokenSilent_afterSignIn {
+- (void)testGetCurrentAccount_afterSignIn {
   XCUIApplication *app = [[XCUIApplication alloc] init];
   [app launch];
-  XCUIElement *button = app.buttons[@"fetch token silent after signin"];
+
+  XCUIElement *button = app.buttons[@"get current account after signin"];
   [self waitForElement:button];
   [button tap];
 
   XCUIElement *resultStatus = app.textViews[@"Result Status"];
   [self waitForResultStatus:resultStatus];
-
   XCUIElement *resultInfo = app.textViews[@"Result Info"];
-  MSQATokenResult *expected = [MSQATokenResult fromJSONString:kFakeMSALResult];
-  MSQATokenResult *actual = [MSQATokenResult fromJSONString:resultInfo.value];
-  XCTAssertTrue([actual isEqual:expected]);
+  MSQAAccountInfo *expected =
+      [MSQAAccountInfo fromJSONString:kExpectedMSQAAccount];
+  MSQAAccountInfo *actual = [MSQAAccountInfo fromJSONString:resultInfo.value];
+  XCTAssertTrue([expected isEqual:actual]);
 }
 
 @end

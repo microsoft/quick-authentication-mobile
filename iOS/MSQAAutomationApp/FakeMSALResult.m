@@ -41,9 +41,10 @@
 
 @implementation FakeMSALResult {
   NSDictionary *_tokenResultDict;
+  MSALAccount *_msalAccount;
 }
 
-- (instancetype)initWithString:(NSString *)str {
+- (instancetype)initWithString:(NSString *)str account:(MSALAccount *)account {
   if (!(self = [super init])) {
     return nil;
   }
@@ -51,6 +52,8 @@
   _tokenResultDict = [NSJSONSerialization JSONObjectWithData:data
                                                      options:0
                                                        error:nil];
+  _msalAccount = account;
+
   return self;
 }
 
@@ -88,6 +91,14 @@
 - (NSUUID *)correlationId {
   return [[NSUUID alloc]
       initWithUUIDString:[_tokenResultDict valueForKey:@"correlationId"]];
+}
+
+- (NSString *)idToken {
+  return [_tokenResultDict valueForKey:@"idToken"];
+}
+
+- (MSALAccount *)account {
+  return _msalAccount;
 }
 
 @end

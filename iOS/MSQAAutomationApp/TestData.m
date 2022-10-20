@@ -39,7 +39,10 @@ NSString *const kFakeMSALAccount =
 NSString *const kExpectedMSQAAccount =
     @"{\"fullName\":\"FirstName LastName\", \"userName\": "
     @"\"user@hotmail.com\", "
-    @"\"userId\":\"111bb81e2ee60a77\",\"idToken\":\"id_token\"}";
+    @"\"userId\":\"111bb81e2ee60a77\", \"surname\":\"surname\", "
+    @"\"givenName\":\"givenName\", "
+    @"\"email\":\"user@hotmail.com\", \"idToken\":\"id_token\", "
+    @"\"photo\":\"user_photo\"}";
 
 NSString *const kFakeMSALResult =
     @"{\"accessToken\":\"accesst_token\", "
@@ -48,6 +51,4 @@ NSString *const kFakeMSALResult =
     @"\"expiresOn\": \"2025-01-01\", "
     @"\"tenantId\":\"tenant_id\", "
     @"\"scopes\":[\"User.Read\"],\"correlationId\": "
-    @"\"E621E1F8-C36C-495A-93FC-0C247A3E6E5F\"}";
-
-NSString *const kNoCachedAccount = @"no-cached-account";
+    @"\"E621E1F8-C36C-495A-93FC-0C247A3E6E5F\", \"idToken\":\"id_token\"}";

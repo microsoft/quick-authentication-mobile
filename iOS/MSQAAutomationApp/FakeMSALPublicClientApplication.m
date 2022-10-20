@@ -59,13 +59,32 @@
 
 - (BOOL)removeAccount:(MSALAccount *)account
                 error:(NSError *_Nullable __autoreleasing *)error {
-  // TODO(minggang): Implement the mocked functionality.
-  return YES;
+  if (_hasSignedIn) {
+    _hasSignedIn = NO;
+    return YES;
+  }
+  NSError __autoreleasing *localError = [NSError errorWithDomain:@"NotSignIn"
+                                                            code:0
+                                                        userInfo:nil];
+  error = &localError;
+  return NO;
 }
 
 - (void)acquireTokenWithParameters:(MSALInteractiveTokenParameters *)parameters
                    completionBlock:(MSALCompletionBlock)completionBlock {
-  // TODO(minggang): Implement the mocked functionality.
+  if (!_willCancel) {
+    dispatch_async(parameters.completionBlockQueue, ^{
+      completionBlock([FakeDataProvider getFakeMSALResult], nil);
+    });
+    return;
+  }
+  NSError *error =
+      [NSError errorWithDomain:MSALErrorDomain
+                          code:-42400
+                      userInfo:@{MSALOAuthErrorKey : @"access_denied"}];
+  dispatch_async(parameters.completionBlockQueue, ^{
+    completionBlock(nil, error);
+  });
 }
 
 - (void)acquireTokenSilentWithParameters:(MSALSilentTokenParameters *)parameters
