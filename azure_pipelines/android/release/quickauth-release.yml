@@ -49,28 +49,6 @@ jobs:
           SourceFolder: build/artifacts
           Contents: '**/*.*'
           TargetFolder: $(Build.ArtifactStagingDirectory)
-      - task: EsrpRelease@2
-        displayName: 'publish artifacts to ESRP'
-        inputs:
-          ConnectedServiceName: 'ESRP_Release_Connection'
-          Intent: 'PackageDistribution'
-          ContentType: 'Maven'
-          PackageLocation: '$(Build.ArtifactStagingDirectory)/build/artifacts/com/microsoft'
-          Owners: |
-            chrisf@microsoft.com
-            chbhatt@microsoft.com
-            minggangwang@microsoft.com
-            chachen@microsoft.com
-            jingjinggu@microsoft.com
-          Approvers: |
-            chrisf@microsoft.com
-            chbhatt@microsoft.com
-            minggangwang@microsoft.com
-            chachen@microsoft.com
-            jingjinggu@microsoft.com
-          ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
-          MainPublisher: 'ESRPRELPACMAN'
-          DomainTenantId: '$(domainTenantId)'
       - task: PublishPipelineArtifact@1
         name: PublishPipelineArtifact1
         displayName: 'Publish Artifact: Build Outputs'
