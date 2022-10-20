@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithAccessToken:(NSString *)accessToken
                 authorizationHeader:(NSString *)authorizationHeader
-                authorizationScheme:(NSString *)authorizationScheme
+               authenticationScheme:(NSString *)authorizationScheme
                           expiresOn:(NSDate *)expiresOn
                            tenantId:(nullable NSString *)tenantId
                              scopes:(NSArray<NSString *> *)scopes

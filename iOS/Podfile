@@ -1,8 +1,15 @@
 platform :ios, '11.0'
 
 use_frameworks!
- 
+
 target 'MSQASignIn' do
     pod 'MSAL'
 end
 
+target 'MSQAAutomationApp' do
+    pod 'MSAL'
+end
+
+target 'MSQAAutomationAppUITests' do
+    pod 'MSAL'
+end

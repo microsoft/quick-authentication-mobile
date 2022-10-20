@@ -25,39 +25,46 @@
 //
 //------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "MSQABaseUITest.h"
 
-NS_ASSUME_NONNULL_BEGIN
+#import "MSQAAccountInfo+Testing.h"
+#import "MSQATokenResult+Testing.h"
+#import "TestData.h"
 
-/// This class represents the result for acquiring a token.
-@interface MSQATokenResult : NSObject
-
-/// The access token.
-@property(nonatomic, readonly, nonnull) NSString *accessToken;
-
-/// The authorization header for the specific authentication scheme. For
-/// instance “Bearer …” or “Pop …”.
-@property(nonatomic, readonly, nonnull) NSString *authorizationHeader;
-
-/// The authentication scheme for the tokens issued. For instance “Bearer ” or
-/// “Pop”.
-@property(nonatomic, readonly, nonnull) NSString *authenticationScheme;
-
-/// The time that the access token returned in the Token property ceases to be
-/// valid.
-@property(nonatomic, readonly, nonnull) NSDate *expiresOn;
-
-/// An identifier for the tenant that the token was acquired from. This property
-/// will be nil if tenant information is not returned by the service.
-@property(nonatomic, readonly, nullable) NSString *tenantId;
-
-/// The scope values returned from the service.
-@property(nonatomic, readonly, nonnull) NSArray<NSString *> *scopes;
-
-/// The correlation ID of the request.
-@property(nonatomic, readonly, nullable) NSUUID *correlationId;
+@interface AcquireTokenSilentTest : MSQABaseUITest
 
 @end
 
-NS_ASSUME_NONNULL_END
+@implementation AcquireTokenSilentTest
+
+- (void)testAcquireTokenSilent_beforeSignIn {
+  XCUIApplication *app = [[XCUIApplication alloc] init];
+  [app launch];
+
+  XCUIElement *button = app.buttons[@"fetch token silent before signin"];
+  [self waitForElement:button];
+  [button tap];
+
+  XCUIElement *resultStatus = app.textViews[@"Result Status"];
+  [self waitForResultStatus:resultStatus];
+  XCUIElement *resultInfo = app.textViews[@"Result Info"];
+  XCTAssertTrue([resultInfo.value isEqualToString:kNoCachedAccount]);
+}
+
+- (void)testAcquireTokenSilent_afterSignIn {
+  XCUIApplication *app = [[XCUIApplication alloc] init];
+  [app launch];
+  XCUIElement *button = app.buttons[@"fetch token silent after signin"];
+  [self waitForElement:button];
+  [button tap];
+
+  XCUIElement *resultStatus = app.textViews[@"Result Status"];
+  [self waitForResultStatus:resultStatus];
+
+  XCUIElement *resultInfo = app.textViews[@"Result Info"];
+  MSQATokenResult *expected = [MSQATokenResult fromJSONString:kFakeMSALResult];
+  MSQATokenResult *actual = [MSQATokenResult fromJSONString:resultInfo.value];
+  XCTAssertTrue([actual isEqual:expected]);
+}
+
+@end

@@ -26,37 +26,19 @@
 //------------------------------------------------------------------------------
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+
+@class MSALResult;
+@class MSALAccount;
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// This class represents the result for acquiring a token.
-@interface MSQATokenResult : NSObject
+/// Provides the testing account that is deserialized from strings defined in
+/// TestData.h file.
+@interface FakeDataProvider : NSObject
 
-/// The access token.
-@property(nonatomic, readonly, nonnull) NSString *accessToken;
++ (MSALResult *)getFakeMSALResult;
 
-/// The authorization header for the specific authentication scheme. For
-/// instance “Bearer …” or “Pop …”.
-@property(nonatomic, readonly, nonnull) NSString *authorizationHeader;
-
-/// The authentication scheme for the tokens issued. For instance “Bearer ” or
-/// “Pop”.
-@property(nonatomic, readonly, nonnull) NSString *authenticationScheme;
-
-/// The time that the access token returned in the Token property ceases to be
-/// valid.
-@property(nonatomic, readonly, nonnull) NSDate *expiresOn;
-
-/// An identifier for the tenant that the token was acquired from. This property
-/// will be nil if tenant information is not returned by the service.
-@property(nonatomic, readonly, nullable) NSString *tenantId;
-
-/// The scope values returned from the service.
-@property(nonatomic, readonly, nonnull) NSArray<NSString *> *scopes;
-
-/// The correlation ID of the request.
-@property(nonatomic, readonly, nullable) NSUUID *correlationId;
++ (MSALAccount *)getFakeMSALAccount;
 
 @end
 

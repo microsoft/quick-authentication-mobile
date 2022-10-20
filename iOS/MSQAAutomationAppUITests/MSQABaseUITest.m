@@ -25,39 +25,43 @@
 //
 //------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "MSQABaseUITest.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation MSQABaseUITest
 
-/// This class represents the result for acquiring a token.
-@interface MSQATokenResult : NSObject
+- (void)setUp {
+  [super setUp];
+  self.continueAfterFailure = NO;
+}
 
-/// The access token.
-@property(nonatomic, readonly, nonnull) NSString *accessToken;
+- (void)waitForElement:(id)object {
+  NSPredicate *existsPredicate =
+      [NSPredicate predicateWithFormat:@"exists == 1"];
+  [self expectationForPredicate:existsPredicate
+            evaluatedWithObject:object
+                        handler:nil];
+  [self waitForExpectationsWithTimeout:10.0f handler:nil];
+}
 
-/// The authorization header for the specific authentication scheme. For
-/// instance “Bearer …” or “Pop …”.
-@property(nonatomic, readonly, nonnull) NSString *authorizationHeader;
+- (void)waitForResultInfo:(XCUIElement *)resultInfoTextView
+         withExpectedText:(NSString *)text {
+  [self waitForElement:resultInfoTextView];
+  NSPredicate *predicate =
+      [NSPredicate predicateWithFormat:@"value == %@", text];
+  [self expectationForPredicate:predicate
+            evaluatedWithObject:resultInfoTextView
+                        handler:nil];
+  [self waitForExpectationsWithTimeout:30.0f handler:nil];
+}
 
-/// The authentication scheme for the tokens issued. For instance “Bearer ” or
-/// “Pop”.
-@property(nonatomic, readonly, nonnull) NSString *authenticationScheme;
-
-/// The time that the access token returned in the Token property ceases to be
-/// valid.
-@property(nonatomic, readonly, nonnull) NSDate *expiresOn;
-
-/// An identifier for the tenant that the token was acquired from. This property
-/// will be nil if tenant information is not returned by the service.
-@property(nonatomic, readonly, nullable) NSString *tenantId;
-
-/// The scope values returned from the service.
-@property(nonatomic, readonly, nonnull) NSArray<NSString *> *scopes;
-
-/// The correlation ID of the request.
-@property(nonatomic, readonly, nullable) NSUUID *correlationId;
+- (void)waitForResultStatus:(XCUIElement *)resultStatusTextView {
+  [self waitForElement:resultStatusTextView];
+  NSPredicate *predicate =
+      [NSPredicate predicateWithFormat:@"value == %@", @"done"];
+  [self expectationForPredicate:predicate
+            evaluatedWithObject:resultStatusTextView
+                        handler:nil];
+  [self waitForExpectationsWithTimeout:30.0f handler:nil];
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

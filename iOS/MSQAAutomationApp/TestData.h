@@ -1,5 +1,3 @@
-//------------------------------------------------------------------------------
-//
 // Copyright (c) Microsoft Corporation.
 // All rights reserved.
 //
@@ -26,38 +24,14 @@
 //------------------------------------------------------------------------------
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
+// Test account that `FakeMSALPublicClientApplication` will provide.
+extern NSString *const kFakeHomeAccountId;
+extern NSString *const kFakeMSALAccount;
+extern NSString *const kFakeMSALResult;
 
-/// This class represents the result for acquiring a token.
-@interface MSQATokenResult : NSObject
+// The expected account that the automation test will verify with.
+extern NSString *const kExpectedMSQAAccount;
 
-/// The access token.
-@property(nonatomic, readonly, nonnull) NSString *accessToken;
-
-/// The authorization header for the specific authentication scheme. For
-/// instance “Bearer …” or “Pop …”.
-@property(nonatomic, readonly, nonnull) NSString *authorizationHeader;
-
-/// The authentication scheme for the tokens issued. For instance “Bearer ” or
-/// “Pop”.
-@property(nonatomic, readonly, nonnull) NSString *authenticationScheme;
-
-/// The time that the access token returned in the Token property ceases to be
-/// valid.
-@property(nonatomic, readonly, nonnull) NSDate *expiresOn;
-
-/// An identifier for the tenant that the token was acquired from. This property
-/// will be nil if tenant information is not returned by the service.
-@property(nonatomic, readonly, nullable) NSString *tenantId;
-
-/// The scope values returned from the service.
-@property(nonatomic, readonly, nonnull) NSArray<NSString *> *scopes;
-
-/// The correlation ID of the request.
-@property(nonatomic, readonly, nullable) NSUUID *correlationId;
-
-@end
-
-NS_ASSUME_NONNULL_END
+// Text used to indicate there is no local cached account.
+extern NSString *const kNoCachedAccount;

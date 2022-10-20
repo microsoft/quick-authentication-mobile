@@ -1,5 +1,3 @@
-//------------------------------------------------------------------------------
-//
 // Copyright (c) Microsoft Corporation.
 // All rights reserved.
 //
@@ -25,28 +23,31 @@
 //
 //------------------------------------------------------------------------------
 
-#import "MSQATokenResult_Private.h"
+#import "TestData.h"
 
-@implementation MSQATokenResult
+NSString *const kFakeHomeAccountId =
+    @"{\"accountIdentifier\" : "
+    @"\"00000000-0000-0000-111b-b81e2ee60a77.9188040d-6c67-4c5b-b112-"
+    @"36a304b66dad\", \"objectId\":\"00000000-0000-0000-111b-b81e2ee60a77\", "
+    @"\"tenantId\":\"9188040d-6c67-4c5b-b112-36a304b66dad\"}";
 
-- (instancetype)initWithAccessToken:(NSString *)accessToken
-                authorizationHeader:(NSString *)authorizationHeader
-               authenticationScheme:(NSString *)authenticationScheme
-                          expiresOn:(NSDate *)expiresOn
-                           tenantId:(nullable NSString *)tenantId
-                             scopes:(NSArray<NSString *> *)scopes
-                      correlationId:(nullable NSUUID *)correlationId {
-  self = [super init];
-  if (self) {
-    _accessToken = accessToken;
-    _authorizationHeader = authorizationHeader;
-    _authenticationScheme = authenticationScheme;
-    _expiresOn = expiresOn;
-    _tenantId = tenantId;
-    _scopes = scopes;
-    _correlationId = correlationId;
-  }
-  return self;
-}
+NSString *const kFakeMSALAccount =
+    @"{\"userName\" : \"user@hotmail.com\", \"homeAccountId\" : %@, "
+    @"\"environment\":\"login.windows.net\", \"accountClaims\" : {\"name\": "
+    @"\"FirstName LastName\"}}";
 
-@end
+NSString *const kExpectedMSQAAccount =
+    @"{\"fullName\":\"FirstName LastName\", \"userName\": "
+    @"\"user@hotmail.com\", "
+    @"\"userId\":\"111bb81e2ee60a77\",\"idToken\":\"id_token\"}";
+
+NSString *const kFakeMSALResult =
+    @"{\"accessToken\":\"accesst_token\", "
+    @"\"authorizationHeader\":\"authorization_header\", "
+    @"\"authenticationScheme\": \"authentication_scheme\", "
+    @"\"expiresOn\": \"2025-01-01\", "
+    @"\"tenantId\":\"tenant_id\", "
+    @"\"scopes\":[\"User.Read\"],\"correlationId\": "
+    @"\"E621E1F8-C36C-495A-93FC-0C247A3E6E5F\"}";
+
+NSString *const kNoCachedAccount = @"no-cached-account";

@@ -81,7 +81,9 @@ NS_ASSUME_NONNULL_BEGIN
   if (!(self = [super init])) {
     return nil;
   }
-  return [self initPrivateWithConfiguration:configuration error:error];
+  return [self initPrivateWithConfiguration:configuration
+                                        cls:[MSALPublicClientApplication class]
+                                      error:error];
 }
 
 - (BOOL)handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication {
@@ -217,7 +219,7 @@ NS_ASSUME_NONNULL_BEGIN
   return
       [[MSQATokenResult alloc] initWithAccessToken:result.accessToken
                                authorizationHeader:result.authorizationHeader
-                               authorizationScheme:result.authenticationScheme
+                              authenticationScheme:result.authenticationScheme
                                          expiresOn:result.expiresOn
                                           tenantId:result.tenantProfile.tenantId
                                             scopes:result.scopes
@@ -391,6 +393,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (instancetype)initPrivateWithConfiguration:(MSQAConfiguration *)configuration
+                                         cls:(Class)cls
                                        error:(NSError *_Nullable *_Nullable)
                                                  error {
   MSALAuthority *authority =
@@ -403,8 +406,7 @@ NS_ASSUME_NONNULL_BEGIN
                  authority:authority];
   NSError *localError = nil;
   _msalPublicClientApplication =
-      [[MSALPublicClientApplication alloc] initWithConfiguration:msalConfig
-                                                           error:&localError];
+      [[cls alloc] initWithConfiguration:msalConfig error:&localError];
 
   if (localError) {
     if (error) {
@@ -438,7 +440,8 @@ NS_ASSUME_NONNULL_BEGIN
 
                            return;
                          }
-                         if (error && error.code != MSALErrorInteractionRequired) {
+                         if (error &&
+                             error.code != MSALErrorInteractionRequired) {
                            [MSQASignInClient callBlockOnMainThread:^{
                              completionBlock(nil, error);
                            }];
@@ -565,6 +568,10 @@ NS_ASSUME_NONNULL_BEGIN
 
   [_msalPublicClientApplication acquireTokenWithParameters:parameters
                                            completionBlock:msalCompletionBlock];
+}
+
+- (MSALPublicClientApplication *)getApplication {
+  return _msalPublicClientApplication;
 }
 
 @end
