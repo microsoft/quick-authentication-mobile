@@ -7,12 +7,6 @@ jobs:
         clean: true
         submodules: recursive
         persistCredentials: True
-      - bash: |
-          echo 'start cd to android project'
-          pwd
-          ls
-          echo 'end cd to android project'
-        displayName: 'Bash Script'
       - task: Bash@3
         displayName: 'Base64 decodes and pipes the GPG key content into the secret file'
         env:
@@ -46,7 +40,7 @@ jobs:
       - task: CopyFiles@2
         displayName: 'Copy publish file to Artifact Staging Directory'
         inputs:
-          SourceFolder: build/artifacts
+          SourceFolder: android/build/artifacts
           Contents: '**/*.*'
           TargetFolder: $(Build.ArtifactStagingDirectory)
       - task: PublishPipelineArtifact@1
