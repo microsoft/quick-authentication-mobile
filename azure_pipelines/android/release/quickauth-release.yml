@@ -1,17 +1,6 @@
-resources:
-  repositories:
-  - repository: self
-    type: git
-    ref: master
-  - repository: common
-    type: github
-    name: AzureAD/microsoft-authentication-library-common-for-android
-    ref: dev
-    endpoint: ANDROID_GITHUB
-
 jobs:
-  - job: sdl_maven
-    displayName: SDL and Maven Tasks
+  - job: quick_auth_publish
+    displayName: Quick Auth Publish Build Tasks
     cancelTimeoutInMinutes: 1
     steps:
       - checkout: self
@@ -24,6 +13,17 @@ jobs:
           ls
           echo 'end cd to android project'
         displayName: 'Bash Script'
+      - task: Bash@3
+        displayName: 'Base64 decodes and pipes the GPG key content into the secret file'
+        env:
+          GPG_KEY_CONTENT: $(gpgContent)
+          SIGNING_SECRET_KEY_RING_FILE: $(gpgSecretFilePath)
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Write your commands here
+            sudo bash -c "echo '$GPG_KEY_CONTENT' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
+            ls
       - task: Gradle@3
         name: Gradle3
         displayName: Assemble Release
@@ -35,84 +35,45 @@ jobs:
           jdkArchitecture: x86
           sqAnalysisBreakBuildIfQualityGateFailed: false
       - task: Gradle@3
-        displayName: Generate Pom file
+        displayName: 'generate artifacts and publish to feed'
         inputs:
           gradleWrapperFile: android/gradlew
           workingDirectory: 'android'
-          tasks: quick_auth:generatePomFileForQuickauthPublication
-          publishJUnitResults: false
-          jdkArchitecture: x86
-          sqAnalysisBreakBuildIfQualityGateFailed: false
+          tasks: quick_auth:publish
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '$(jdkVersion)'
+          options: '-PGPGSigningKeyID=$(gpgSignKey) -PGPGSigningPassword=$(gpgSignPassword) -PSigningSecretKeyRingFile=$(gpgSecretFileParentPath)'
       - task: CopyFiles@2
-        displayName: 'Copy aar to Artifact Staging Directory'
+        displayName: 'Copy publish file to Artifact Staging Directory'
         inputs:
-          SourceFolder: android/quick_auth/build/outputs/aar
-          Contents: '**/*.aar'
+          SourceFolder: build/artifacts
+          Contents: '**/*.*'
           TargetFolder: $(Build.ArtifactStagingDirectory)
-      - task: CopyFiles@2
-        displayName: 'Copy jars to Artifact Staging Directory'
+      - task: EsrpRelease@2
+        displayName: 'publish artifacts to ESRP'
         inputs:
-          SourceFolder: android/quick_auth/build/outputs/jar
-          Contents: '**/*.jar'
-          TargetFolder: $(Build.ArtifactStagingDirectory)
-      - task: CopyFiles@2
-        displayName: 'Copy pom to Artifact Staging Directory'
-        inputs:
-          SourceFolder: android/quick_auth/build/publications/quickauth
-          Contents: '**/*.xml'
-          TargetFolder: $(Build.ArtifactStagingDirectory)
+          ConnectedServiceName: 'ESRP_Release_Connection'
+          Intent: 'PackageDistribution'
+          ContentType: 'Maven'
+          PackageLocation: '$(Build.ArtifactStagingDirectory)/build/artifacts/com/microsoft'
+          Owners: |
+            chrisf@microsoft.com
+            chbhatt@microsoft.com
+            minggangwang@microsoft.com
+            chachen@microsoft.com
+            jingjinggu@microsoft.com
+          Approvers: |
+            chrisf@microsoft.com
+            chbhatt@microsoft.com
+            minggangwang@microsoft.com
+            chachen@microsoft.com
+            jingjinggu@microsoft.com
+          ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
+          MainPublisher: 'ESRPRELPACMAN'
+          DomainTenantId: '$(domainTenantId)'
       - task: PublishPipelineArtifact@1
         name: PublishPipelineArtifact1
         displayName: 'Publish Artifact: Build Outputs'
         inputs:
           ArtifactName: BuildOutputs
           TargetPath: $(Build.ArtifactStagingDirectory)
-  - job: gpg_siging
-    variables:
-      BuildOutputs: build_outputs
-    displayName: GPG Signing
-    cancelTimeoutInMinutes: 1
-    dependsOn: sdl_maven
-    steps:
-    - checkout: common
-      clean: true
-    - task: DownloadPipelineArtifact@2
-      displayName: Download Pipeline Artifacts
-      inputs:
-        artifact: BuildOutputs
-        path: $(Build.SourcesDirectory)/$(BuildOutputs)
-    - task: DownloadSecureFile@1
-      name: private
-      displayName: Download GPG private key
-      inputs:
-        secureFile: private.gpg
-        retryCount: 5
-    - task: DownloadSecureFile@1
-      name: public
-      displayName: Download GPG public key
-      inputs:
-        secureFile: public.gpg
-        retryCount: 5
-    - task: DownloadSecureFile@1
-      name: passphrase
-      displayName: Download GPG passphrase
-      inputs:
-        secureFile: passphrase.txt
-        retryCount: 5
-    - task: Bash@3
-      displayName: GPG Signing
-      inputs:
-        targetType: filePath
-        filePath: azure-pipelines/templates/steps/maven-release/gpg-signing.sh
-        workingDirectory: $(Build.SourcesDirectory)/$(BuildOutputs)
-      env:
-        PROJECT: quick_auth
-        PROJECTVERSION: 1.0.0
-        JAR: false
-        AAR: true
-        SOURCESJAR: true
-        JAVADOCJAR: true
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: $(Build.SourcesDirectory)/$(BuildOutputs)
-        targetFolder: $(Build.ArtifactStagingDirectory)
