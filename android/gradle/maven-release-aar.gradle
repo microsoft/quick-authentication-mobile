@@ -1,11 +1,15 @@
 apply plugin: 'maven-publish'
 apply plugin: 'pmd'
+apply plugin: 'signing'
 
 ext["GROUP_ID"] = 'com.microsoft'
 ext["ARTIFACT_ID"] = "quickauth"
 ext["VERSION_CODE"] = 1
 ext["VERSION_NAME"] = "1.0.0"
 ext["LIB_VERSION"] = "v0.1"
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
 
 File secretPropsFile = project.rootProject.file('local.properties')
 if (secretPropsFile.exists()) {
@@ -16,7 +20,9 @@ if (secretPropsFile.exists()) {
         ext[name] = value
     }
 } else {
-    println "No props file, loading env vars"
+    ext["signing.keyId"] = project.hasProperty('GPGSigningKeyID') ? "$GPGSigningKeyID" : ''
+    ext["signing.password"] = project.hasProperty('GPGSigningPassword') ? "$GPGSigningPassword" : ''
+    ext["signing.secretKeyRingFile"] = project.hasProperty('SigningSecretKeyRingFile') ? "$SigningSecretKeyRingFile" : ''
 }
 
 // Task to generate javadoc.jar
@@ -122,5 +128,9 @@ android.libraryVariants.all { variant ->
 
 afterEvaluate {
     assemble.dependsOn generatereleaseJavadoc, sourcesJar, javadocJar
+}
+
+signing {
+    sign publishing.publications
 }
 
