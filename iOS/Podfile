@@ -13,3 +13,7 @@ end
 target 'MSQAAutomationAppUITests' do
     pod 'MSAL'
 end
+
+target 'MSQASignInUnitTests' do
+    pod 'MSAL'
+end

@@ -28,6 +28,10 @@
 		2980A2F628BE0F59004F1295 /* MSQAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 2980A2F428BE0F59004F1295 /* MSQAConfiguration.m */; };
 		29BCDAF128D45CF100AC4047 /* Pods_MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */; };
 		29BCDAF728DB0F5300AC4047 /* MSQATelemetrySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */; };
+		29D75B132906347900ADCDED /* MSQALoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D75B122906347900ADCDED /* MSQALoggerTests.m */; };
+		29D75B142906347900ADCDED /* MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E06DD128B8C695003D558A /* MSQASignIn.framework */; platformFilter = ios; };
+		29D75B1B2906595A00ADCDED /* MSQATelemetrySenderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D75B1A2906595A00ADCDED /* MSQATelemetrySenderTests.m */; };
+		29D75B1D29066AAD00ADCDED /* MSQAAccountInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 29D75B1C29066AAD00ADCDED /* MSQAAccountInfoTests.m */; };
 		29E06DD828B8C6B1003D558A /* MSQASignIn_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC397028A6551300699274 /* MSQASignIn_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		29E06DD928B8C6B1003D558A /* MSQASignInButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 292FB4D528B755D000E846A5 /* MSQASignInButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29E06DDA28B8C6B1003D558A /* MSQASignInClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 29DC394428A63F6E00699274 /* MSQASignInClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,10 +67,18 @@
 		B30C49FF28F43E9600A4E770 /* MSQAAccountInfo+Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = B30C49FD28F43E9600A4E770 /* MSQAAccountInfo+Testing.m */; };
 		B30C4A0028F4455E00A4E770 /* MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E06DD128B8C695003D558A /* MSQASignIn.framework */; };
 		B30C4A0728F46EDD00A4E770 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B30C4A0528F46EDD00A4E770 /* SceneDelegate.m */; };
+		C44937918EF1B5BF1FE361D6 /* Pods_MSQASignInUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89BEF06888FFF646CDAF6FDE /* Pods_MSQASignInUnitTests.framework */; };
 		D5D376FF186394B9196AC149 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		29D75B152906347900ADCDED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29DC393828A63F6E00699274 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29E06DD028B8C695003D558A;
+			remoteInfo = MSQASignIn;
+		};
 		B30C49E528F00C0000A4E770 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29DC393828A63F6E00699274 /* Project object */;
@@ -128,6 +140,10 @@
 		29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATelemetrySender.h; sourceTree = "<group>"; };
 		29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATelemetrySender.m; sourceTree = "<group>"; };
+		29D75B102906347900ADCDED /* MSQASignInUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSQASignInUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29D75B122906347900ADCDED /* MSQALoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQALoggerTests.m; sourceTree = "<group>"; };
+		29D75B1A2906595A00ADCDED /* MSQATelemetrySenderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATelemetrySenderTests.m; sourceTree = "<group>"; };
+		29D75B1C29066AAD00ADCDED /* MSQAAccountInfoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountInfoTests.m; sourceTree = "<group>"; };
 		29DC394428A63F6E00699274 /* MSQASignInClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQASignInClient.h; sourceTree = "<group>"; };
 		29DC394528A63F6E00699274 /* MSQASignIn.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MSQASignIn.docc; sourceTree = "<group>"; };
 		29DC394B28A63F6E00699274 /* MSQASignInTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSQASignInTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,7 +159,9 @@
 		29FDDB0128FD6181003A5EA8 /* FakeMSALResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FakeMSALResult.m; sourceTree = "<group>"; };
 		6D6EB6F9946EC7CCED87709B /* Pods-MQASignIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQASignIn.debug.xcconfig"; path = "Target Support Files/Pods-MQASignIn/Pods-MQASignIn.debug.xcconfig"; sourceTree = "<group>"; };
 		75DF8F37E45BF9ECF33EA396 /* Pods-MSQASignIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignIn.debug.xcconfig"; path = "Target Support Files/Pods-MSQASignIn/Pods-MSQASignIn.debug.xcconfig"; sourceTree = "<group>"; };
+		78C4B5719E818F36F0C5FCE6 /* Pods-MSQASignInUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInUnitTests.release.xcconfig"; path = "Target Support Files/Pods-MSQASignInUnitTests/Pods-MSQASignInUnitTests.release.xcconfig"; sourceTree = "<group>"; };
 		82C7715B9B4DBEF22642BBAF /* Pods-MSQAAutomationAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQAAutomationAppUITests.release.xcconfig"; path = "Target Support Files/Pods-MSQAAutomationAppUITests/Pods-MSQAAutomationAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		89BEF06888FFF646CDAF6FDE /* Pods_MSQASignInUnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSQASignInUnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BDFDBF2FA3F1B5DA91D1409 /* Pods-MSQAAutomationAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQAAutomationAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-MSQAAutomationAppUITests/Pods-MSQAAutomationAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A16B447A126B0F3789639B90 /* Pods-MQASignIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MQASignIn.release.xcconfig"; path = "Target Support Files/Pods-MQASignIn/Pods-MQASignIn.release.xcconfig"; sourceTree = "<group>"; };
 		AF12A15CDD307A135823D9A2 /* Pods-MSQAAutomationApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQAAutomationApp.debug.xcconfig"; path = "Target Support Files/Pods-MSQAAutomationApp/Pods-MSQAAutomationApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -176,9 +194,19 @@
 		B30C4A0528F46EDD00A4E770 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		B30C4A0628F46EDD00A4E770 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		B96A3C9C47E08469C8A5140F /* Pods_MSQAAutomationAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSQAAutomationAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E735511F398B59371E86B4B8 /* Pods-MSQASignInUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-MSQASignInUnitTests/Pods-MSQASignInUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		29D75B0D2906347900ADCDED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29D75B142906347900ADCDED /* MSQASignIn.framework in Frameworks */,
+				C44937918EF1B5BF1FE361D6 /* Pods_MSQASignInUnitTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		29DC394828A63F6E00699274 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -234,6 +262,16 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
+		29D75B112906347900ADCDED /* MSQASignInUnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				29D75B1C29066AAD00ADCDED /* MSQAAccountInfoTests.m */,
+				29D75B1A2906595A00ADCDED /* MSQATelemetrySenderTests.m */,
+				29D75B122906347900ADCDED /* MSQALoggerTests.m */,
+			);
+			path = MSQASignInUnitTests;
+			sourceTree = "<group>";
+		};
 		29DC393728A63F6E00699274 = {
 			isa = PBXGroup;
 			children = (
@@ -242,6 +280,7 @@
 				29DC394328A63F6E00699274 /* MSQASignIn */,
 				B30C49BE28EF348300A4E770 /* MSQAAutomationApp */,
 				B30C49E028F00C0000A4E770 /* MSQAAutomationAppUITests */,
+				29D75B112906347900ADCDED /* MSQASignInUnitTests */,
 				29DC394228A63F6E00699274 /* Products */,
 				6BAD592ECC605B3C63738355 /* Pods */,
 				999B8D8628C207D0C0D40B64 /* Frameworks */,
@@ -256,6 +295,7 @@
 				29E06DD128B8C695003D558A /* MSQASignIn.framework */,
 				B30C49BD28EF348300A4E770 /* MSQAAutomationApp.app */,
 				B30C49DF28F00C0000A4E770 /* MSQAAutomationAppUITests.xctest */,
+				29D75B102906347900ADCDED /* MSQASignInUnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -327,6 +367,8 @@
 				041700256F9EE8FFA34C4AD7 /* Pods-MSQAAutomationApp.release.xcconfig */,
 				9BDFDBF2FA3F1B5DA91D1409 /* Pods-MSQAAutomationAppUITests.debug.xcconfig */,
 				82C7715B9B4DBEF22642BBAF /* Pods-MSQAAutomationAppUITests.release.xcconfig */,
+				E735511F398B59371E86B4B8 /* Pods-MSQASignInUnitTests.debug.xcconfig */,
+				78C4B5719E818F36F0C5FCE6 /* Pods-MSQASignInUnitTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -343,6 +385,7 @@
 				29A9925C28BF52FD00C2F474 /* MSAL.framework */,
 				B120C066104A53C3D2535869 /* Pods_MSQAAutomationApp.framework */,
 				B96A3C9C47E08469C8A5140F /* Pods_MSQAAutomationAppUITests.framework */,
+				89BEF06888FFF646CDAF6FDE /* Pods_MSQASignInUnitTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -413,6 +456,26 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		29D75B0F2906347900ADCDED /* MSQASignInUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29D75B192906347900ADCDED /* Build configuration list for PBXNativeTarget "MSQASignInUnitTests" */;
+			buildPhases = (
+				10D3E36A59535983D00031B8 /* [CP] Check Pods Manifest.lock */,
+				29D75B0C2906347900ADCDED /* Sources */,
+				29D75B0D2906347900ADCDED /* Frameworks */,
+				29D75B0E2906347900ADCDED /* Resources */,
+				9E55BA9E6D7F2648EBB0DE7A /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29D75B162906347900ADCDED /* PBXTargetDependency */,
+			);
+			name = MSQASignInUnitTests;
+			productName = MSQASignInUnitTests;
+			productReference = 29D75B102906347900ADCDED /* MSQASignInUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		29DC394A28A63F6E00699274 /* MSQASignInTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 29DC395828A63F6E00699274 /* Build configuration list for PBXNativeTarget "MSQASignInTests" */;
@@ -498,6 +561,9 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
+					29D75B0F2906347900ADCDED = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
 					29DC394A28A63F6E00699274 = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
@@ -530,11 +596,19 @@
 				29E06DD028B8C695003D558A /* MSQASignIn */,
 				B30C49BC28EF348300A4E770 /* MSQAAutomationApp */,
 				B30C49DE28F00C0000A4E770 /* MSQAAutomationAppUITests */,
+				29D75B0F2906347900ADCDED /* MSQASignInUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		29D75B0E2906347900ADCDED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		29DC394928A63F6E00699274 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -579,6 +653,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		10D3E36A59535983D00031B8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MSQASignInUnitTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		25F2EE1B8BFA5A8AC644B795 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -659,6 +755,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSQAAutomationApp/Pods-MSQAAutomationApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9E55BA9E6D7F2648EBB0DE7A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSQASignInUnitTests/Pods-MSQASignInUnitTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MSAL/MSAL.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MSAL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSQASignInUnitTests/Pods-MSQASignInUnitTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		ADB967D99A2FC2E7C7CD2322 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -684,6 +798,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		29D75B0C2906347900ADCDED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29D75B1D29066AAD00ADCDED /* MSQAAccountInfoTests.m in Sources */,
+				29D75B1B2906595A00ADCDED /* MSQATelemetrySenderTests.m in Sources */,
+				29D75B132906347900ADCDED /* MSQALoggerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		29DC394728A63F6E00699274 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -741,6 +865,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		29D75B162906347900ADCDED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 29E06DD028B8C695003D558A /* MSQASignIn */;
+			targetProxy = 29D75B152906347900ADCDED /* PBXContainerItemProxy */;
+		};
 		B30C49E628F00C0000A4E770 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B30C49BC28EF348300A4E770 /* MSQAAutomationApp */;
@@ -768,6 +898,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		29D75B172906347900ADCDED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E735511F398B59371E86B4B8 /* Pods-MSQASignInUnitTests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 29J9NKAPA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MSQASignInUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		29D75B182906347900ADCDED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 78C4B5719E818F36F0C5FCE6 /* Pods-MSQASignInUnitTests.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 29J9NKAPA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.MSQASignInUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		29DC395328A63F6E00699274 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1071,6 +1237,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		29D75B192906347900ADCDED /* Build configuration list for PBXNativeTarget "MSQASignInUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29D75B172906347900ADCDED /* Debug */,
+				29D75B182906347900ADCDED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		29DC393B28A63F6E00699274 /* Build configuration list for PBXProject "MSQASignIn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
