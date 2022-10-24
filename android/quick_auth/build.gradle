@@ -77,4 +77,5 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$rootProject.ext.mockitoCoreVersion"
     testImplementation "junit:junit:${rootProject.ext.junitVersion}"
     testImplementation "androidx.test:core:$rootProject.ext.androidxTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 }
