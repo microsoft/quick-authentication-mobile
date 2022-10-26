@@ -244,12 +244,13 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _iconView.image = image;
 }
 
-- (void)setSignInClient:(MSQASignInClient *)msSignInClient
+- (BOOL)setSignInClient:(MSQASignInClient *)msSignInClient
          viewController:(UIViewController *)viewController
         completionBlock:(MSQACompletionBlock)completionBlock {
   _msSignInClient = msSignInClient;
   _viewController = viewController;
   _completionBlock = completionBlock;
+  return msSignInClient && viewController && completionBlock;
 }
 
 #pragma mark - Override

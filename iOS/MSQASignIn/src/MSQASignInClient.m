@@ -135,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!account && !error) {
       completionBlock(nil, nil);
       [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
-                                       format:@"No account presents"];
+                                       format:@"No accounts present"];
       [MSQATelemetrySender.sharedInstance
           sendWithEvent:kGetCurrentAccountEvent
                 message:kNoAccountPresentMessage];
