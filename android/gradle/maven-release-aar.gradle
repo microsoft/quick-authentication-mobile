@@ -130,7 +130,9 @@ afterEvaluate {
     assemble.dependsOn generatereleaseJavadoc, sourcesJar, javadocJar
 }
 
-signing {
-    sign publishing.publications
+if (!secretPropsFile.exists()) {
+    signing {
+        sign publishing.publications
+    }
 }
 
