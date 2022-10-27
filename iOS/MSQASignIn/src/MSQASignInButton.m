@@ -568,13 +568,25 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 - (NSString *)buttonTextString {
   switch (_text) {
   case kMSQASignInButtonTextSignInWith:
-    return @"Sign in with Microsoft";
+    return [[NSBundle bundleForClass:self.class]
+        localizedStringForKey:@"msqa_signin_with_text"
+                        value:nil
+                        table:nil];
   case kMSQASignInButtonTextSignUpWith:
-    return @"Sign up with Microsoft";
+    return [[NSBundle bundleForClass:self.class]
+        localizedStringForKey:@"msqa_signup_with_text"
+                        value:nil
+                        table:nil];
   case kMSQASignInButtonTextContinueWith:
-    return @"Continue with Microsoft";
+    return [[NSBundle bundleForClass:self.class]
+        localizedStringForKey:@"msqa_continue_with_text"
+                        value:nil
+                        table:nil];
   case kMSQASignInButtonTextSignIn:
-    return @"Sign in";
+    return [[NSBundle bundleForClass:self.class]
+        localizedStringForKey:@"msqa_signin_text"
+                        value:nil
+                        table:nil];
   }
 }
 
