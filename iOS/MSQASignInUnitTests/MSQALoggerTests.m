@@ -25,39 +25,38 @@
 //
 //------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#import "MSQALogger_Private.h"
 
-typedef void (^TelemetryCallback)(NSData *jsonData);
-
-/// Used to send the metrics back to the server, and the telemetry format is a
-/// JSON object, which is defined as:
-/// {
-///  "events":[
-///   {
-///      "EventName":"getCurrentAccount",
-///      "Message":"no-account-present",
-///      "Count":1,
-///      "Timestamp":"2022-09-26T08:26:01Z"
-///   }
-///  ],
-///  "EasyAuthSessionId":"C5D2FCD6-1F9D-41D7-AB3F-A2DB394F0AA5",
-///  "LibVersion":"1.0"
-/// }
-/// Accessing the signleton instance through`sharedInstance` property.
-@interface MSQATelemetrySender : NSObject
-
-@property(class, nonatomic, readonly) MSQATelemetrySender *sharedInstance;
-
-+ (instancetype)new NS_UNAVAILABLE;
-
-+ (instancetype)init NS_UNAVAILABLE;
-
-- (void)sendWithEvent:(NSString *)event message:(NSString *)message;
-
-@property(nonatomic) TelemetryCallback callbackForTesting;
+@interface MSQALoggerTests : XCTestCase
 
 @end
 
-NS_ASSUME_NONNULL_END
+@implementation MSQALoggerTests
+
+- (void)testMSQALogger_withLogLevel {
+  MSQALogger *logger = MSQALogger.sharedInstance;
+  XCTAssertNotNil(logger);
+
+  // Test the default log level.
+  XCTAssertEqual(MSQALogLevelInfo, logger.logLevel);
+
+  // Setting the log level.
+  logger.logLevel = MSQALogLevelWarning;
+  [logger setLogCallback:^(MSQALogLevel level, NSString *_Nullable message) {
+    XCTAssertGreaterThanOrEqual(MSQALogLevelWarning, level);
+    XCTAssertTrue([message isEqualToString:@"Testing logLevel."]);
+  }];
+  [logger logWithLevel:MSQALogLevelError format:@"Testing logLevel."];
+  [logger logWithLevel:MSQALogLevelWarning format:@"Testing logLevel."];
+  [logger logWithLevel:MSQALogLevelInfo format:@"Testing logLevel."];
+  [logger logWithLevel:MSQALogLevelVerbose format:@"Testing logLevel."];
+
+  // Resetting the callback causes exception.
+  XCTAssertThrows(
+      [logger setLogCallback:^(MSQALogLevel level, NSString *_Nullable message){
+      }]);
+}
+
+@end
