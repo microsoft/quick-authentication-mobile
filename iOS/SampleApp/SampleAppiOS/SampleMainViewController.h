@@ -43,7 +43,7 @@
 
 + (instancetype)sharedViewController;
 
-- (void)setAccountInfo:(MSQAAccountInfo *)accountData
-              msSignIn:(MSQASignInClient *)msSignIn;
+- (void)setAccountInfo:(MSQAAccountInfo *)account
+          signInClient:(MSQASignInClient *)msSignInClient;
 
 @end

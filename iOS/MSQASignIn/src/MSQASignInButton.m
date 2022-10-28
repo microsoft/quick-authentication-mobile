@@ -29,20 +29,22 @@
 
 #import <CoreText/CoreText.h>
 
+#import "MSQASignIn_Private.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString* const kFontNameSegoeUISemiBold = @"SegoeUI-SemiBold";
+static NSString *const kFontNameSegoeUISemiBold = @"SegoeUI-SemiBold";
 
-static NSString* const kLargeIconImageName = @"Microsoft-Brand-20";
-static NSString* const kMediumIconImageName = @"Microsoft-Brand-16";
-static NSString* const kSmallIconImageName = @"Microsoft-Brand-12";
+static NSString *const kLargeIconImageName = @"Microsoft-Brand-20";
+static NSString *const kMediumIconImageName = @"Microsoft-Brand-16";
+static NSString *const kSmallIconImageName = @"Microsoft-Brand-12";
 
-static NSString* const kCoderTypeKey = @"type";
-static NSString* const kCoderThemeKey = @"theme";
-static NSString* const kCoderSizeKey = @"size";
-static NSString* const kCoderTextKey = @"text";
-static NSString* const kCoderShapeKey = @"shape";
-static NSString* const kCoderLogoKey = @"logo";
+static NSString *const kCoderTypeKey = @"type";
+static NSString *const kCoderThemeKey = @"theme";
+static NSString *const kCoderSizeKey = @"size";
+static NSString *const kCoderTextKey = @"text";
+static NSString *const kCoderShapeKey = @"shape";
+static NSString *const kCoderLogoKey = @"logo";
 
 static const CGFloat kBorderWidth = 1;
 
@@ -75,7 +77,7 @@ static const NSUInteger kPressedBorderColorDark = 0x272727ff;
 static const NSUInteger kTextColorLight = 0x323130ff;
 static const NSUInteger kTextColorDark = 0xffffffff;
 
-static UIColor* UIColorFromHexValue(NSUInteger hex) {
+static UIColor *UIColorFromHexValue(NSUInteger hex) {
   CGFloat red = ((hex & 0xff000000) >> 24) / 255.0f;
   CGFloat green = ((hex & 0x00ff0000) >> 16) / 255.0f;
   CGFloat blue = ((hex & 0x0000ff00) >> 8) / 255.0f;
@@ -93,11 +95,15 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 @property(nonatomic, assign) MSQASignInButtonState buttonState;
 
-@property(nonatomic, strong) UIImageView* iconView;
+@property(nonatomic, strong) UIImageView *iconView;
 
 @end
 
-@implementation MSQASignInButton
+@implementation MSQASignInButton {
+  MSQASignInClient *_msSignInClient;
+  UIViewController *_viewController;
+  MSQACompletionBlock _completionBlock;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
@@ -107,7 +113,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   return self;
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder*)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
   self = [super initWithCoder:coder];
   if (self) {
     [self initInternal];
@@ -155,6 +161,10 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
                        UIControlEventTouchDragOutside |
                        UIControlEventTouchUpInside];
 
+  [self addTarget:self
+                action:@selector(onButtonClicked)
+      forControlEvents:UIControlEventTouchUpInside];
+
   self.clipsToBounds = YES;
   self.backgroundColor = [UIColor clearColor];
 
@@ -194,22 +204,22 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   if (_type == kMSQASignInButtonTypeIcon) {
     return;
   }
-  NSString* string = [self buttonTextString];
-  UIFont* font = [self buttonTextFont];
+  NSString *string = [self buttonTextString];
+  UIFont *font = [self buttonTextFont];
   CGSize size = [self buttonTextSize];
-  UIColor* color = [self buttonTextColor];
+  UIColor *color = [self buttonTextColor];
 
   CGFloat x = 0;
   switch (_logo) {
-    case kMSQASignInButtonLogoLeft:
-      x = kElementPadding * 2 + [self buttonIconWidth];
-      break;
-    case kMSQASignInButtonLogoLeftTextCenter:
-    case kMSQASignInButtonLogoCenter:
-      x = round((self.bounds.size.width + [self buttonIconWidth] +
-                 kElementPadding - size.width) /
-                2);
-      break;
+  case kMSQASignInButtonLogoLeft:
+    x = kElementPadding * 2 + [self buttonIconWidth];
+    break;
+  case kMSQASignInButtonLogoLeftTextCenter:
+  case kMSQASignInButtonLogoCenter:
+    x = round((self.bounds.size.width + [self buttonIconWidth] +
+               kElementPadding - size.width) /
+              2);
+    break;
   }
   CGFloat y = round((self.bounds.size.height - size.height) / 2);
 
@@ -225,13 +235,22 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 }
 
 - (void)updateButtonIconImage {
-  NSString* imagePath = [self buttonIconImagePath];
+  NSString *imagePath = [self buttonIconImagePath];
   if (!imagePath) {
     _iconView.image = nil;
     return;
   }
-  UIImage* image = [UIImage imageWithContentsOfFile:imagePath];
+  UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
   _iconView.image = image;
+}
+
+- (BOOL)setSignInClient:(MSQASignInClient *)msSignInClient
+         viewController:(UIViewController *)viewController
+        completionBlock:(MSQACompletionBlock)completionBlock {
+  _msSignInClient = msSignInClient;
+  _viewController = viewController;
+  _completionBlock = completionBlock;
+  return msSignInClient && viewController && completionBlock;
 }
 
 #pragma mark - Override
@@ -249,24 +268,24 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 - (CGSize)sizeThatFits:(CGSize)size {
   if (_type == kMSQASignInButtonTypeIcon) {
     switch (_size) {
-      case kMSQASignInButtonSizeLarge:
-        return CGSizeMake(kLargeButtonHeight, kLargeButtonHeight);
-      case kMSQASignInButtonSizeMedium:
-        return CGSizeMake(kMediumButtonHeight, kMediumButtonHeight);
-      case kMSQASignInButtonSizeSmall:
-        return CGSizeMake(kSmallButtonHeight, kSmallButtonHeight);
+    case kMSQASignInButtonSizeLarge:
+      return CGSizeMake(kLargeButtonHeight, kLargeButtonHeight);
+    case kMSQASignInButtonSizeMedium:
+      return CGSizeMake(kMediumButtonHeight, kMediumButtonHeight);
+    case kMSQASignInButtonSizeSmall:
+      return CGSizeMake(kSmallButtonHeight, kSmallButtonHeight);
     }
   }
   CGFloat minWidth = ceil([self buttonTextSize].width + [self buttonIconWidth] +
                           kElementPadding * 3);
   CGFloat width = MAX(size.width, minWidth);
   switch (_size) {
-    case kMSQASignInButtonSizeLarge:
-      return CGSizeMake(width, kLargeButtonHeight);
-    case kMSQASignInButtonSizeMedium:
-      return CGSizeMake(width, kMediumButtonHeight);
-    case kMSQASignInButtonSizeSmall:
-      return CGSizeMake(width, kSmallButtonHeight);
+  case kMSQASignInButtonSizeLarge:
+    return CGSizeMake(width, kLargeButtonHeight);
+  case kMSQASignInButtonSizeMedium:
+    return CGSizeMake(width, kMediumButtonHeight);
+  case kMSQASignInButtonSizeSmall:
+    return CGSizeMake(width, kSmallButtonHeight);
   }
 }
 
@@ -290,7 +309,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 - (void)updateConstraints {
   CGSize sizeThatFits = [self sizeThatFits:CGSizeZero];
 
-  NSLayoutConstraint* heightConstraint =
+  NSLayoutConstraint *heightConstraint =
       [NSLayoutConstraint constraintWithItem:self
                                    attribute:NSLayoutAttributeHeight
                                    relatedBy:NSLayoutRelationEqual
@@ -304,7 +323,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   NSLayoutRelation widthConstraintRelation =
       _type == kMSQASignInButtonTypeIcon ? NSLayoutRelationEqual
                                          : NSLayoutRelationGreaterThanOrEqual;
-  NSLayoutConstraint* widthConstraint =
+  NSLayoutConstraint *widthConstraint =
       [NSLayoutConstraint constraintWithItem:self
                                    attribute:NSLayoutAttributeWidth
                                    relatedBy:widthConstraintRelation
@@ -316,7 +335,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
       @"buttonWidth - auto calculated by MSQASignInButton";
 
   BOOL needAddHeightConstraint = YES, needAddWidthConstraint = YES;
-  for (NSLayoutConstraint* constraint in self.constraints) {
+  for (NSLayoutConstraint *constraint in self.constraints) {
     if (constraint.firstItem != self) {
       continue;
     }
@@ -360,8 +379,8 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   [self setNeedsDisplay];
 }
 
-- (BOOL)isConstraint:(NSLayoutConstraint*)constraintA
-    equalToConstraint:(NSLayoutConstraint*)constraintB {
+- (BOOL)isConstraint:(NSLayoutConstraint *)constraintA
+    equalToConstraint:(NSLayoutConstraint *)constraintB {
   return constraintA.priority == constraintB.priority &&
          constraintA.firstItem == constraintB.firstItem &&
          constraintA.firstAttribute == constraintB.firstAttribute &&
@@ -384,6 +403,13 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 - (void)buttonDidRelease {
   self.buttonState = kMSQASignInButtonStateNormal;
+}
+
+- (void)onButtonClicked {
+  if (_msSignInClient) {
+    [_msSignInClient signInByButtonWithViewController:_viewController
+                                      completionBlock:_completionBlock];
+  }
 }
 
 #pragma mark - Setter
@@ -449,70 +475,70 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 - (CGFloat)buttonRectRadius {
   switch (_shape) {
-    case kMSQASignInButtonShapeRectangular:
-      return 0;
-    case kMSQASignInButtonShapeRounded:
-      return kStandardCornerRadius;
-    case kMSQASignInButtonShapePill:
-      return (self.bounds.size.height - kBorderWidth) / 2;
+  case kMSQASignInButtonShapeRectangular:
+    return 0;
+  case kMSQASignInButtonShapeRounded:
+    return kStandardCornerRadius;
+  case kMSQASignInButtonShapePill:
+    return (self.bounds.size.height - kBorderWidth) / 2;
   }
 }
 
-- (UIColor*)buttonBackgroundColor {
+- (UIColor *)buttonBackgroundColor {
   switch (_buttonState) {
-    case kMSQASignInButtonStateNormal:
-    case kMSQASignInButtonStateDisabled:
-      return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
-                                     ? kNormalBackgroundColorLight
-                                     : kNormalBackgroundColorDark);
-      break;
-    case kMSQASignInButtonStatePressed:
-      return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
-                                     ? kPressedBackgroundColorLight
-                                     : kPressedBackgroundColorDark);
-      break;
+  case kMSQASignInButtonStateNormal:
+  case kMSQASignInButtonStateDisabled:
+    return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
+                                   ? kNormalBackgroundColorLight
+                                   : kNormalBackgroundColorDark);
+    break;
+  case kMSQASignInButtonStatePressed:
+    return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
+                                   ? kPressedBackgroundColorLight
+                                   : kPressedBackgroundColorDark);
+    break;
   }
 }
 
-- (UIColor*)buttonBorderColor {
+- (UIColor *)buttonBorderColor {
   switch (_buttonState) {
-    case kMSQASignInButtonStateNormal:
-    case kMSQASignInButtonStateDisabled:
-      return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
-                                     ? kNormalBorderColorLight
-                                     : kNormalBorderColorDark);
-    case kMSQASignInButtonStatePressed:
-      return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
-                                     ? kPressedBorderColorLight
-                                     : kPressedBorderColorDark);
+  case kMSQASignInButtonStateNormal:
+  case kMSQASignInButtonStateDisabled:
+    return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
+                                   ? kNormalBorderColorLight
+                                   : kNormalBorderColorDark);
+  case kMSQASignInButtonStatePressed:
+    return UIColorFromHexValue(_theme == kMSQASignInButtonThemeLight
+                                   ? kPressedBorderColorLight
+                                   : kPressedBorderColorDark);
   }
 }
 
 - (CGFloat)buttonIconWidth {
   switch (_size) {
-    case kMSQASignInButtonSizeLarge:
-      return kLargeIconWidth;
-    case kMSQASignInButtonSizeMedium:
-      return kMediumIconWidth;
-    case kMSQASignInButtonSizeSmall:
-      return kSmallIconWidth;
+  case kMSQASignInButtonSizeLarge:
+    return kLargeIconWidth;
+  case kMSQASignInButtonSizeMedium:
+    return kMediumIconWidth;
+  case kMSQASignInButtonSizeSmall:
+    return kSmallIconWidth;
   }
 }
 
-- (NSString*)buttonIconImagePath {
+- (NSString *)buttonIconImagePath {
   switch (_size) {
-    case kMSQASignInButtonSizeLarge:
-      return [[NSBundle bundleForClass:[self class]]
-          pathForResource:kLargeIconImageName
-                   ofType:@"png"];
-    case kMSQASignInButtonSizeMedium:
-      return [[NSBundle bundleForClass:[self class]]
-          pathForResource:kMediumIconImageName
-                   ofType:@"png"];
-    case kMSQASignInButtonSizeSmall:
-      return [[NSBundle bundleForClass:[self class]]
-          pathForResource:kSmallIconImageName
-                   ofType:@"png"];
+  case kMSQASignInButtonSizeLarge:
+    return [[NSBundle bundleForClass:[self class]]
+        pathForResource:kLargeIconImageName
+                 ofType:@"png"];
+  case kMSQASignInButtonSizeMedium:
+    return [[NSBundle bundleForClass:[self class]]
+        pathForResource:kMediumIconImageName
+                 ofType:@"png"];
+  case kMSQASignInButtonSizeSmall:
+    return [[NSBundle bundleForClass:[self class]]
+        pathForResource:kSmallIconImageName
+                 ofType:@"png"];
   }
 }
 
@@ -527,42 +553,41 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   CGFloat textWidth = [self buttonTextSize].width;
   CGFloat x = 0;
   switch (_logo) {
-    case kMSQASignInButtonLogoLeft:
-    case kMSQASignInButtonLogoLeftTextCenter:
-      x = kElementPadding;
-      break;
-    case kMSQASignInButtonLogoCenter:
-      x = (self.bounds.size.width - iconWidth - kElementPadding - textWidth) /
-          2;
-      break;
+  case kMSQASignInButtonLogoLeft:
+  case kMSQASignInButtonLogoLeftTextCenter:
+    x = kElementPadding;
+    break;
+  case kMSQASignInButtonLogoCenter:
+    x = (self.bounds.size.width - iconWidth - kElementPadding - textWidth) / 2;
+    break;
   }
   CGFloat y = (self.bounds.size.height - iconWidth) / 2;
   return CGRectMake(x, y, iconWidth, iconWidth);
 }
 
-- (NSString*)buttonTextString {
+- (NSString *)buttonTextString {
   switch (_text) {
-    case kMSQASignInButtonTextSignInWith:
-      return @"Sign in with Microsoft";
-    case kMSQASignInButtonTextSignUpWith:
-      return @"Sign up with Microsoft";
-    case kMSQASignInButtonTextContinueWith:
-      return @"Continue with Microsoft";
-    case kMSQASignInButtonTextSignIn:
-      return @"Sign in";
+  case kMSQASignInButtonTextSignInWith:
+    return @"Sign in with Microsoft";
+  case kMSQASignInButtonTextSignUpWith:
+    return @"Sign up with Microsoft";
+  case kMSQASignInButtonTextContinueWith:
+    return @"Continue with Microsoft";
+  case kMSQASignInButtonTextSignIn:
+    return @"Sign in";
   }
 }
 
-- (UIColor*)buttonTextColor {
+- (UIColor *)buttonTextColor {
   return UIColorFromHexValue(
       _theme == kMSQASignInButtonThemeLight ? kTextColorLight : kTextColorDark);
 }
 
-- (UIFont*)buttonTextFont {
+- (UIFont *)buttonTextFont {
   CGFloat size = [self buttonTextFontSize];
-  UIFont* font = [UIFont fontWithName:kFontNameSegoeUISemiBold size:size];
+  UIFont *font = [UIFont fontWithName:kFontNameSegoeUISemiBold size:size];
   if (!font) {
-    NSString* path = [[NSBundle bundleForClass:[self class]]
+    NSString *path = [[NSBundle bundleForClass:[self class]]
         pathForResource:kFontNameSegoeUISemiBold
                  ofType:@"ttf"];
     if (!path) {
@@ -585,12 +610,12 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 - (CGFloat)buttonTextFontSize {
   switch (_size) {
-    case kMSQASignInButtonSizeLarge:
-      return kLargeTextSize;
-    case kMSQASignInButtonSizeMedium:
-      return kMediumTextSize;
-    case kMSQASignInButtonSizeSmall:
-      return kSmallTextSize;
+  case kMSQASignInButtonSizeLarge:
+    return kLargeTextSize;
+  case kMSQASignInButtonSizeMedium:
+    return kMediumTextSize;
+  case kMSQASignInButtonSizeSmall:
+    return kSmallTextSize;
   }
 }
 

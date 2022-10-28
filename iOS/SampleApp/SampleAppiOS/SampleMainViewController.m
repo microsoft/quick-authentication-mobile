@@ -36,8 +36,8 @@
 #import "SampleLoginViewController.h"
 
 @implementation SampleMainViewController {
-  MSQAAccountInfo *_accountData;
-  MSQASignInClient *_msSignIn;
+  MSQAAccountInfo *_account;
+  MSQASignInClient *_msSignInClient;
 }
 
 + (instancetype)sharedViewController {
@@ -69,22 +69,22 @@
   _profileImageView.clipsToBounds = YES;
 }
 
-- (void)setAccountInfo:(MSQAAccountInfo *)accountData
-              msSignIn:(MSQASignInClient *)msSignIn {
-  _accountData = accountData;
-  _msSignIn = msSignIn;
+- (void)setAccountInfo:(MSQAAccountInfo *)account
+          signInClient:(MSQASignInClient *)msSignInClient {
+  _account = account;
+  _msSignInClient = msSignInClient;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   _nameLabel.text =
-      [NSString stringWithFormat:@"Welcome, %@", _accountData.userName];
+      [NSString stringWithFormat:@"Welcome, %@", _account.userName];
   _fullNameLabel.text =
-      [NSString stringWithFormat:@"Full name: %@", _accountData.fullName];
-  _idLabel.text = [NSString stringWithFormat:@"Id: %@", _accountData.userId];
+      [NSString stringWithFormat:@"Full name: %@", _account.fullName];
+  _idLabel.text = [NSString stringWithFormat:@"Id: %@", _account.userId];
 
-  if (_accountData.base64Photo) {
+  if (_account.base64Photo) {
     NSData *data = [[NSData alloc]
-        initWithBase64EncodedString:_accountData.base64Photo
+        initWithBase64EncodedString:_account.base64Photo
                             options:
                                 NSDataBase64DecodingIgnoreUnknownCharacters];
     [self setUserPhoto:[UIImage imageWithData:data]];
@@ -94,7 +94,7 @@
 }
 
 - (IBAction)signOut:(id)sender {
-  [_msSignIn signOutWithCompletionBlock:^(NSError *_Nullable error) {
+  [_msSignInClient signOutWithCompletionBlock:^(NSError *_Nullable error) {
     if (error)
       NSLog(@"Error:%@", error.description);
   }];
@@ -105,13 +105,14 @@
 - (IBAction)fetchTokenSilent:(id)sender {
   MSQASilentTokenParameters *parameters =
       [[MSQASilentTokenParameters alloc] initWithScopes:@[ @"User.Read" ]];
-  [_msSignIn acquireTokenSilentWithParameters:parameters
-                              completionBlock:^(MSQATokenResult *tokenResult,
-                                                NSError *error) {
-                                self->_tokenLabel.text = [NSString
-                                    stringWithFormat:@"Access token: %@",
-                                                     tokenResult.accessToken];
-                              }];
+  [_msSignInClient
+      acquireTokenSilentWithParameters:parameters
+                       completionBlock:^(MSQATokenResult *tokenResult,
+                                         NSError *error) {
+                         self->_tokenLabel.text = [NSString
+                             stringWithFormat:@"Access token: %@",
+                                              tokenResult.accessToken];
+                       }];
 }
 
 - (IBAction)fetchTokenInteractive:(id)sender {
@@ -122,7 +123,7 @@
              initWithScopes:@[ @"User.Read", @"Calendars.Read" ]
           webviewParameters:webParameters];
 
-  [_msSignIn
+  [_msSignInClient
       acquireTokenWithParameters:parameters
                  completionBlock:^(MSQATokenResult *_Nullable tokenResult,
                                    NSError *_Nullable error) {
@@ -133,17 +134,18 @@
 }
 
 - (IBAction)getCurrentAccount:(id)sender {
-  [_msSignIn getCurrentAccountWithCompletionBlock:^(
-                 MSQAAccountInfo *_Nullable account, NSError *_Nullable error) {
-    if (account) {
-      NSString *message =
-          [NSString stringWithFormat:@"FullName: %@\nEmail: %@",
-                                     account.fullName, account.userName];
-      [self showAlertWithMessage:message];
-      return;
-    }
-    [self showAlertWithMessage:@"None available account"];
-  }];
+  [_msSignInClient
+      getCurrentAccountWithCompletionBlock:^(MSQAAccountInfo *_Nullable account,
+                                             NSError *_Nullable error) {
+        if (account) {
+          NSString *message =
+              [NSString stringWithFormat:@"FullName: %@\nEmail: %@",
+                                         account.fullName, account.userName];
+          [self showAlertWithMessage:message];
+          return;
+        }
+        [self showAlertWithMessage:@"None available account"];
+      }];
 }
 
 - (void)showAlertWithMessage:(NSString *)message {

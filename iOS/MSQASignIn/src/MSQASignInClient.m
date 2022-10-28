@@ -129,30 +129,34 @@ NS_ASSUME_NONNULL_BEGIN
 
   [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
                                    format:@"Start to get current account."];
-  [_msalPublicClientApplication
-      getCurrentAccountWithParameters:parameters
-                      completionBlock:^(MSALAccount *_Nullable account,
-                                        MSALAccount *_Nullable previousAccount,
-                                        NSError *_Nullable error) {
-                        BOOL isSuccess = [MSQASignInClient
-                            validateGetCurrentAccountResultWithAccount:account
-                                                                 error:error];
-                        if (!isSuccess) {
-                          completionBlock(nil, error);
-                          return;
-                        }
+  MSALCurrentAccountCompletionBlock block = ^(
+      MSALAccount *_Nullable account, MSALAccount *_Nullable previousAccount,
+      NSError *_Nullable error) {
+    if (!account && !error) {
+      completionBlock(nil, nil);
+      [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                       format:@"No accounts present"];
+      [MSQATelemetrySender.sharedInstance
+          sendWithEvent:kGetCurrentAccountEvent
+                message:kNoAccountPresentMessage];
+      return;
+    }
 
-                        MSQAAccountInfo *accountData = [[MSQAAccountInfo alloc]
-                            initWithFullName:account.accountClaims[@"name"]
-                                    userName:account.username
-                                      userId:[MSQASignInClient
-                                                 getUserIdFromObjectId:
-                                                     account.homeAccountId
-                                                         .objectId]
-                                     idToken:nil
-                                 accessToken:nil];
-                        completionBlock(accountData, nil);
-                      }];
+    if (error) {
+      completionBlock(nil, error);
+      [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                       format:@"Failed to get the current "
+                                              @"account."];
+      [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
+                                                message:kFailureMessage];
+      return;
+    }
+    // Continue to get more account info by calling Graph.
+    [self continueToGetAccountInfoForAccount:account
+                             completionBlock:completionBlock];
+  };
+  [_msalPublicClientApplication getCurrentAccountWithParameters:parameters
+                                                completionBlock:block];
 }
 
 - (void)signOutWithCompletionBlock:
@@ -162,33 +166,37 @@ NS_ASSUME_NONNULL_BEGIN
 
   [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
                                    format:@"Start to sign out."];
-  [_msalPublicClientApplication
-      getCurrentAccountWithParameters:parameters
-                      completionBlock:^(MSALAccount *_Nullable account,
-                                        MSALAccount *_Nullable previousAccount,
-                                        NSError *_Nullable error) {
-                        if (account && !error) {
-                          NSError *localError = nil;
-                          [self->_msalPublicClientApplication
-                              removeAccount:account
-                                      error:&localError];
-                          completionBlock(localError);
-                          [MSQALogger.sharedInstance
-                              logWithLevel:MSQALogLevelVerbose
-                                    format:@"Sign out succeeded."];
-                          [MSQATelemetrySender.sharedInstance
-                              sendWithEvent:kSignOutEvent
-                                    message:kSuccessMessage];
-                          return;
-                        }
-                        completionBlock(error);
-                        [MSQALogger.sharedInstance
-                            logWithLevel:MSQALogLevelError
-                                  format:@"Sign out failed."];
-                        [MSQATelemetrySender.sharedInstance
-                            sendWithEvent:kSignOutEvent
-                                  message:kFailureMessage];
-                      }];
+
+  MSALCurrentAccountCompletionBlock block =
+      ^(MSALAccount *_Nullable account, MSALAccount *_Nullable previousAccount,
+        NSError *_Nullable error) {
+        if (account && !error) {
+          NSError *localError = nil;
+          [self->_msalPublicClientApplication removeAccount:account
+                                                      error:&localError];
+          completionBlock(localError);
+          if (!localError) {
+            [MSQALogger.sharedInstance logWithLevel:MSQALogLevelVerbose
+                                             format:@"Sign out succeeded."];
+            [MSQATelemetrySender.sharedInstance sendWithEvent:kSignOutEvent
+                                                      message:kSuccessMessage];
+          } else {
+            [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
+                                             format:@"Sign out failed."];
+            [MSQATelemetrySender.sharedInstance sendWithEvent:kSignOutEvent
+                                                      message:kFailureMessage];
+          }
+          return;
+        }
+        completionBlock(error);
+        [MSQALogger.sharedInstance
+            logWithLevel:MSQALogLevelError
+                  format:@"Failed to get the current account."];
+        [MSQATelemetrySender.sharedInstance sendWithEvent:kSignOutEvent
+                                                  message:kFailureMessage];
+      };
+  [_msalPublicClientApplication getCurrentAccountWithParameters:parameters
+                                                completionBlock:block];
 }
 
 - (void)signInWithViewController:(UIViewController *)controller
@@ -329,36 +337,6 @@ NS_ASSUME_NONNULL_BEGIN
                                             message:message];
   [MSQATelemetrySender.sharedInstance sendWithEvent:eventName
                                             message:kSuccessMessage];
-}
-
-// Validate the result of `getCurrentAccountWithCompletionBlock` and send the
-// telemetry, return `YES` if a valid one presented, otherwise, return `NO`.
-+ (BOOL)validateGetCurrentAccountResultWithAccount:(MSALAccount *)account
-                                             error:(NSError *)error {
-  // The `account` and `error` can be `nil` both when no account presents in
-  // cache.
-  if (!account && !error) {
-    [MSQALogger.sharedInstance logWithLevel:MSQALogLevelError
-                                     format:@"No account presents"];
-    [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
-                                              message:kNoAccountPresentMessage];
-    return NO;
-  }
-  if (error) {
-    [MSQALogger.sharedInstance
-        logWithLevel:MSQALogLevelError
-              format:@"Failed to get the current account."];
-    [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
-                                              message:kFailureMessage];
-    return NO;
-  }
-
-  [MSQALogger.sharedInstance
-      logWithLevel:MSQALogLevelVerbose
-            format:@"Getting the current account succeeded"];
-  [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
-                                            message:kSuccessMessage];
-  return YES;
 }
 
 #pragma mark - Private methods
@@ -572,6 +550,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (MSALPublicClientApplication *)getApplication {
   return _msalPublicClientApplication;
+}
+
+- (void)continueToGetAccountInfoForAccount:(MSALAccount *)account
+                           completionBlock:
+                               (MSQACompletionBlock)completionBlock {
+  MSALSilentTokenParameters *silentTokenParameters =
+      [[MSALSilentTokenParameters alloc] initWithScopes:DEFAULT_SCOPES
+                                                account:account];
+  silentTokenParameters.completionBlockQueue = dispatch_get_main_queue();
+
+  MSALCompletionBlock block = ^(MSALResult *_Nullable result,
+                                NSError *_Nullable error) {
+    if (result && !error) {
+      MSQAAccountInfo *account =
+          [MSQASignInClient createMQAAccountInfoFromMSALResult:result];
+      [self
+          continueToFetchPhotoWithAccount:account
+                          completionBlock:^(MSQAAccountInfo *_Nullable account,
+                                            NSError *_Nullable error) {
+                            completionBlock(account, nil);
+                            [MSQALogger.sharedInstance
+                                logWithLevel:MSQALogLevelVerbose
+                                      format:@"Getting the current account "
+                                             @"succeeded"];
+                            [MSQATelemetrySender.sharedInstance
+                                sendWithEvent:kGetCurrentAccountEvent
+                                      message:kSuccessMessage];
+                          }];
+      return;
+    }
+    completionBlock(nil, error);
+    [MSQALogger.sharedInstance
+        logWithLevel:MSQALogLevelError
+              format:@"Failed to get the current account."];
+    [MSQATelemetrySender.sharedInstance sendWithEvent:kGetCurrentAccountEvent
+                                              message:kFailureMessage];
+  };
+
+  [_msalPublicClientApplication
+      acquireTokenSilentWithParameters:silentTokenParameters
+                       completionBlock:block];
 }
 
 @end

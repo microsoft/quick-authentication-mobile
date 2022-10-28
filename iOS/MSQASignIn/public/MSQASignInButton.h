@@ -27,6 +27,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MSQASignInClient.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, MSQASignInButtonType) {
@@ -84,6 +86,17 @@ typedef NS_ENUM(NSInteger, MSQASignInButtonLogo) {
 
 /// The logo alignment for the sign-in button.
 @property(nonatomic, assign) MSQASignInButtonLogo logo;
+
+/// Set the callback when the sign in completes, return `YES` if all parameters
+/// are not nil.
+/// - Parameters:
+///   - signInClient: The `MSQASignInClient` used to sign in.
+///   - viewController: The `UIViewController` used to present the consent
+///   prompt.
+///   - completionBlock: The block to be called when the sign in completes.
+- (BOOL)setSignInClient:(MSQASignInClient *)msSignInClient
+         viewController:(UIViewController *)viewController
+        completionBlock:(MSQACompletionBlock)completionBlock;
 
 @end
 
