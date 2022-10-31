@@ -66,7 +66,7 @@ publishing {
 
             pom {
                 name = ARTIFACT_ID
-                description = 'Quick Auth Android SDK.'
+                description = rootProject.ext.pom_description
                 url = rootProject.ext.github_url
                 licenses {
                     license {

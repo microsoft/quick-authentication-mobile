@@ -30,6 +30,7 @@ ext {
     license_type = 'MIT License'
     license_url = 'https://github.com/microsoft/quick-authentication-mobile/blob/main/LICENSE'
     github_url = 'https://github.com/microsoft/quick-authentication-mobile'
+    pom_description = 'Quick Auth Android SDK.'
     developer_id = 'quick-auth'
     developer_name = 'Microsoft'
     developer_email = 'edgeeasyauth@microsoft.com'
