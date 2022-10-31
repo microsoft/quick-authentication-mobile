@@ -97,6 +97,9 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 @property(nonatomic, strong) UIImageView *iconView;
 
+/// Indicate if the layout direction is from right to left.
+@property(nonatomic, assign) BOOL isRTL;
+
 @end
 
 @implementation MSQASignInButton {
@@ -221,6 +224,10 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
               2);
     break;
   }
+
+  if (self.isRTL) {
+    x = self.bounds.size.width - x - size.width;
+  }
   CGFloat y = round((self.bounds.size.height - size.height) / 2);
 
   [string drawAtPoint:CGPointMake(x, y)
@@ -251,6 +258,11 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _viewController = viewController;
   _completionBlock = completionBlock;
   return msSignInClient && viewController && completionBlock;
+}
+
+- (BOOL)isRTL {
+  return self.effectiveUserInterfaceLayoutDirection ==
+         UIUserInterfaceLayoutDirectionRightToLeft;
 }
 
 #pragma mark - Override
@@ -561,6 +573,10 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
     x = (self.bounds.size.width - iconWidth - kElementPadding - textWidth) / 2;
     break;
   }
+
+  if (self.isRTL) {
+    x = self.bounds.size.width - x - [self buttonIconWidth];
+  }
   CGFloat y = (self.bounds.size.height - iconWidth) / 2;
   return CGRectMake(x, y, iconWidth, iconWidth);
 }
@@ -597,6 +613,12 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 - (UIFont *)buttonTextFont {
   CGFloat size = [self buttonTextFontSize];
+  // We only try to apply the SegoeUI-SemiBold font for English, other languages
+  // use the system default.
+  if (![MSQASignInButton isEnglish]) {
+    return [UIFont systemFontOfSize:size];
+  }
+
   UIFont *font = [UIFont fontWithName:kFontNameSegoeUISemiBold size:size];
   if (!font) {
     NSString *path = [[NSBundle bundleForClass:[self class]]
@@ -638,6 +660,14 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
                        attributes:@{NSFontAttributeName : [self buttonTextFont]}
                           context:nil]
       .size;
+}
+
+#pragma mark - Class methods
+
++ (BOOL)isEnglish {
+  NSString *language =
+      [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
+  return [language isEqualToString:@"en"];
 }
 
 @end
