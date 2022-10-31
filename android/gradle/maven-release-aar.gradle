@@ -4,8 +4,8 @@ apply plugin: 'signing'
 
 ext["GROUP_ID"] = 'com.microsoft'
 ext["ARTIFACT_ID"] = "quickauth"
-ext["VERSION_CODE"] = 1
-ext["VERSION_NAME"] = "0.0.1"
+ext["VERSION_CODE"] = 2
+ext["VERSION_NAME"] = "0.1.0"
 ext["LIB_VERSION"] = "v0.1"
 ext["signing.keyId"] = ''
 ext["signing.password"] = ''
