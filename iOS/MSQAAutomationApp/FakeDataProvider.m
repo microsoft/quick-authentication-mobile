@@ -71,6 +71,13 @@
 }
 
 + (MSALAccount *)getFakeMSALAccount {
+  BOOL canConstructMSALAccount = [MSALAccount
+      instanceMethodForSelector:@selector
+      (initWithUsername:homeAccountId:environment:tenantProfiles:)];
+
+  if (!canConstructMSALAccount) {
+    return nil;
+  }
   NSString *str =
       [NSString stringWithFormat:kFakeMSALAccount, kFakeHomeAccountId];
   NSDictionary *accountDict = [FakeDataProvider getDictFromString:str];
@@ -84,9 +91,13 @@
 }
 
 + (MSALResult *)getFakeMSALResult {
-  FakeMSALResult *result = [[FakeMSALResult alloc]
-      initWithString:kFakeMSALResult
-             account:[FakeDataProvider getFakeMSALAccount]];
+  MSALAccount *account = [FakeDataProvider getFakeMSALAccount];
+  if (!account) {
+    return nil;
+  }
+
+  FakeMSALResult *result =
+      [[FakeMSALResult alloc] initWithString:kFakeMSALResult account:account];
   return result;
 }
 
