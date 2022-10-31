@@ -1,0 +1,63 @@
+jobs:
+  - job: quick_auth_publish
+    displayName: Quick Auth Publish Build Tasks
+    cancelTimeoutInMinutes: 1
+    steps:
+      - checkout: self
+        clean: true
+        submodules: recursive
+        persistCredentials: True
+      - task: Bash@3
+        displayName: 'Base64 decodes and pipes the GPG key content into the secret file'
+        env:
+          GPG_KEY_CONTENT: $(gpgContent)
+          SIGNING_SECRET_KEY_RING_FILE: $(gpgSecretFilePath)
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Write your commands here
+            sudo bash -c "echo '$GPG_KEY_CONTENT' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
+            pwd
+            ls
+      - task: Gradle@3
+        name: Gradle3
+        displayName: Assemble Release
+        inputs:
+          gradleWrapperFile: android/gradlew
+          workingDirectory: 'android'
+          tasks: quick_auth:clean quick_auth:assemble
+          publishJUnitResults: false
+          jdkArchitecture: x86
+          sqAnalysisBreakBuildIfQualityGateFailed: false
+      - task: Gradle@3
+        displayName: 'generate artifacts and publish to feed'
+        inputs:
+          gradleWrapperFile: android/gradlew
+          workingDirectory: 'android'
+          tasks: quick_auth:publish
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '$(jdkVersion)'
+          options: '-PGPGSigningKeyID=$(gpgSignKey) -PGPGSigningPassword=$(gpgSignPassword) -PSigningSecretKeyRingFile=$(gpgSecretFileParentPath)'
+      - task: CopyFiles@2
+        displayName: 'Copy publish file to Artifact Staging Directory'
+        inputs:
+          SourceFolder: android/build/artifacts
+          Contents: '**/*.*'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishPipelineArtifact@1
+        name: PublishPipelineArtifact1
+        displayName: 'Publish Artifact: Build Outputs'
+        inputs:
+          ArtifactName: BuildOutputs
+          TargetPath: $(Build.ArtifactStagingDirectory)
+      - task: EsrpRelease@2
+        inputs:
+          ConnectedServiceName: 'QuickAuthESRPConnection'
+          Intent: 'PackageDistribution'
+          ContentType: 'Maven'
+          PackageLocation: '$(Build.ArtifactStagingDirectory)'
+          Owners: '$(owners)'
+          Approvers: '$(approvers)'
+          ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
+          MainPublisher: 'ESRPRELPACMANTEST'
+          DomainTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
