@@ -632,6 +632,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
     CFErrorRef error;
     CGFontRef loadedFont = CGFontCreateWithDataProvider(provider);
     if (!loadedFont || !CTFontManagerRegisterGraphicsFont(loadedFont, &error)) {
+      CGDataProviderRelease(provider);
       return [UIFont boldSystemFontOfSize:size];
     }
     CGFontRelease(loadedFont);
