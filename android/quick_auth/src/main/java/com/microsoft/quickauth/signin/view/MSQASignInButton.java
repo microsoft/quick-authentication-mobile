@@ -22,12 +22,17 @@
 //  THE SOFTWARE.
 package com.microsoft.quickauth.signin.view;
 
+import static android.content.pm.ApplicationInfo.FLAG_SUPPORTS_RTL;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -49,6 +54,7 @@ import com.microsoft.quickauth.signin.error.MSQAException;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
 import com.microsoft.quickauth.signin.internal.metric.MSQAMetricEvent;
 import com.microsoft.quickauth.signin.internal.metric.MSQASignInMetricListener;
+import java.util.Locale;
 
 public class MSQASignInButton extends LinearLayout {
 
@@ -82,6 +88,7 @@ public class MSQASignInButton extends LinearLayout {
     initAttrs(context, attrs, defStyleAttr);
     init(context);
     updateButtonView();
+    requestLayout();
   }
 
   private void init(Context context) {
@@ -96,8 +103,6 @@ public class MSQASignInButton extends LinearLayout {
     mSignInText = new TextView(context);
     LayoutParams textLayoutParams =
         new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    textLayoutParams.setMargins(
-        getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0, 0, 0);
     addView(mSignInText, textLayoutParams);
     mSignInContainer = this;
 
@@ -193,14 +198,18 @@ public class MSQASignInButton extends LinearLayout {
 
   private void updateButtonView() {
     if (mSignInIcon == null || mSignInText == null) return;
-    if (mButtonType == ButtonType.ICON) {
-      mSignInText.setVisibility(View.GONE);
-    } else {
-      mSignInText.setVisibility(View.VISIBLE);
-    }
     // set container
     mSignInContainer.setBackground(getContainerBackground());
     mSignInContainer.setContentDescription(getResources().getString(getButtonText()));
+    int defaultHeight = getDefaultHeight();
+    mSignInContainer.setMinimumHeight(defaultHeight);
+    mSignInContainer.setMinimumWidth(
+        mButtonType == ButtonType.ICON ? defaultHeight : mDefaultWidth);
+    int containerPadding =
+        mButtonType == ButtonType.ICON
+            ? 0
+            : getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_icon_padding);
+    mSignInContainer.setPadding(containerPadding, 0, containerPadding, 0);
     // set icon
     ViewGroup.LayoutParams iconLayoutParams = mSignInIcon.getLayoutParams();
     if (iconLayoutParams != null) {
@@ -209,29 +218,33 @@ public class MSQASignInButton extends LinearLayout {
       mSignInIcon.setLayoutParams(iconLayoutParams);
     }
     // set text
+    if (mButtonType == ButtonType.ICON) {
+      mSignInText.setVisibility(View.GONE);
+    } else {
+      mSignInText.setVisibility(View.VISIBLE);
+    }
+    ViewGroup.MarginLayoutParams textLayoutParams =
+        (MarginLayoutParams) mSignInText.getLayoutParams();
     mSignInText.setTextAppearance(getContext(), getButtonTextTextAppearance());
     mSignInText.setTextColor(getButtonTextColor());
     mSignInText.setText(getButtonText());
-
+    if (isRTL()) {
+      textLayoutParams.setMargins(
+          0, 0, getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0);
+    } else {
+      textLayoutParams.setMargins(
+          getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_text_padding), 0, 0, 0);
+    }
     // set alignment
-    ViewGroup.MarginLayoutParams iconViewLayoutParams =
-        (MarginLayoutParams) mSignInIcon.getLayoutParams();
     if (mButtonType != ButtonType.ICON) {
       if (mButtonLogoAlignment == ButtonLogoAlignment.CENTER) {
-        iconViewLayoutParams.setMargins(0, 0, 0, 0);
         mSignInText.setGravity(Gravity.CENTER);
         mSignInContainer.setGravity(Gravity.CENTER);
       } else {
-        iconViewLayoutParams.setMargins(
-            getResources().getDimensionPixelSize(R.dimen.msqa_sign_in_button_icon_padding),
-            0,
-            0,
-            0);
         mSignInText.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         mSignInContainer.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
       }
     } else {
-      iconViewLayoutParams.setMargins(0, 0, 0, 0);
       mSignInContainer.setGravity(Gravity.CENTER);
     }
   }
@@ -250,42 +263,6 @@ public class MSQASignInButton extends LinearLayout {
           };
       mClient.signIn(mActivity, mInternalListener);
     }
-  }
-
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    int resultWidth;
-    int resultHeight;
-    int defaultHeight = getDefaultHeight();
-    if (mButtonType == ButtonType.ICON) {
-      resultWidth = defaultHeight;
-      resultHeight = defaultHeight;
-    } else {
-      resultWidth = measureDimension(mDefaultWidth, widthMeasureSpec);
-      resultHeight = measureDimension(defaultHeight, heightMeasureSpec);
-    }
-    super.onMeasure(
-        MeasureSpec.makeMeasureSpec(resultWidth, MeasureSpec.EXACTLY),
-        MeasureSpec.makeMeasureSpec(resultHeight, MeasureSpec.EXACTLY));
-  }
-
-  private int measureDimension(int defaultSize, int measureSpec) {
-    int result = defaultSize;
-    int specMode = MeasureSpec.getMode(measureSpec);
-    int specSize = MeasureSpec.getSize(measureSpec);
-    switch (specMode) {
-      case MeasureSpec.UNSPECIFIED:
-        result = specSize;
-        break;
-      case MeasureSpec.EXACTLY:
-        // ensure view min size
-        result = Math.max(specSize, defaultSize);
-        break;
-      case MeasureSpec.AT_MOST:
-        result = defaultSize;
-        break;
-    }
-    return result;
   }
 
   private Drawable getContainerBackground() {
@@ -386,5 +363,19 @@ public class MSQASignInButton extends LinearLayout {
             info.setClassName(Button.class.getName());
           }
         });
+  }
+
+  /**
+   * @return true, if current it a right-to-left layout
+   */
+  public boolean isRTL() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      return false;
+    }
+    ApplicationInfo applicationInfo = getContext().getApplicationInfo();
+    boolean hasRtlSupport = (applicationInfo.flags & FLAG_SUPPORTS_RTL) == FLAG_SUPPORTS_RTL;
+    boolean isRtl =
+        TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
+    return hasRtlSupport && isRtl;
   }
 }
