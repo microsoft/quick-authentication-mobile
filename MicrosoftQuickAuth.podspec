@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.ios.deployment_target = "11.0"
   s.source       = {
-    :git => "https://github.com/minggangw/MicrosoftQuickAuth.git",
+    :git => "https://github.com/minggangw/quick-authentication-mobile.git",
     :tag => s.version.to_s,
   }
   s.source_files = "iOS/MSQASignIn/**/*.[mh]"
