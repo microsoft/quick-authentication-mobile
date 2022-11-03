@@ -42,11 +42,11 @@ jobs:
           jdkArchitecture: x86
           sqAnalysisBreakBuildIfQualityGateFailed: false
       - task: CopyFiles@2
-          displayName: 'Copy unit-test result to Artifact Staging Directory'
-          inputs:
-            SourceFolder: android/quick_auth/build/reports/tests/
-            Contents: '**/*.*'
-            TargetFolder: $(Build.ArtifactStagingDirectory)
+        displayName: 'Copy unit-test result to Artifact Staging Directory'
+        inputs:
+          SourceFolder: android/quick_auth/build/reports/tests/
+          Contents: '**/*.*'
+          TargetFolder: $(Build.ArtifactStagingDirectory)
 
   - job: quick_auth_instrumentation_test
     displayName: Quick Auth Instrumentation Test Tasks
