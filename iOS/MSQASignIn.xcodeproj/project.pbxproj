@@ -278,6 +278,7 @@
 		29DC394328A63F6E00699274 /* MSQASignIn */ = {
 			isa = PBXGroup;
 			children = (
+				0262E18128D0473B000DC8C8 /* resources */,
 				29F0A347290A7740006C267E /* strings */,
 				29DC396F28A653A500699274 /* public */,
 				29DC396C28A6498100699274 /* src */,
@@ -290,7 +291,6 @@
 		29DC396C28A6498100699274 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				0262E18128D0473B000DC8C8 /* resources */,
 				296E2DD428D1D2D000EC06EE /* MSQASilentTokenParameters.m */,
 				29DC397028A6551300699274 /* MSQASignIn_Private.h */,
 				2903638328F931DA00142C95 /* MSQATokenResult_Private.h */,

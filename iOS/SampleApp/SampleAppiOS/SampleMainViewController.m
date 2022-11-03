@@ -27,10 +27,10 @@
 
 #import "SampleMainViewController.h"
 
-#import <MSQASignIn/MSQAAccountInfo.h>
-#import <MSQASignIn/MSQASignInClient.h>
-#import <MSQASignIn/MSQASilentTokenParameters.h>
-#import <MSQASignIn/MSQATokenResult.h>
+#import <MicrosoftQuickAuth/MSQAAccountInfo.h>
+#import <MicrosoftQuickAuth/MSQASignInClient.h>
+#import <MicrosoftQuickAuth/MSQASilentTokenParameters.h>
+#import <MicrosoftQuickAuth/MSQATokenResult.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleLoginViewController.h"

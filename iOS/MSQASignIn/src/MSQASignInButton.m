@@ -540,15 +540,15 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 - (NSString *)buttonIconImagePath {
   switch (_size) {
   case kMSQASignInButtonSizeLarge:
-    return [[NSBundle bundleForClass:[self class]]
+    return [[MSQASignInButton getFrameworkBundle]
         pathForResource:kLargeIconImageName
                  ofType:@"png"];
   case kMSQASignInButtonSizeMedium:
-    return [[NSBundle bundleForClass:[self class]]
+    return [[MSQASignInButton getFrameworkBundle]
         pathForResource:kMediumIconImageName
                  ofType:@"png"];
   case kMSQASignInButtonSizeSmall:
-    return [[NSBundle bundleForClass:[self class]]
+    return [[MSQASignInButton getFrameworkBundle]
         pathForResource:kSmallIconImageName
                  ofType:@"png"];
   }
@@ -581,28 +581,42 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   return CGRectMake(x, y, iconWidth, iconWidth);
 }
 
++ (nullable NSBundle *)getFrameworkBundle {
+  NSString *const kBundlePath = @"MicrosoftQuickAuth";
+  NSString *path = [[NSBundle mainBundle] pathForResource:kBundlePath
+                                                   ofType:@"bundle"];
+  if (!path) {
+    path = [[NSBundle bundleForClass:[MSQASignInButton class]]
+        pathForResource:kBundlePath
+                 ofType:@"bundle"];
+  }
+  return [NSBundle bundleWithPath:path];
+}
+
 - (NSString *)buttonTextString {
+  NSString *const kStringsTableName = @"Localizable";
+
   switch (_text) {
   case kMSQASignInButtonTextSignInWith:
-    return [[NSBundle bundleForClass:self.class]
+    return [[MSQASignInButton getFrameworkBundle]
         localizedStringForKey:@"msqa_signin_with_text"
                         value:nil
-                        table:nil];
+                        table:kStringsTableName];
   case kMSQASignInButtonTextSignUpWith:
-    return [[NSBundle bundleForClass:self.class]
+    return [[MSQASignInButton getFrameworkBundle]
         localizedStringForKey:@"msqa_signup_with_text"
                         value:nil
-                        table:nil];
+                        table:kStringsTableName];
   case kMSQASignInButtonTextContinueWith:
-    return [[NSBundle bundleForClass:self.class]
+    return [[MSQASignInButton getFrameworkBundle]
         localizedStringForKey:@"msqa_continue_with_text"
                         value:nil
-                        table:nil];
+                        table:kStringsTableName];
   case kMSQASignInButtonTextSignIn:
-    return [[NSBundle bundleForClass:self.class]
-        localizedStringForKey:@"msqa_signin_text"
+    return [[MSQASignInButton getFrameworkBundle]
+        localizedStringForKey:@"msqa_signin_with_text"
                         value:nil
-                        table:nil];
+                        table:kStringsTableName];
   }
 }
 
