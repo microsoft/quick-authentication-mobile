@@ -32,7 +32,6 @@
 
         <activity android:name=".signinbuttontest.MSQASignInButtonTestActivity" />
         <activity android:name=".apitest.MSQAApiTestActivity" />
-        <activity android:name=".logtest.MSQALoggerTestActivity" />
 
         <activity android:name="com.microsoft.identity.client.BrowserTabActivity">
             <intent-filter>
