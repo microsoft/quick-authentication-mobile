@@ -2,8 +2,6 @@ trigger:
   branches:
     include:
       - user/jingjinggu/*
-    exclude:
-      - main
 
 jobs:
   - job: quick_auth_build
