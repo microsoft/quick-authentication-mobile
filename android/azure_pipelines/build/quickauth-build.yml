@@ -12,7 +12,7 @@ jobs:
         clean: true
         submodules: recursive
         persistCredentials: True
-      - task: Gradle@3
+      - task: Gradle@1
         name: Gradle3
         displayName: Assemble Release
         inputs:
@@ -31,7 +31,7 @@ jobs:
         clean: true
         submodules: recursive
         persistCredentials: True
-      - task: Gradle@3
+      - task: Gradle@2
         name: Gradle3
         displayName: Run Unit Test
         inputs:
@@ -88,7 +88,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb devices
 
             echo "Emulator started"
-      - task: Gradle@3
+      - task: Gradle@4
         name: Gradle3
         displayName: Run Instrumentation Test
         inputs:
