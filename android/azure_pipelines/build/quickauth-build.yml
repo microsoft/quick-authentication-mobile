@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - user/jingjinggu/*
+
+jobs:
+  - job: quick_auth_build
+    displayName: Quick Auth Build Tasks
+    cancelTimeoutInMinutes: 1
+    steps:
+      - checkout: self
+        clean: true
+        submodules: recursive
+        persistCredentials: True
+      - task: Gradle@3
+        name: Gradle3
+        displayName: Assemble Release
+        inputs:
+          gradleWrapperFile: android/gradlew
+          workingDirectory: 'android'
+          tasks: quick_auth:clean quick_auth:assemble
+          publishJUnitResults: false
+          jdkArchitecture: x86
+          sqAnalysisBreakBuildIfQualityGateFailed: false
+
