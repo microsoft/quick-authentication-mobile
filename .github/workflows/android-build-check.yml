@@ -1,6 +1,15 @@
 name: Android Build CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      - 'main'
+    paths:
+      - '**.java'
+      - '**.kt'
+      - '**.xml'
+      - '**.gradle'
 
 jobs:
 
