@@ -27,9 +27,9 @@
 
 #import "SampleAppDelegate.h"
 
-#import <MSQASignIn/MSQAConfiguration.h>
-#import <MSQASignIn/MSQALogger.h>
-#import <MSQASignIn/MSQASignInClient.h>
+#import <MicrosoftQuickAuth/MSQAConfiguration.h>
+#import <MicrosoftQuickAuth/MSQALogger.h>
+#import <MicrosoftQuickAuth/MSQASignInClient.h>
 
 #import "SampleLoginViewController.h"
 #import "SampleMainViewController.h"

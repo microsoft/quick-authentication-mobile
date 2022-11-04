@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B30C49B728EEE8FD00A4E770 /* MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B30C49B628EEE8FD00A4E770 /* MSQASignIn.framework */; };
-		B30C49B828EEE8FD00A4E770 /* MSQASignIn.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B30C49B628EEE8FD00A4E770 /* MSQASignIn.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		86F9C9A59B61BF49521284ED /* Pods_QuickAuthSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F62E040F35A4235ABBEB2BEA /* Pods_QuickAuthSample.framework */; };
 		D62CF4821E9593ED006C0217 /* SampleMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D62CF4811E9593ED006C0217 /* SampleMainViewController.m */; };
 		D62CF4851E9593FB006C0217 /* SampleLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D62CF4841E9593FB006C0217 /* SampleLoginViewController.m */; };
 		D62CF4871E9594B2006C0217 /* SampleMainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D62CF4861E9594B2006C0217 /* SampleMainView.xib */; };
@@ -27,7 +26,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				B30C49B828EEE8FD00A4E770 /* MSQASignIn.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,14 +34,9 @@
 
 /* Begin PBXFileReference section */
 		1F4E7F9A08A5E9E912BD6799 /* Pods-QuickAuthSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickAuthSample.release.xcconfig"; path = "Target Support Files/Pods-QuickAuthSample/Pods-QuickAuthSample.release.xcconfig"; sourceTree = "<group>"; };
-		29E06DE528BDE889003D558A /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		29EA75A328C0753500501E0E /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29EA75A528C0754E00501E0E /* MSQASignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MSQASignIn.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MSQASignIn-gzvtpzblebotjuggxkdcxlojhwdt/Build/Products/Debug-iphonesimulator/MSQASignIn.framework"; sourceTree = "<group>"; };
-		29EA75AA28C0B67D00501E0E /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8025F4CC28EAEBB7A21FB6C0 /* Pods-QuickAuthSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickAuthSample.debug.xcconfig"; path = "Target Support Files/Pods-QuickAuthSample/Pods-QuickAuthSample.debug.xcconfig"; sourceTree = "<group>"; };
 		B221CF0820C4859C002F5E94 /* SampleAppiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SampleAppiOS.entitlements; sourceTree = "<group>"; };
-		B30C49B328EEE8C700A4E770 /* MSAL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSAL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B30C49B628EEE8FD00A4E770 /* MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D62CF4801E9593ED006C0217 /* SampleMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleMainViewController.h; sourceTree = "<group>"; };
 		D62CF4811E9593ED006C0217 /* SampleMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleMainViewController.m; sourceTree = "<group>"; };
 		D62CF4831E9593FB006C0217 /* SampleLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleLoginViewController.h; sourceTree = "<group>"; };
@@ -58,7 +51,7 @@
 		D6AEBD7A1E92DBB300C31082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6AEBD7C1E92DBB300C31082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6B88B161EA55F3C00A2374B /* no_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_photo.png; sourceTree = "<group>"; };
-		EB0030CD9F5EAEF51B8E54F5 /* Pods_QuickAuthSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickAuthSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F62E040F35A4235ABBEB2BEA /* Pods_QuickAuthSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickAuthSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B30C49B728EEE8FD00A4E770 /* MSQASignIn.framework in Frameworks */,
+				86F9C9A59B61BF49521284ED /* Pods_QuickAuthSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,12 +69,7 @@
 		29AD994428AE2CF80029F4FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B30C49B628EEE8FD00A4E770 /* MSQASignIn.framework */,
-				B30C49B328EEE8C700A4E770 /* MSAL.framework */,
-				29EA75A328C0753500501E0E /* MSQASignIn.framework */,
-				29EA75AA28C0B67D00501E0E /* MSQASignIn.framework */,
-				29E06DE528BDE889003D558A /* MSQASignIn.framework */,
-				EB0030CD9F5EAEF51B8E54F5 /* Pods_QuickAuthSample.framework */,
+				F62E040F35A4235ABBEB2BEA /* Pods_QuickAuthSample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -252,10 +240,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-QuickAuthSample/Pods-QuickAuthSample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/MSAL/MSAL.framework",
+				"${BUILT_PRODUCTS_DIR}/MicrosoftQuickAuth/MicrosoftQuickAuth.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MSAL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MicrosoftQuickAuth.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
