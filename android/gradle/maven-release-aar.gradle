@@ -4,9 +4,6 @@ apply plugin: 'signing'
 
 ext["GROUP_ID"] = 'com.microsoft'
 ext["ARTIFACT_ID"] = "quickauth"
-ext["VERSION_CODE"] = 300
-ext["VERSION_NAME"] = "0.3.0"
-ext["LIB_VERSION"] = "v0.1"
 ext["signing.keyId"] = ''
 ext["signing.password"] = ''
 ext["signing.secretKeyRingFile"] = ''
@@ -62,7 +59,7 @@ publishing {
         quickauth(MavenPublication) {
             groupId = GROUP_ID
             artifactId = ARTIFACT_ID
-            version = VERSION_NAME
+            version = rootProject.ext.quickAuthVersionName
 
             pom {
                 name = ARTIFACT_ID
@@ -98,7 +95,7 @@ publishing {
             }
             artifact(sourcesJar)
             artifact(javadocJar)
-            artifact("$buildDir/outputs/aar/quickauth-${VERSION_NAME}.aar")
+            artifact("$buildDir/outputs/aar/quickauth-${rootProject.ext.quickAuthVersionName}.aar")
         }
 
     }

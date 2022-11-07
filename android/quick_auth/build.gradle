@@ -10,7 +10,7 @@ spotless {
     java {
         target project.fileTree(project.rootDir) {
             include '**/*.java'
-            exclude '**/signdemo1/**'
+            exclude '**/azuresamples/**'
         }
         googleJavaFormat()
     }
@@ -24,11 +24,11 @@ android {
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
+        versionCode rootProject.ext.quickAuthVersionCode
+        versionName rootProject.ext.quickAuthVersionName
         project.archivesBaseName = "quickauth"
         project.version = android.defaultConfig.versionName
-        buildConfigField("String", "LIB_VERSION", "\"${project.ext.LIB_VERSION}\"")
+        buildConfigField("String", "LIB_VERSION", "\"${rootProject.ext.quickAuthMetricLibVersion}\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

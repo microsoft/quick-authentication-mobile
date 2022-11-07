@@ -6,13 +6,16 @@ ext {
     targetSdkVersion = 30
     compileSdkVersion = 30
     buildToolsVersion = "30.0.3"
+    quickAuthMetricLibVersion = "v0.1"
+    quickAuthVersionCode = 400
+    quickAuthVersionName = "0.4.0"
 
     // Plugins
     gradleVersion = '4.2.0'
 
     // Libraries
-    quickAuthVersion = "1.0.0"
     msalSDKVersion = "3.0.2"
+    kotlinCoreVersion = "1.1.0"
     recyclerviewVersion = "1.2.1"
     androidxTestCoreVersion = "1.2.0"
     androidxJunitVersion = "1.1.1"
