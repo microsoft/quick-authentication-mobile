@@ -74,12 +74,12 @@
           if (account && !error) {
             SampleMainViewController *controller =
                 [SampleMainViewController sharedViewController];
-            [controller setAccountInfo:account signInClient:_msSignInClient];
+            [controller setAccountInfo:account signInClient:self->_msSignInClient];
             [self setCurrentViewController:controller];
             return;
           }
           [[SampleLoginViewController sharedViewController]
-              setSignInClient:_msSignInClient];
+              setSignInClient:self->_msSignInClient];
           [self setCurrentViewController:[SampleLoginViewController
                                              sharedViewController]];
         }];
@@ -144,7 +144,7 @@
         }
         completion:^(BOOL finished) {
           [oldController removeFromParentViewController];
-          [viewController didMoveToParentViewController:_rootController];
+          [viewController didMoveToParentViewController:self->_rootController];
         }];
   }
 }
