@@ -52,7 +52,7 @@ jobs:
           TargetPath: $(Build.ArtifactStagingDirectory)
       - task: EsrpRelease@2
         inputs:
-          ConnectedServiceName: 'QuickAuthESRPConnection'
+          ConnectedServiceName: 'QuickAuthESRPReleaseConnection'
           Intent: 'PackageDistribution'
           ContentType: 'Maven'
           PackageLocation: '$(Build.ArtifactStagingDirectory)'

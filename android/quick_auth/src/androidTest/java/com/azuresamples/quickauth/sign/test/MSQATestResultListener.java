@@ -20,32 +20,12 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test;
 
-import androidx.annotation.StringDef;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import androidx.annotation.Nullable;
+import com.microsoft.quickauth.signin.error.MSQAException;
+import com.microsoft.quickauth.signin.internal.metric.MSQAMetricController;
 
-@Retention(RetentionPolicy.SOURCE)
-@StringDef({
-  MSQAMetricEvent.SIGN_IN_SUCCESS,
-  MSQAMetricEvent.SIGN_IN_FAILURE,
-  MSQAMetricEvent.BUTTON_SIGN_IN,
-  MSQAMetricEvent.SIGN_OUT,
-  MSQAMetricEvent.GET_CURRENT_ACCOUNT,
-  MSQAMetricEvent.SIGN_IN,
-  MSQAMetricEvent.ACQUIRE_TOKEN,
-  MSQAMetricEvent.ACQUIRE_TOKEN_SILENT,
-  MSQAMetricEvent.TEST
-})
-public @interface MSQAMetricEvent {
-  String SIGN_IN_SUCCESS = "SignIn.Success";
-  String SIGN_IN_FAILURE = "SignIn.Failure";
-  String BUTTON_SIGN_IN = "button-sign-in";
-  String SIGN_OUT = "signOut";
-  String GET_CURRENT_ACCOUNT = "getCurrentAccount";
-  String SIGN_IN = "signIn";
-  String ACQUIRE_TOKEN = "acquireToken";
-  String ACQUIRE_TOKEN_SILENT = "acquireTokenSilent";
-  String TEST = "test";
+public interface MSQATestResultListener {
+  void onResult(@Nullable MSQAMetricController controller, Object result, MSQAException error);
 }

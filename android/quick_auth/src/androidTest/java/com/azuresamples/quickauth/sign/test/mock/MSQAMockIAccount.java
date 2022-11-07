@@ -20,32 +20,60 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test.mock;
 
-import androidx.annotation.StringDef;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.microsoft.identity.client.IAccount;
+import java.util.HashMap;
+import java.util.Map;
 
-@Retention(RetentionPolicy.SOURCE)
-@StringDef({
-  MSQAMetricEvent.SIGN_IN_SUCCESS,
-  MSQAMetricEvent.SIGN_IN_FAILURE,
-  MSQAMetricEvent.BUTTON_SIGN_IN,
-  MSQAMetricEvent.SIGN_OUT,
-  MSQAMetricEvent.GET_CURRENT_ACCOUNT,
-  MSQAMetricEvent.SIGN_IN,
-  MSQAMetricEvent.ACQUIRE_TOKEN,
-  MSQAMetricEvent.ACQUIRE_TOKEN_SILENT,
-  MSQAMetricEvent.TEST
-})
-public @interface MSQAMetricEvent {
-  String SIGN_IN_SUCCESS = "SignIn.Success";
-  String SIGN_IN_FAILURE = "SignIn.Failure";
-  String BUTTON_SIGN_IN = "button-sign-in";
-  String SIGN_OUT = "signOut";
-  String GET_CURRENT_ACCOUNT = "getCurrentAccount";
-  String SIGN_IN = "signIn";
-  String ACQUIRE_TOKEN = "acquireToken";
-  String ACQUIRE_TOKEN_SILENT = "acquireTokenSilent";
-  String TEST = "test";
+// MSQA mock test IAccount.
+public class MSQAMockIAccount implements IAccount {
+
+  private Context mContext;
+  private Map<String, Object> mClaims;
+
+  public MSQAMockIAccount(Context context) {
+    mContext = context;
+    mClaims = new HashMap<>();
+    mClaims.put("name", MSQATestMockUtil.MOCK_STRING);
+  }
+
+  @NonNull
+  @Override
+  public String getId() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public String getAuthority() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @Nullable
+  @Override
+  public String getIdToken() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @Nullable
+  @Override
+  public Map<String, ?> getClaims() {
+    return mClaims;
+  }
+
+  @NonNull
+  @Override
+  public String getUsername() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public String getTenantId() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
 }

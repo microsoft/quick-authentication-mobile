@@ -36,9 +36,8 @@ android {
             debuggable true
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             debuggable false
-            consumerProguardFiles 'consumer-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -77,4 +76,5 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$rootProject.ext.mockitoCoreVersion"
     testImplementation "junit:junit:${rootProject.ext.junitVersion}"
     testImplementation "androidx.test:core:$rootProject.ext.androidxTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 }

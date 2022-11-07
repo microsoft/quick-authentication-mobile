@@ -30,27 +30,55 @@ import com.microsoft.quickauth.signin.error.MSQAException;
 public class MSQAMetricListener<TResult> implements OnCompleteListener<TResult> {
   protected final @NonNull MSQAMetricController mController;
   protected final @Nullable OnCompleteListener<TResult> mCompleteListener;
-  private final @NonNull MSQAErrorToMessageMapper mMessageMapper;
+  protected boolean mPostMetric;
 
   public MSQAMetricListener(
       @NonNull MSQAMetricController controller,
       @Nullable OnCompleteListener<TResult> completeListener) {
-    this(controller, completeListener, new MSQAErrorToMessageMapper());
+    this(controller, completeListener, true);
+  }
+
+  public MSQAMetricListener(@NonNull MSQAMetricController controller, boolean postMetric) {
+    this(controller, null, postMetric);
   }
 
   public MSQAMetricListener(
       @NonNull MSQAMetricController controller,
       @Nullable OnCompleteListener<TResult> completeListener,
-      @NonNull MSQAErrorToMessageMapper messageMapper) {
+      boolean postMetric) {
     mController = controller;
     mCompleteListener = completeListener;
-    mMessageMapper = messageMapper;
+    mPostMetric = postMetric;
   }
 
   @Override
   public void onComplete(@Nullable TResult tResult, @Nullable MSQAException error) {
     if (mCompleteListener != null) mCompleteListener.onComplete(tResult, error);
-    mMessageMapper.map(mController.getEvent(), tResult, error);
-    mController.postMetric();
+    mController.getMessageMapper().map(mController.getEvent(), tResult, error);
+    if (mPostMetric) {
+      mController.postMetric();
+    }
+  }
+
+  public @NonNull MSQAMetricController getController() {
+    return mController;
+  }
+
+  /** Wrapper completeListener when this listener is not a MSQAMetricListener. */
+  public static <TResult> MSQAMetricListener<TResult> wrapperIfNeeded(
+      @NonNull OnCompleteListener<TResult> completeListener,
+      @NonNull MSQAMetricListenerCreator<TResult> creator) {
+    MSQAMetricListener<TResult> internalListener;
+    if (!(completeListener instanceof MSQAMetricListener)) {
+      internalListener = creator.create();
+    } else {
+      internalListener = (MSQAMetricListener<TResult>) completeListener;
+    }
+    return internalListener;
+  }
+
+  public interface MSQAMetricListenerCreator<TResult> {
+    @NonNull
+    MSQAMetricListener<TResult> create();
   }
 }

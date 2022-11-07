@@ -20,24 +20,72 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
-package com.microsoft.quickauth.signin.internal.metric;
+package com.azuresamples.quickauth.sign.test.mock;
 
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.List;
+import com.microsoft.identity.client.IAccount;
+import com.microsoft.identity.client.IAuthenticationResult;
+import java.util.Date;
+import java.util.UUID;
 
-public interface IMSQAMetricController {
+// MSQA mock test AuthenticationResult.
+public class MSQAMockAuthentication implements IAuthenticationResult {
+
+  private final Context mContext;
+  private @NonNull final MSQAMockIAccount mAccount;
+
+  public MSQAMockAuthentication(@NonNull Context context) {
+    mContext = context;
+    mAccount = new MSQAMockIAccount(context);
+  }
 
   @NonNull
-  MSQAMetric.MetricEvent getEvent();
+  @Override
+  public String getAccessToken() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public String getAuthorizationHeader() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public String getAuthenticationScheme() {
+    return MSQATestMockUtil.MOCK_STRING;
+  }
+
+  @NonNull
+  @Override
+  public Date getExpiresOn() {
+    return new Date();
+  }
 
   @Nullable
-  List<MSQAMetric.MetricEvent> getExtEvent();
-
-  MSQAMetricController addExtEvent(@NonNull MSQAMetric.MetricEvent event);
+  @Override
+  public String getTenantId() {
+    return null;
+  }
 
   @NonNull
-  IMSQAErrorToMessageMapper getMessageMapper();
+  @Override
+  public IAccount getAccount() {
+    return mAccount;
+  }
 
-  void postMetric();
+  @NonNull
+  @Override
+  public String[] getScope() {
+    return new String[] {"user.read"};
+  }
+
+  @Nullable
+  @Override
+  public UUID getCorrelationId() {
+    return null;
+  }
 }
