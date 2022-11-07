@@ -9,12 +9,36 @@ trigger:
 pool:
   vmImage: 'macos-latest'
 
-steps:
-- task: Xcode@5
-  inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+jobs:
+- job:
+  displayName: 'Build Sample App'
+  steps:
+  - bash: 'cd iOS/SampleApp/ && brew install cocoapods'
+    displayName: 'Install dependencies'
+  - task: Xcode@5
+    displayName: 'Build QuickAuthSample'
+    inputs:
+      actions: 'build'
+      scheme: 'SampleAppiOS'
+      sdk: 'iphoneos'
+      configuration: 'Release'
+      xcWorkspacePath: 'iOS/SampleApp/QuickAuthSample.xcworkspace'
+      xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+      packageApp: true
+      archivePath: 'iOS/SampleApp/archieve'
+      exportPath: 'iOS/SampleApp/ipa'
+      signingOption: nosign
+
+  - task: CopyFiles@2
+    displayName: 'Copy Archieves to Staging Directory'
+    inputs:
+      SourceFolder: 'iOS/SampleApp/ipa'
+      Contents: '*.ipa'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishPipelineArtifact@1
+    name: PublishPipelineArtifact1
+    displayName: 'Publish Artifact'
+    inputs:
+      ArtifactName: BuildOutputs
+      TargetPath: $(Build.ArtifactStagingDirectory)
