@@ -13,7 +13,7 @@ jobs:
 - job:
   displayName: 'Build Sample App'
   steps:
-  - bash: 'cd iOS/SampleApp/ && brew install cocoapods'
+  - bash: 'cd iOS/SampleApp/ && pod install'
     displayName: 'Install dependencies'
   - task: Xcode@5
     displayName: 'Build QuickAuthSample'
