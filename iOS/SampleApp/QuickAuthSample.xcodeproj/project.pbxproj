@@ -410,7 +410,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PODS_ROOT = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.signinDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.signinDemo-df";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
@@ -432,7 +432,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PODS_ROOT = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.microsoft.signinDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.signinDemo-df";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
