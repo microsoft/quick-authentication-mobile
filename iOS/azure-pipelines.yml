@@ -36,6 +36,7 @@ jobs:
       xcodeVersion: 'default'
       packageApp: true
       archivePath: 'iOS/SampleApp/archive'
+      exportTeamId: '9KBH5RKYEW'
   - bash: |
       rm -rf distribution
       mkdir distribution
