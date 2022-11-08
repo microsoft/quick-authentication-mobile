@@ -1,3 +1,6 @@
 rootProject.name = "QuickAuth"
-include ':Demo'
 include ':quick_auth'
+
+// demoapps apps
+include ':demoapps:javademo'
+include ':demoapps:kotlindemo'
