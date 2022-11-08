@@ -37,9 +37,9 @@ public class ByteCodeUtil {
   public static Bitmap base64ToBitmap(String base64) {
     if (TextUtils.isEmpty(base64)) return null;
     try {
-      byte[] decode = Base64.decode(base64, Base64.NO_WRAP);
+      byte[] decode = Base64.decode(base64, Base64.DEFAULT);
       return BitmapFactory.decodeByteArray(decode, 0, decode.length);
-    } catch (Exception e) {
+    } catch (Throwable e) {
       e.printStackTrace();
     }
     return null;

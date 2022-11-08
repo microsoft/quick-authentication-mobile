@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.util.Base64
-import java.lang.Exception
 
 object ByteCodeUtil {
     /**
@@ -38,9 +37,9 @@ object ByteCodeUtil {
     fun base64ToBitmap(base64: String?): Bitmap? {
         if (TextUtils.isEmpty(base64)) return null
         try {
-            val decode = Base64.decode(base64, Base64.NO_WRAP)
+            val decode = Base64.decode(base64, Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(decode, 0, decode.size)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
         }
         return null
