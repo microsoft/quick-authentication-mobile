@@ -33,6 +33,7 @@ public class ChooseActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     findViewById(R.id.sign_in_activity)
+
         .setOnClickListener(
             v -> startActivity(new Intent(ChooseActivity.this, SignInActivity.class)));
     findViewById(R.id.token_activity)
