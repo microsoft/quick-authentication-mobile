@@ -33,7 +33,7 @@ jobs:
       sdk: 'iphoneos'
       configuration: 'Debug'
       xcWorkspacePath: 'iOS/SampleApp/QuickAuthSample.xcworkspace'
-      xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+      xcodeVersion: 'default'
       packageApp: true
       archivePath: 'iOS/SampleApp/archive'
   - bash: |
