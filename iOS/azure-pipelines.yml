@@ -18,6 +18,11 @@ jobs:
     inputs:
       certSecureFile: 'QuickAuthCert2022.p12'
       certPwd: '$(quick_auth_password202)'
+  - task: InstallAppleProvisioningProfile@1
+    inputs:
+      provisioningProfileLocation: 'secureFiles'
+      provProfileSecureFile: '3f1fb761-5e70-4635-ab90-4cd46a498cbb.mobileprovision'
+      removeProfile: true
   - task: DownloadSecureFile@1
     name: dogFoodProvision
     displayName: 'Download the dogFood provision'
@@ -35,12 +40,12 @@ jobs:
       xcWorkspacePath: 'iOS/SampleApp/QuickAuthSample.xcworkspace'
       xcodeVersion: 'default'
       packageApp: true
-      archivePath: 'iOS/SampleApp/archive'
-      exportTeamId: '9KBH5RKYEW'
+      signingOption: default
+      archivePath: '${Build.ArtifactStagingDirectory)/archive'
   - bash: |
       rm -rf distribution
       mkdir distribution
-      cp iOS/SampleApp/archive/*.xcarchive distribution/
+      cp ${Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
       cp $(dogFoodProvision.secureFilePath) distribution/
       cp iOS/SampleApp/export/ExportOptions.plist distribution/
       pushd distribution
