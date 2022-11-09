@@ -4,56 +4,67 @@
 |--|--|--|
 
 ## Steps to run the app
-1. Clone the code
-> https://github.com/microsoft/quick-authentication-mobile/
 
-The following steps are for Android Studio. But you can choose and work with any editor of your choice.
-Open Android Studio, and select open an existing Android Studio project. Find the cloned project and open in android folder.
+1. Clone the project and open in Android Studio.
 
-2. Step 2: Run the sample
-    1. Run java demo, select Run > Run 'demoapps.javademo', the java demo code is in android/demoapps/javademo folder.
-    2. Run kotlin demo, select Run > Run 'demoapps.kotlindemo'. the kotlin demo code is in android/demoapps/kotlindemo folder.
+    > https://github.com/microsoft/quick-authentication-mobile/
+
+2. Run the sample
+
+    - Java Demo: Run `demoapps.javademo`, and the code is in `android/demoapps/javademo` folder.
+    - Kotlin Demo: Run `demoapps.kotlindemo`, and the code is in `android/demoapps/kotlindemo` folder.
+
 
 ## How to integrate into your projects
-1. Add to your app's build.gradle:
-```deps
-dependencies {
-    implementation "com.microsoft:quickauth:0.4.0"
-}
-```
 
-2. Please also add the following lines to your repositories section in your build.gradle:
-```repositorys
-maven {
-    url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
-}
-mavenCentral()
-```
+1. Add dependencies in `build.gradle`.
 
-3. Create your MSAL configuration file
-The configuration file is a JSON file which can be saved from the portal website, more configuration information please refer to  [configuration file documentation](https://docs.microsoft.com/zh-cn/azure/active-directory/develop/msal-configuration).
-
-Create this JSON file as a "raw" resource file in your project resources. You'll be able to refer to this using the generated resource identifier when initializing.
-Below the redirect URI please paste:
-```single
-"account_mode" : "SINGLE",
-```
-Your config file should resemble this example:
-```config
-{
-  "client_id": "<YOUR_CLIENT_ID>",
-  "authorization_user_agent": "DEFAULT",
-  "redirect_uri": "msauth://<YOUR_PACKAGE_NAME>/<YOUR_BASE64_URL_ENCODED_PACKAGE_SIGNATURE>",
-  "account_mode": "SINGLE",
-  "broker_redirect_uri_registered": true,
-  "authorities": [
-    {
-      "type": "AAD",
-      "audience": {
-        "type": "PersonalMicrosoftAccount",
-        "tenant_id": "consumers"
-      }
+    ```groovy
+    dependencies {
+        implementation "com.microsoft:quickauth:0.4.0"
     }
-  ]
-}
-```
+    ```
+
+2. Add repositories in `build.gradle`.
+
+    ```groovy
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
+        mavenCentral()
+    }
+    ```
+
+3. Create MSAL configuration file
+
+    The configuration file is a JSON file which can be downloaded from the portal website, please refer to [Android Microsoft Authentication Library configuration file](https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-configuration).
+
+    Copy the JSON file to the `res/raw` folder of your project. Refer it with `R.raw.<FILE_NAME>` when initializing.
+
+    And add the following line to set `account_mode` to `SINGLE`:
+
+    ```json
+    "account_mode" : "SINGLE",
+    ```
+
+    Here is an example of the config file:
+
+    ```json
+    {
+      "client_id": "<YOUR_CLIENT_ID>",
+      "authorization_user_agent": "DEFAULT",
+      "redirect_uri": "msauth://<YOUR_PACKAGE_NAME>/<YOUR_BASE64_URL_ENCODED_PACKAGE_SIGNATURE>",
+      "account_mode": "SINGLE",
+      "broker_redirect_uri_registered": true,
+      "authorities": [
+        {
+          "type": "AAD",
+          "audience": {
+            "type": "PersonalMicrosoftAccount",
+            "tenant_id": "consumers"
+          }
+        }
+      ]
+    }
+    ```
