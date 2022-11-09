@@ -58,9 +58,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // libraries for quickauth sdk
-    if(rootProject.ext.compileWithQuickAuthModule){
+    if (rootProject.ext.compileWithQuickAuthModule) {
         implementation(project(":quick_auth"))
-    }else{
+    } else {
         implementation "com.microsoft:quickauth:${rootProject.ext.quickAuthVersionName}"
     }
     // libraries for android

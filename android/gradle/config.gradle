@@ -30,7 +30,8 @@ ext {
     truthVersion = "1.1.3"
     espressoCoreVersion = "3.2.0"
 
-    // True will compile with quick auth mobile, false will compile AAR.
+    // true: compile with quick auth module (source code in this project).
+    // false: compile with quick auth AAR from maven.
     compileWithQuickAuthModule = false
 
     // publish
