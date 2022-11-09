@@ -43,6 +43,7 @@ jobs:
       signingOption: default
       archivePath: '${Build.ArtifactStagingDirectory)/archive'
   - bash: |
+      set -euo pipefail
       rm -rf distribution
       mkdir distribution
       cp ${Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
