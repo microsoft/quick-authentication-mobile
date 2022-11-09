@@ -42,7 +42,7 @@ jobs:
       packageApp: true
       signingOption: default
       archivePath: '${Build.ArtifactStagingDirectory)/archive'
-  - bash:
+  - bash: |
       set -euo pipefail
       rm -rf distribution
       mkdir distribution
