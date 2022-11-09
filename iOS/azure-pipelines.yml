@@ -46,7 +46,7 @@ jobs:
       set -euo pipefail
       rm -rf distribution
       mkdir distribution
-      cp $(Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
+      cp -R $(Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
       cp $(dogFoodProvision.secureFilePath) distribution/
       cp iOS/SampleApp/export/ExportOptions.plist distribution/
       pushd distribution
