@@ -41,7 +41,7 @@ jobs:
       xcodeVersion: 'default'
       packageApp: true
       signingOption: default
-      archivePath: '${Build.ArtifactStagingDirectory)/archive'
+      archivePath: '$(Build.ArtifactStagingDirectory)/archive'
   - bash: |
       set -euo pipefail
       rm -rf distribution
