@@ -53,26 +53,6 @@
 
 @end
 
-@interface MSALResult (Testing)
-
-+ (MSALResult *)resultWithAccessToken:(NSString *)accessToken
-                            expiresOn:(NSDate *)expiresOn
-              isExtendedLifetimeToken:(BOOL)isExtendedLifetimeToken
-                             tenantId:(NSString *)tenantId
-                        tenantProfile:(MSALTenantProfile *)tenantProfile
-                              account:(MSALAccount *)account
-                              idToken:(NSString *)idToken
-                             uniqueId:(NSString *)uniqueId
-                               scopes:(NSArray<NSString *> *)scopes
-                            authority:(MSALAuthority *)authority
-                        correlationId:(NSUUID *)correlationId
-                           authScheme:
-                               (id<MSALAuthenticationSchemeProtocol,
-                                   MSALAuthenticationSchemeProtocolInternal>)
-                                   authScheme;
-
-@end
-
 @implementation FakeDataProvider
 
 + (NSDictionary *)getDictFromString:(NSString *)str {
@@ -91,6 +71,13 @@
 }
 
 + (MSALAccount *)getFakeMSALAccount {
+  BOOL canConstructMSALAccount = [MSALAccount
+      instanceMethodForSelector:@selector
+      (initWithUsername:homeAccountId:environment:tenantProfiles:)];
+
+  if (!canConstructMSALAccount) {
+    return nil;
+  }
   NSString *str =
       [NSString stringWithFormat:kFakeMSALAccount, kFakeHomeAccountId];
   NSDictionary *accountDict = [FakeDataProvider getDictFromString:str];
@@ -104,7 +91,14 @@
 }
 
 + (MSALResult *)getFakeMSALResult {
-  return [[FakeMSALResult alloc] initWithString:kFakeMSALResult];
+  MSALAccount *account = [FakeDataProvider getFakeMSALAccount];
+  if (!account) {
+    return nil;
+  }
+
+  FakeMSALResult *result =
+      [[FakeMSALResult alloc] initWithString:kFakeMSALResult account:account];
+  return result;
 }
 
 @end

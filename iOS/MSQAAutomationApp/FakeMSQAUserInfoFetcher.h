@@ -1,3 +1,5 @@
+//------------------------------------------------------------------------------
+//
 // Copyright (c) Microsoft Corporation.
 // All rights reserved.
 //
@@ -23,15 +25,16 @@
 //
 //------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
+#import <MSQASignIn/MSQAUserInfoFetcher.h>
 
-// This group of strings can be deserialized into the MSAL classes,
-// `MSALAccountId`, `MSALAccount` and `MSALResult`, by `FakeDataProvider`, which
-// serves the `FakeMSALPublicClientApplication` in the MSQAAutomationApp.
-extern NSString *const kFakeHomeAccountId;
-extern NSString *const kFakeMSALAccount;
-extern NSString *const kFakeMSALResult;
+NS_ASSUME_NONNULL_BEGIN
 
-// The serialized string that represents the expected `MSQAAccountInfo` object
-// in the automation tests.
-extern NSString *const kExpectedMSQAAccount;
+@interface FakeMSQAUserInfoFetcher : MSQAUserInfoFetcher
+
++ (instancetype)fetchUserInfoWithAccount:(MSQAAccountInfo *)account
+                         completionBlock:
+                             (UserInfoFetcherCompletionBlock)completionBlock;
+
+@end
+
+NS_ASSUME_NONNULL_END

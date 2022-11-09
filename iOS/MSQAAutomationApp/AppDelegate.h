@@ -34,6 +34,6 @@
 
 @property(nonatomic) FakeMSALPublicClientApplication *application;
 
-@property(nonatomic) MSQASignInClient *msSignIn;
+@property(nonatomic) MSQASignInClient *msSignInClient;
 
 @end

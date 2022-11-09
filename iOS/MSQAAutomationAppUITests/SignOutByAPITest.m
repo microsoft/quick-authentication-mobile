@@ -1,3 +1,5 @@
+//------------------------------------------------------------------------------
+//
 // Copyright (c) Microsoft Corporation.
 // All rights reserved.
 //
@@ -23,15 +25,26 @@
 //
 //------------------------------------------------------------------------------
 
-#import <Foundation/Foundation.h>
+#import "MSQABaseUITest.h"
 
-// This group of strings can be deserialized into the MSAL classes,
-// `MSALAccountId`, `MSALAccount` and `MSALResult`, by `FakeDataProvider`, which
-// serves the `FakeMSALPublicClientApplication` in the MSQAAutomationApp.
-extern NSString *const kFakeHomeAccountId;
-extern NSString *const kFakeMSALAccount;
-extern NSString *const kFakeMSALResult;
+@interface SignOutByAPITest : MSQABaseUITest
 
-// The serialized string that represents the expected `MSQAAccountInfo` object
-// in the automation tests.
-extern NSString *const kExpectedMSQAAccount;
+@end
+
+@implementation SignOutByAPITest
+
+- (void)testSignOut {
+  XCUIApplication *app = [[XCUIApplication alloc] init];
+  [app launch];
+
+  XCUIElement *button = app.buttons[@"sign out"];
+  [self waitForElement:button];
+  [button tap];
+
+  XCUIElement *resultStatus = app.textViews[@"Result Status"];
+  [self waitForResultStatus:resultStatus];
+  XCUIElement *resultInfo = app.textViews[@"Result Info"];
+  XCTAssertTrue([resultInfo.value isEqualToString:@"success"]);
+}
+
+@end

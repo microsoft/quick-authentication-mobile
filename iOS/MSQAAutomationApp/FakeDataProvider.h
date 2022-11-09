@@ -32,9 +32,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Provides the testing account that is deserialized from strings defined in
-/// TestData.h file.
+/// Provides the fake MSAL objects used by the `FakeMSALPublicClientApplication`
+/// in MQQAAutomationApp,  and these fake objects are deserialized from strings
+/// declared in TestData.h.
 @interface FakeDataProvider : NSObject
+
++ (NSDictionary *)getDictFromString:(NSString *)str;
 
 + (MSALResult *)getFakeMSALResult;
 

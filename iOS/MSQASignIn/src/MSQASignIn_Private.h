@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)signInInternalWithViewController:(UIViewController *)controller
                          completionBlock:(MSQACompletionBlock)completionBlock;
 
+- (void)setMSQAUserInfoFetcherForTesting:(Class)cls;
+
 @end
 
 NS_ASSUME_NONNULL_END

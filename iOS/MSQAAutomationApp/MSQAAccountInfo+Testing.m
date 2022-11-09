@@ -37,7 +37,8 @@
     @"idToken" : self.idToken,
     @"surname" : self.surname,
     @"givenName" : self.givenName,
-    @"email" : self.email
+    @"email" : self.email,
+    @"photo" : self.base64Photo
   };
   NSData *resultData = [NSJSONSerialization dataWithJSONObject:dict
                                                        options:0
@@ -57,9 +58,12 @@
                                          userId:dict[@"userId"]
                                         idToken:dict[@"idToken"]
                                     accessToken:nil];
+
   [account setSurname:dict[@"surname"]];
   [account setGivenName:dict[@"givenName"]];
   [account setEmail:dict[@"email"]];
+  [account setBase64Photo:dict[@"photo"]];
+
   return account;
 }
 
@@ -70,7 +74,8 @@
          [self.idToken isEqualToString:account.idToken] &&
          [self.surname isEqualToString:account.surname] &&
          [self.givenName isEqualToString:account.givenName] &&
-         [self.email isEqualToString:account.email];
+         [self.email isEqualToString:account.email] &&
+         [self.base64Photo isEqualToString:account.base64Photo];
 }
 
 @end

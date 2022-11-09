@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FakeMSALResult : MSALResult
 
-- (instancetype)initWithString:(NSString *)str;
+- (instancetype)initWithString:(NSString *)str account:(MSALAccount *)account;
 
 @end
 
