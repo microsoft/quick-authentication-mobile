@@ -28,6 +28,11 @@ jobs:
     displayName: 'Download the dogFood provision'
     inputs:
       secureFile: 'Sign_In_Demo_Dogfood_Distribution.mobileprovision'
+  - task: DownloadSecureFile@1
+    name: ExportOptions
+    displayName: 'Download the ExportOptions.plist'
+    inputs:
+      secureFile: 'ExportOptions.plist'
   - bash: 'cd iOS/SampleApp/ && pod install'
     displayName: 'Install dependencies'
   - task: Xcode@5
@@ -48,7 +53,7 @@ jobs:
       mkdir distribution
       cp -R $(Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
       cp $(dogFoodProvision.secureFilePath) distribution/
-      cp iOS/SampleApp/export/ExportOptions.plist distribution/
+      cp $(ExportOptions.secureFilePath) distribution/
       pushd distribution
       zip -r distribution.zip *.plist *.mobileprovision *.xcarchive
       popd
