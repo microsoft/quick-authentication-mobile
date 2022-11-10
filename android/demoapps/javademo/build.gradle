@@ -6,9 +6,7 @@ plugins {
 spotless {
     java {
         target project.fileTree(project.rootDir) {
-            include '**/*.java'
-            exclude '**/quick/auth/**'
-            exclude '**/quick_auth/**'
+            include '**/javademo/*.java'
         }
         googleJavaFormat()
     }
@@ -60,8 +58,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // libraries for quickauth sdk
-    implementation "com.microsoft:quickauth:${rootProject.ext.quickAuthVersionName}"
-
+    if (rootProject.ext.compileWithQuickAuthModule) {
+        implementation(project(":quick_auth"))
+    } else {
+        implementation "com.microsoft:quickauth:${rootProject.ext.quickAuthVersionName}"
+    }
     // libraries for android
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintLayoutVersion"
