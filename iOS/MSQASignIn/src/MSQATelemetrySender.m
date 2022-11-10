@@ -77,6 +77,12 @@ static NSString *const kOrigin = @"https://edge-auth.microsoft.com/";
                                              appVersion:self.appVersion
                                               timestamp:self.timestamp
                                                 message:message];
+  // Returns directly when testing.
+  if (self.callbackForTesting) {
+    self.callbackForTesting(data);
+    return;
+  }
+
   if (data) {
     [urlRequest setHTTPBody:data];
     NSURLSession *session = [NSURLSession sharedSession];
