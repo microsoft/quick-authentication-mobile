@@ -55,4 +55,4 @@ jobs:
       configuration: 'Debug'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
-      args: '-destination platform="iOS Simulator",name=iPhone 13'
+      args: '-destination platform="iOS Simulator,name=iPhone 13"'
