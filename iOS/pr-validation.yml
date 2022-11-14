@@ -57,4 +57,4 @@ jobs:
       xcodeVersion: 'default'
       destinationPlatformOption: 'iOS'
       destinationTypeOption: 'simulators'
-      destinationSimulators: 'Any iOS Simulator Device'
+      destinationSimulators: 'iPhone 12,OS=15.2'
