@@ -40,6 +40,9 @@ jobs:
       configuration: 'Release'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
+      destinationPlatformOption: 'iOS'
+      destinationTypeOption: 'simulators'
+      destinationSimulators: 'iPhone 13'
   - task: Xcode@5
     displayName: 'Run unit tests'
     inputs:
@@ -49,3 +52,6 @@ jobs:
       configuration: 'Release'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
+      destinationPlatformOption: 'iOS'
+      destinationTypeOption: 'simulators'
+      destinationSimulators: 'iPhone 13'
