@@ -4,10 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-- main
+  branches:
+    include:
+    - main
 
 pr:
-  autoCancel: true
   branches:
     include:
     - '*'
@@ -29,7 +30,7 @@ jobs:
       actions: 'build'
       scheme: 'MSQASignIn'
       sdk: 'iphonesimulator'
-      configuration: 'Release'
+      configuration: 'Debug'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
 
@@ -39,7 +40,7 @@ jobs:
       actions: 'test'
       scheme: 'MSQAAutomationApp'
       sdk: 'iphonesimulator'
-      configuration: 'Release'
+      configuration: 'Debug'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
       destinationPlatformOption: 'iOS'
@@ -52,9 +53,7 @@ jobs:
       actions: 'test'
       scheme: 'MSQASignInUnitTests'
       sdk: 'iphonesimulator'
-      configuration: 'Release'
+      configuration: 'Debug'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
-      destinationPlatformOption: 'iOS'
-      destinationTypeOption: 'simulators'
-      destinationSimulators: 'iPhone 12,OS=15.2'
+      args: '-destination platform="iOS Simulator",name=iPhone 13'
