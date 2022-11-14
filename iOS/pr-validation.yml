@@ -6,15 +6,46 @@
 trigger:
 - main
 
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - '*'
+  drafts: true
+
 pool:
   vmImage: 'macos-latest'
 
-steps:
-- task: Xcode@5
-  inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+jobs:
+- job:
+  displayName: 'Build Quick Auth iOS SDK & run tests'
+  steps:
+  - bash: 'cd iOS/SampleApp/ && pod install'
+    displayName: 'Install dependencies'
+  - task: Xcode@5
+    displayName: 'Build SDK'
+    inputs:
+      actions: 'build'
+      scheme: 'MSQASignIn'
+      sdk: 'iphonesimulator'
+      configuration: 'Release'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
+  - task: Xcode@5
+    displayName: 'Run automation tests'
+    inputs:
+      actions: 'test'
+      scheme: 'MSQAAutomationApp'
+      sdk: 'iphonesimulator'
+      configuration: 'Release'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
+  - task: Xcode@5
+    displayName: 'Run unit tests'
+    inputs:
+      actions: 'test'
+      scheme: 'MSQASignInUnitTests'
+      sdk: 'iphonesimulator'
+      configuration: 'Release'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
