@@ -4,11 +4,10 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-  branches:
-    include:
-    - main
+- main
 
 pr:
+  autoCancel: true
   branches:
     include:
     - '*'
