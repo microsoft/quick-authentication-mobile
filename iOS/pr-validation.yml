@@ -22,6 +22,7 @@ jobs:
   steps:
   - bash: 'cd iOS/ && pod install'
     displayName: 'Install dependencies'
+
   - task: Xcode@5
     displayName: 'Build SDK'
     inputs:
@@ -31,6 +32,7 @@ jobs:
       configuration: 'Release'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
+
   - task: Xcode@5
     displayName: 'Run automation tests'
     inputs:
@@ -43,6 +45,7 @@ jobs:
       destinationPlatformOption: 'iOS'
       destinationTypeOption: 'simulators'
       destinationSimulators: 'iPhone 13'
+
   - task: Xcode@5
     displayName: 'Run unit tests'
     inputs:
@@ -54,4 +57,4 @@ jobs:
       xcodeVersion: 'default'
       destinationPlatformOption: 'iOS'
       destinationTypeOption: 'simulators'
-      destinationSimulators: 'iPhone 13'
+      destinationSimulators: 'Any iOS Simulator Device'
