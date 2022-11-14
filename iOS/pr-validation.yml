@@ -50,9 +50,11 @@ jobs:
     displayName: 'Run unit tests'
     inputs:
       actions: 'test'
-      scheme: 'MSQASignInUnitTests'
+      scheme: 'MSQASignIn'
       sdk: 'iphonesimulator'
       configuration: 'Debug'
       xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
       xcodeVersion: 'default'
-      args: '-destination platform="iOS Simulator,name=iPhone 13"'
+      destinationPlatformOption: 'iOS'
+      destinationTypeOption: 'simulators'
+      destinationSimulators: 'iPhone 13'
