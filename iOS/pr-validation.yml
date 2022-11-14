@@ -20,7 +20,7 @@ jobs:
 - job:
   displayName: 'Build Quick Auth iOS SDK & run tests'
   steps:
-  - bash: 'cd iOS/SampleApp/ && pod install'
+  - bash: 'cd iOS/ && pod install'
     displayName: 'Install dependencies'
   - task: Xcode@5
     displayName: 'Build SDK'
