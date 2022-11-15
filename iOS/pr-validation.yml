@@ -11,6 +11,14 @@ trigger:
     include:
     - iOS
 
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+  include:
+  - iOS
+
 pool:
   vmImage: 'macos-latest'
 
