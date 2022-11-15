@@ -4,14 +4,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 trigger:
-- main
-
-pr:
-  autoCancel: true
   branches:
     include:
-    - '*'
-  drafts: true
+    - main
+  paths:
+    include:
+    - iOS
 
 pool:
   vmImage: 'macos-latest'
