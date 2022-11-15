@@ -47,15 +47,17 @@ jobs:
       packageApp: true
       signingOption: default
       archivePath: '$(Build.ArtifactStagingDirectory)/archive'
+      exportPath: '$(Build.ArtifactStagingDirectory)/ipa'
+      exportMethod: 'development'
   - bash: |
       set -euo pipefail
       rm -rf distribution
       mkdir distribution
-      cp -R $(Build.ArtifactStagingDirectory)/archive/*.xcarchive distribution/
+      cp $(Build.ArtifactStagingDirectory)/ipa/*.ipa distribution/
       cp $(dogFoodProvision.secureFilePath) distribution/
       cp $(ExportOptions.secureFilePath) distribution/
       pushd distribution
-      zip -r distribution.zip *.plist *.mobileprovision *.xcarchive
+      zip -r distribution.zip *.plist *.mobileprovision *.ipa
       popd
       cp distribution/distribution.zip distribution.zip
     displayName: 'Preparing distribution files'
