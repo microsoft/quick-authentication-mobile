@@ -75,7 +75,7 @@
 		B30C4A0028F4455E00A4E770 /* MSQASignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E06DD128B8C695003D558A /* MSQASignIn.framework */; };
 		B30C4A0728F46EDD00A4E770 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B30C4A0528F46EDD00A4E770 /* SceneDelegate.m */; };
 		C44937918EF1B5BF1FE361D6 /* Pods_MSQASignInUnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89BEF06888FFF646CDAF6FDE /* Pods_MSQASignInUnitTests.framework */; };
-		D5D376FF186394B9196AC149 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		D5D376FF186394B9196AC149 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +157,28 @@
 		29AD993A28AB86850029F4FB /* MSQAAccountInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountInfo.h; sourceTree = "<group>"; };
 		29AD993C28AB89CD0029F4FB /* MSQAAccountInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQAAccountInfo.m; sourceTree = "<group>"; };
 		29AD993E28ACFFC10029F4FB /* MSQAAccountInfo_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQAAccountInfo_Private.h; sourceTree = "<group>"; };
+		29B49658292361060092142D /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B496592923611B0092142D /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4965A292361680092142D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4965B292362330092142D /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		29B4965C292362450092142D /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4965D292362520092142D /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		29B4965E292362660092142D /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4965F2923627C0092142D /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49660292362A70092142D /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49661292362B50092142D /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49662292362DB0092142D /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49663292362E70092142D /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B496642923636B0092142D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49665292363790092142D /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B496662923638D0092142D /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49667292363A20092142D /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49668292363B00092142D /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B49669292363BE0092142D /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4966A292363CE0092142D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4966B292363E00092142D /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4966C292363EE0092142D /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		29B4966D292364BF0092142D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		29BCDAF028D45CF100AC4047 /* Pods_MSQASignIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MSQASignIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29BCDAF428DB0F5300AC4047 /* MSQATelemetrySender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSQATelemetrySender.h; sourceTree = "<group>"; };
 		29BCDAF528DB0F5300AC4047 /* MSQATelemetrySender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSQATelemetrySender.m; sourceTree = "<group>"; };
@@ -255,7 +277,7 @@
 			files = (
 				B30C49D628EF355900A4E770 /* MSQASignIn.framework in Frameworks */,
 				81589CA1E0C73396D143CF60 /* Pods_MSQAAutomationApp.framework in Frameworks */,
-				D5D376FF186394B9196AC149 /* BuildFile in Frameworks */,
+				D5D376FF186394B9196AC149 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +661,28 @@
 				ar,
 				id,
 				"pt-PT",
+				ca,
+				cs,
+				da,
+				"es-MX",
+				fi,
+				"fr-CA",
+				he,
+				hi,
+				hr,
+				hu,
+				ms,
+				nb,
+				nl,
+				pl,
+				ro,
+				sk,
+				sv,
+				th,
+				tr,
+				uk,
+				vi,
+				el,
 			);
 			mainGroup = 29DC393728A63F6E00699274;
 			productRefGroup = 29DC394228A63F6E00699274 /* Products */;
@@ -956,6 +1000,28 @@
 				29864AEE290A8A6B00065B07 /* ar */,
 				29864AEF290A8B7100065B07 /* id */,
 				29864AF0290A8BCF00065B07 /* pt-PT */,
+				29B49658292361060092142D /* ca */,
+				29B496592923611B0092142D /* cs */,
+				29B4965A292361680092142D /* da */,
+				29B4965B292362330092142D /* es-MX */,
+				29B4965C292362450092142D /* fi */,
+				29B4965D292362520092142D /* fr-CA */,
+				29B4965E292362660092142D /* he */,
+				29B4965F2923627C0092142D /* hi */,
+				29B49660292362A70092142D /* hr */,
+				29B49661292362B50092142D /* hu */,
+				29B49662292362DB0092142D /* ms */,
+				29B49663292362E70092142D /* nb */,
+				29B496642923636B0092142D /* nl */,
+				29B49665292363790092142D /* pl */,
+				29B496662923638D0092142D /* ro */,
+				29B49667292363A20092142D /* sk */,
+				29B49668292363B00092142D /* sv */,
+				29B49669292363BE0092142D /* th */,
+				29B4966A292363CE0092142D /* tr */,
+				29B4966B292363E00092142D /* uk */,
+				29B4966C292363EE0092142D /* vi */,
+				29B4966D292364BF0092142D /* el */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
