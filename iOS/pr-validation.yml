@@ -16,8 +16,8 @@ pr:
     include:
     - '*'
   paths:
-  include:
-  - iOS
+    include:
+    - iOS
 
 pool:
   vmImage: 'macos-latest'
