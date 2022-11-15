@@ -1,0 +1,66 @@
+# Xcode
+# Build, test, and archive an Xcode workspace on macOS.
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - iOS
+
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - iOS
+
+pool:
+  vmImage: 'macos-latest'
+
+jobs:
+- job:
+  displayName: 'Build Quick Auth iOS SDK & run tests'
+  steps:
+  - bash: 'cd iOS/ && pod install'
+    displayName: 'Install dependencies'
+
+  - task: Xcode@5
+    displayName: 'Build SDK'
+    inputs:
+      actions: 'build'
+      scheme: 'MSQASignIn'
+      sdk: 'iphonesimulator'
+      configuration: 'Debug'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
+
+  - task: Xcode@5
+    displayName: 'Run automation tests'
+    inputs:
+      actions: 'test'
+      scheme: 'MSQAAutomationApp'
+      sdk: 'iphonesimulator'
+      configuration: 'Debug'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
+      destinationPlatformOption: 'iOS'
+      destinationTypeOption: 'simulators'
+      destinationSimulators: 'iPhone 13'
+
+  - task: Xcode@5
+    displayName: 'Run unit tests'
+    inputs:
+      actions: 'test'
+      scheme: 'MSQASignIn'
+      sdk: 'iphonesimulator'
+      configuration: 'Debug'
+      xcWorkspacePath: 'iOS/MSQASignIn.xcworkspace'
+      xcodeVersion: 'default'
+      destinationPlatformOption: 'iOS'
+      destinationTypeOption: 'simulators'
+      destinationSimulators: 'iPhone 13'
