@@ -63,10 +63,16 @@ jobs:
     displayName: 'Preparing distribution files'
     workingDirectory: $(Build.StagingDirectory)
     condition: succeeded()
+  - task: PublishBuildArtifacts@1
+    name: PublishBuildArtifacts1
+    displayName: 'Publish zip file'
+    inputs:
+      ArtifactName: BuildOutputs
+      TargetPath: $(Build.StagingDirectory)
   - task: EsrpCodeSigning@2
     inputs:
       ConnectedServiceName: 'QuickAuthCodeSignConnection'
-      FolderPath: '$(Build.StagingDirectory)'
+      FolderPath: $(Build.StagingDirectory)
       Pattern: 'distribution.zip'
       signConfigType: 'inlineSignParams'
       inlineOperation: |
