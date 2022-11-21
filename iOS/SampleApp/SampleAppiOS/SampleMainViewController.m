@@ -152,7 +152,7 @@
   UIAlertController *controller = [UIAlertController
       alertControllerWithTitle:@"Current account"
                        message:message
-                preferredStyle:UIAlertControllerStyleActionSheet];
+                preferredStyle:UIAlertControllerStyleAlert];
   UIAlertAction *action =
       [UIAlertAction actionWithTitle:@"OK"
                                style:UIAlertActionStyleDefault
