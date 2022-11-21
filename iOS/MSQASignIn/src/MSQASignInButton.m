@@ -150,6 +150,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _shape = kMSQASignInButtonShapeRectangular;
   _logo = kMSQASignInButtonLogoLeft;
   _buttonState = kMSQASignInButtonStateNormal;
+  self.isAccessibilityElement = YES;
 
   [self addTarget:self
                 action:@selector(buttonDidTouch)
@@ -471,6 +472,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
     return;
   }
   _text = text;
+  self.accessibilityLabel = [self buttonTextString];
   [self updateUI];
 }
 
