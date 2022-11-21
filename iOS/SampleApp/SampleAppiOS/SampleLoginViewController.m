@@ -111,7 +111,7 @@
         if (account && !error) {
           SampleMainViewController *controller =
               [SampleMainViewController sharedViewController];
-          [controller setAccountInfo:account signInClient:_msSignInClient];
+          [controller setAccountInfo:account signInClient:self->_msSignInClient];
           [SampleAppDelegate setCurrentViewController:controller];
         }
       }];
@@ -150,7 +150,7 @@
         if (account && !error) {
           SampleMainViewController *controller =
               [SampleMainViewController sharedViewController];
-          [controller setAccountInfo:account signInClient:_msSignInClient];
+          [controller setAccountInfo:account signInClient:self->_msSignInClient];
           [SampleAppDelegate setCurrentViewController:controller];
         }
       }];

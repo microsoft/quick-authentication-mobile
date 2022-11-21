@@ -99,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self getData:@"me/photo/$value"
             completionBlock:^(NSData *data, NSError *error) {
               if (!error && data) {
-                _account.base64Photo =
+                self->_account.base64Photo =
                     [data base64EncodedStringWithOptions:
                               NSDataBase64EncodingEndLineWithLineFeed];
               }

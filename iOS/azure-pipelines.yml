@@ -1,0 +1,97 @@
+# Xcode
+# Build, test, and archive an Xcode workspace on macOS.
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+
+trigger: none
+pr: none
+
+pool:
+  vmImage: 'macos-latest'
+
+jobs:
+- job:
+  displayName: 'Build Sample App'
+  steps:
+
+  - task: InstallAppleCertificate@2
+    displayName: 'Install Development certificate'
+    inputs:
+      certSecureFile: 'QuickAuthCert2022.p12'
+      certPwd: '$(quick_auth_password202)'
+
+  - task: InstallAppleProvisioningProfile@1
+    displayName: 'Install Provisioning Profile'
+    inputs:
+      provisioningProfileLocation: 'secureFiles'
+      provProfileSecureFile: '3f1fb761-5e70-4635-ab90-4cd46a498cbb.mobileprovision'
+      removeProfile: true
+
+  - task: DownloadSecureFile@1
+    name: dogFoodProvision
+    displayName: 'Download the dogFood Provision'
+    inputs:
+      secureFile: 'Sign_In_Demo_Dogfood_Distribution.mobileprovision'
+
+  - task: DownloadSecureFile@1
+    name: ExportOptions
+    displayName: 'Download the ExportOptions.plist'
+    inputs:
+      secureFile: 'ExportOptions.plist'
+
+  - bash: 'cd iOS/SampleApp/ && pod install'
+    displayName: 'Install dependencies'
+
+  - task: Xcode@5
+    displayName: 'Build archive for QuickAuthSample'
+    inputs:
+      actions: 'archive'
+      scheme: 'SampleAppiOS'
+      sdk: 'iphoneos'
+      configuration: 'Debug'
+      xcWorkspacePath: 'iOS/SampleApp/QuickAuthSample.xcworkspace'
+      xcodeVersion: 'default'
+      packageApp: true
+      signingOption: default
+      archivePath: '$(Build.ArtifactStagingDirectory)/archive'
+      exportPath: '$(Build.ArtifactStagingDirectory)/ipa'
+      exportMethod: 'development'
+
+  - bash: |
+      set -euo pipefail
+      rm -rf distribution
+      mkdir distribution
+      cp $(Build.ArtifactStagingDirectory)/ipa/*.ipa distribution/
+      cp $(dogFoodProvision.secureFilePath) distribution/
+      cp $(ExportOptions.secureFilePath) distribution/
+      pushd distribution
+      zip -r distribution.zip *.plist *.mobileprovision *.ipa
+      popd
+      cp distribution/distribution.zip distribution.zip
+    displayName: 'Zip distribution files'
+    workingDirectory: $(Build.StagingDirectory)
+    condition: succeeded()
+
+  - task: EsrpCodeSigning@2
+    inputs:
+      ConnectedServiceName: 'QuickAuthCodeSignConnection'
+      FolderPath: $(Build.StagingDirectory)
+      Pattern: 'distribution.zip'
+      signConfigType: 'inlineSignParams'
+      inlineOperation: |
+        [
+                {
+                    "keyCode" : "CP-464234-Apple",
+                    "operationSetCode" : "iOSAppSignVnext",
+                    "parameters" : [],
+                    "toolName" : "sign",
+                    "toolVersion" : "1.0"
+                }
+        ]
+
+  - task: PublishBuildArtifacts@1
+    name: PublishBuildArtifacts1
+    displayName: 'Publish distribution files'
+    inputs:
+      ArtifactName: BuildOutputs
+      TargetPath: $(Build.StagingDirectory)
