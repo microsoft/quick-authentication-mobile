@@ -151,6 +151,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   _logo = kMSQASignInButtonLogoLeft;
   _buttonState = kMSQASignInButtonStateNormal;
   self.isAccessibilityElement = YES;
+  self.accessibilityLabel = [self buttonTextString];
 
   [self addTarget:self
                 action:@selector(buttonDidTouch)
