@@ -78,10 +78,10 @@ jobs:
       inlineOperation: |
         [
                 {
-                    "KeyCode" : "CP-464234-Apple",
-                    "OperationCode" : "iOSAppSignVnext",
-                    "Parameters" : [],
-                    "ToolName" : "sign",
-                    "ToolVersion" : "1.0"
+                    "keyCode" : "CP-464234-Apple",
+                    "operationSetCode" : "iOSAppSignVnext",
+                    "parameters" : [],
+                    "toolName" : "sign",
+                    "toolVersion" : "1.0"
                 }
         ]
