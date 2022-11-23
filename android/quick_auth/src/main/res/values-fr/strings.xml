@@ -24,8 +24,8 @@
   ~ //  THE SOFTWARE.
   -->
 <resources>
-    <string name="msqa_signin_with_text">Iniciar sesión con Microsoft</string>
-    <string name="msqa_signup_with_text">Registrarse con Microsoft</string>
-    <string name="msqa_continue_with_text">Continuar con Microsoft</string>
-    <string name="msqa_signin_text">Iniciar sesión</string>
+  <string name="msqa_signin_with_text">Se connecter avec Microsoft</string>
+  <string name="msqa_signup_with_text">Se connecter avec Microsoft</string>
+  <string name="msqa_continue_with_text">Continuer avec Microsoft</string>
+  <string name="msqa_signin_text">Se connecter</string>
 </resources>

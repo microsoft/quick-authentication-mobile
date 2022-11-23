@@ -24,8 +24,8 @@
   ~ //  THE SOFTWARE.
   -->
 <resources>
-    <string name="msqa_signin_with_text">تسجيل الدخول في Microsoft</string>
-    <string name="msqa_signup_with_text">تسجيل الدخول في Microsoft</string>
-    <string name="msqa_continue_with_text">متابعة مع Microsoft</string>
-    <string name="msqa_signin_text">تسجيل الدخول</string>
+  <string name="msqa_signin_with_text">Войдите с помощью учетной записи Майкрософт</string>
+  <string name="msqa_signup_with_text">Зарегистрироваться с помощью Майкрософт</string>
+  <string name="msqa_continue_with_text">Продолжить с помощью Майкрософт</string>
+  <string name="msqa_signin_text">Вход</string>
 </resources>

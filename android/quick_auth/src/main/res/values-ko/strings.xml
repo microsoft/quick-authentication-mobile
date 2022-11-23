@@ -24,8 +24,8 @@
   ~ //  THE SOFTWARE.
   -->
 <resources>
-    <string name="msqa_signin_with_text">通过 Microsoft 登录</string>
-    <string name="msqa_signup_with_text">使用 Microsoft 注册</string>
-    <string name="msqa_continue_with_text">通过 Microsoft 继续</string>
-    <string name="msqa_signin_text">登录</string>
+  <string name="msqa_signin_with_text">Microsoft로 로그인</string>
+  <string name="msqa_signup_with_text">Microsoft에 등록</string>
+  <string name="msqa_continue_with_text">Microsoft로 계속하기</string>
+  <string name="msqa_signin_text">로그인</string>
 </resources>
