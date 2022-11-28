@@ -1,0 +1,6 @@
+platform :ios, '13.0'
+
+target 'MSQASignInDemo' do
+  use_frameworks!
+  pod 'MicrosoftQuickAuthSwiftSupport', :path => '../../../../' 
+end
