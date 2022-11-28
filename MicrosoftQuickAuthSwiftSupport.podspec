@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                  = 'MicrosoftQuickAuthSwiftSupport'
   s.version               = '0.0.5'
-  s.summary               = 'Add Swift-UI support for MicrosoftQuickAuth.'
+  s.summary               = 'Add SwiftUI support for MicrosoftQuickAuth.'
   s.homepage              = 'https://github.com/microsoft/quick-authentication/blob/main/docs/quick-authentication-ios-how-to.md'
   s.license               = { :type => 'MIT', :file => 'LICENSE' }
   s.authors               = { 'Microsoft' => 'minggangwang@microsoft.com' }
