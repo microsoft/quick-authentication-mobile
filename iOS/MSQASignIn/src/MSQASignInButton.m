@@ -624,7 +624,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
                         table:kStringsTableName];
   case kMSQASignInButtonTextSignIn:
     return [[MSQASignInButton getFrameworkBundle]
-        localizedStringForKey:@"msqa_signin_with_text"
+        localizedStringForKey:@"msqa_signin_text"
                         value:nil
                         table:kStringsTableName];
   }
