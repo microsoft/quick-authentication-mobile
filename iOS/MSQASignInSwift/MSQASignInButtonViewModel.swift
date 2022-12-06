@@ -26,6 +26,7 @@
 //-----------------------------------------------------------------------------
 
 import Foundation
+import MicrosoftQuickAuth
 
 /// A view model for Microsoft Quick Auth sign in button publishing changes for the button's type, theme, size, etc.
 @available(iOS 13.0, *)
@@ -38,7 +39,15 @@ public class MSQASignInButtonViewModel: ObservableObject {
   @Published public var layout: MSQASignInButtonLayout
   @Published public var state: MSQASignInButtonState
 
+  private var signInClient: MSQASignInClient
+  private var presentingViewController: UIViewController?
+  private var completionBlock: MSQACompletionBlock
+
   /// Creates an instance of the view model for Microsoft Quick Auth sign in button.
+  /// - parameter signInClient: An instance of properly configured `MSQASignInClient`.
+  /// - parameter presentingViewController: The view controller on which the sign in page will be presented.
+  ///     Defaults to the root view controller of the first window.
+  /// - parameter completionBlock: The completion to run when sign in complete.
   /// - parameter type: The `MSQASignInButtonType` to use.
   ///     Defaults to `.standard`.
   /// - parameter theme: The `MSQASignInButtonTheme` to use.
@@ -54,6 +63,9 @@ public class MSQASignInButtonViewModel: ObservableObject {
   /// - parameter state: The `MSQASignInButtonState` to use.
   ///     Defaults to `.normal`.
   public init(
+    signInClient: MSQASignInClient,
+    presentingViewController: UIViewController?,
+    completionBlock: @escaping MSQACompletionBlock,
     type: MSQASignInButtonType = .standard,
     theme: MSQASignInButtonTheme = .light,
     size: MSQASignInButtonSize = .large,
@@ -62,6 +74,9 @@ public class MSQASignInButtonViewModel: ObservableObject {
     layout: MSQASignInButtonLayout = .logoTextLeft,
     state: MSQASignInButtonState = .normal
   ) {
+    self.signInClient = signInClient
+    self.presentingViewController = presentingViewController
+    self.completionBlock = completionBlock
     self.type = type
     self.theme = theme
     self.size = size
@@ -74,5 +89,16 @@ public class MSQASignInButtonViewModel: ObservableObject {
   var buttonStyle: MSQASignInButtonStyle {
     return MSQASignInButtonStyle(
       type: type, theme: theme, size: size, text: text, shape: shape, layout: layout, state: state)
+  }
+
+  func signIn() {
+    if let viewController = presentingViewController {
+      signInClient.signIn(with: viewController, completionBlock: completionBlock)
+      return
+    }
+    guard let viewController = UIApplication.shared.windows.first?.rootViewController else {
+      return
+    }
+    signInClient.signIn(with: viewController, completionBlock: completionBlock)
   }
 }

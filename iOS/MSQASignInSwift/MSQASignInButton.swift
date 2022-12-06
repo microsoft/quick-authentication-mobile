@@ -33,55 +33,15 @@ import SwiftUI
 public struct MSQASignInButton: View {
   /// An object containing the customization to the button.
   @ObservedObject public var viewModel: MSQASignInButtonViewModel
-  private let action: () -> Void
 
   /// Creates an instance of Microsoft Quick Auth sign in button.
-  /// - parameter viewModel: An instance of `MSQASignInButtonViewModel` with customization about the button's type, theme, size, etc.
-  ///     Defaults to `MSQASignInButtonViewModel` with its standard defaults.
-  /// - parameter action: A closure to be executed on button press event.
-  ///     Defaults to no-op.
-  public init(
-    viewModel: MSQASignInButtonViewModel = MSQASignInButtonViewModel(),
-    action: @escaping () -> Void = {}
-  ) {
+  /// - parameter viewModel: An instance of `MSQASignInButtonViewModel`.
+  public init(viewModel: MSQASignInButtonViewModel) {
     self.viewModel = viewModel
-    self.action = action
-  }
-
-  /// A convenience initializer to create a Microsoft Quick Auth sign in button with type, theme, size, etc.
-  /// - parameter type: The `MSQASignInButtonType` to use.
-  ///     Defaults to `.standard`.
-  /// - parameter theme: The `MSQASignInButtonTheme` to use.
-  ///     Defaults to `.light`.
-  /// - parameter size: The `MSQASignInButtonSize` to use.
-  ///     Defaults to `.large`.
-  /// - parameter text: The `MSQASignInButtonText` to use.
-  ///     Defaults to `.signInWith`.
-  /// - parameter shape: The `MSQASignInButtonShape` to use.
-  ///     Defaults to `.rectangular`.
-  /// - parameter layout: The `MSQASignInButtonLayout` to use.
-  ///     Defaults to `.logoTextLeft`.
-  /// - parameter state: The `MSQASignInButtonState` to use.
-  ///     Defaults to `.normal`.
-  /// - parameter action: A closure to be executed on button press event.
-  ///     Defaults to no-op.
-  public init(
-    type: MSQASignInButtonType = .standard,
-    theme: MSQASignInButtonTheme = .light,
-    size: MSQASignInButtonSize = .large,
-    text: MSQASignInButtonText = .signInWith,
-    shape: MSQASignInButtonShape = .rectangular,
-    layout: MSQASignInButtonLayout = .logoTextLeft,
-    state: MSQASignInButtonState = .normal,
-    action: @escaping () -> Void = {}
-  ) {
-    let viewModel = MSQASignInButtonViewModel(
-      type: type, theme: theme, size: size, text: text, shape: shape, layout: layout, state: state)
-    self.init(viewModel: viewModel, action: action)
   }
 
   public var body: some View {
-    let button = Button(action: action) {
+    let button = Button(action: viewModel.signIn) {
       switch viewModel.type {
       case .standard:
         switch viewModel.layout {

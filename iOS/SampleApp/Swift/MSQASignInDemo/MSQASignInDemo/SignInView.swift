@@ -26,21 +26,20 @@
 //-----------------------------------------------------------------------------
 
 import MSQASignInSwift
+import MicrosoftQuickAuth
 import SwiftUI
 
 struct SignInView: View {
-  @ObservedObject var signInButtonViewModel = MSQASignInButtonViewModel()
+  @ObservedObject var signInButtonViewModel = MSQASignInButtonViewModel(
+    signInClient: MSQASignInClient(
+      configuration: MSQAConfiguration(clientID: "c4e50099-e6cd-43e4-a7c6-ffb3cebce505"), error: nil
+    ), presentingViewController: nil, completionBlock: { _, _ in /* Handle account info or error */ })
 
   var body: some View {
     Spacer()
-    MSQASignInButton(
-      viewModel: signInButtonViewModel,
-      action: { () -> Void in
-        // Handle sign in button click event here.
-      }
-    )
-    .accessibilityIdentifier("MSQASignInButton")
-    .padding()
+    MSQASignInButton(viewModel: signInButtonViewModel)
+      .accessibilityIdentifier("MSQASignInButton")
+      .padding()
     VStack {
       HStack {
         Text("Button type:")
