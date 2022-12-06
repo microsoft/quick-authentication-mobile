@@ -60,6 +60,10 @@ struct MSQASignInButtonHelper {
     return Bundle(path: classBundlePath)
   }
 
+  static func preferredLocalizationIsEnglish() -> Bool {
+    return Bundle.main.preferredLocalizations[0] == "en"
+  }
+
   static func url(forResource name: String?, withExtension ext: String?) -> URL? {
     return frameworkBundle()?.url(forResource: name, withExtension: ext)
   }

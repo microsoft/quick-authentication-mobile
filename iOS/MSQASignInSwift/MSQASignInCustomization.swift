@@ -142,7 +142,15 @@ struct MSQASignInButtonStyle: ButtonStyle {
 
   private var uiFont: UIFont {
     let calculatedFontSize = fontSize
-    if let registeredFont = UIFont(name: MSQASignInButtonFontName, size: calculatedFontSize) {
+    if MSQASignInButtonHelper.preferredLocalizationIsEnglish() {
+      return enUIFont(size: calculatedFontSize)
+    } else {
+      return defaultUIFont(size: calculatedFontSize)
+    }
+  }
+
+  private func enUIFont(size: CGFloat) -> UIFont {
+    if let registeredFont = UIFont(name: MSQASignInButtonFontName, size: size) {
       return registeredFont
     }
     guard
@@ -151,15 +159,19 @@ struct MSQASignInButtonStyle: ButtonStyle {
       let fontDataProvider = CGDataProvider(filename: fontURL.path),
       let font = CGFont(fontDataProvider)
     else {
-      return UIFont.systemFont(ofSize: calculatedFontSize, weight: .bold)
+      return defaultUIFont(size: size)
     }
     guard CTFontManagerRegisterGraphicsFont(font, nil) else {
-      return UIFont.systemFont(ofSize: calculatedFontSize, weight: .bold)
+      return defaultUIFont(size: size)
     }
-    if let registeredFont = UIFont(name: MSQASignInButtonFontName, size: calculatedFontSize) {
+    if let registeredFont = UIFont(name: MSQASignInButtonFontName, size: size) {
       return registeredFont
     }
-    return UIFont.systemFont(ofSize: calculatedFontSize, weight: .bold)
+    return defaultUIFont(size: size)
+  }
+
+  private func defaultUIFont(size: CGFloat) -> UIFont {
+    return UIFont.systemFont(ofSize: size, weight: .bold)
   }
 
   public var fontSize: CGFloat {
