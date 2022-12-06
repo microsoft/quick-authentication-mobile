@@ -21,6 +21,7 @@
 		0220D98429346C23002025A0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0220D98B29346C53002025A0 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		02758316293F144500493008 /* MSQASignInDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MSQASignInDemo.entitlements; sourceTree = "<group>"; };
+		02758317293F154900493008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F0CEC19C2BDA7F80BE443AB /* Pods_MSQASignInDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSQASignInDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A0675116B90A6886834EAB /* Pods-MSQASignInDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInDemo.release.xcconfig"; path = "Target Support Files/Pods-MSQASignInDemo/Pods-MSQASignInDemo.release.xcconfig"; sourceTree = "<group>"; };
 		B34A278854A21A5BBAEAEC9A /* Pods-MSQASignInDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInDemo.debug.xcconfig"; path = "Target Support Files/Pods-MSQASignInDemo/Pods-MSQASignInDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		0220D97C29346C22002025A0 /* MSQASignInDemo */ = {
 			isa = PBXGroup;
 			children = (
+				02758317293F154900493008 /* Info.plist */,
 				02758316293F144500493008 /* MSQASignInDemo.entitlements */,
 				0220D97D29346C22002025A0 /* MSQASignInDemoApp.swift */,
 				0220D98B29346C53002025A0 /* SignInView.swift */,
@@ -341,6 +343,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MSQASignInDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MSQASignInDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -371,6 +374,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MSQASignInDemo/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MSQASignInDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
