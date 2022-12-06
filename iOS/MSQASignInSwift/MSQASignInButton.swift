@@ -81,7 +81,7 @@ public struct MSQASignInButton: View {
   }
 
   public var body: some View {
-    Button(action: action) {
+    let button = Button(action: action) {
       switch viewModel.type {
       case .standard:
         switch viewModel.layout {
@@ -99,13 +99,18 @@ public struct MSQASignInButton: View {
         .onChanged({ _ in viewModel.state = .pressed })
         .onEnded({ _ in viewModel.state = .normal })
     )
+    if #available(iOS 14.0, *) {
+      return button.accessibilityLabel(textView)
+    } else {
+      return button.accessibility(label: textView)
+    }
   }
 
   private var logoTextLeadingView: some View {
     return HStack(alignment: .center, spacing: 0) {
       iconView
         .padding([.leading, .trailing], MSQASignInButtonElementPadding)
-      Text(MSQASignInButtonHelper.localizedString(forText: viewModel.text))
+      textView
         .fixedSize()
         .frame(
           width: viewModel.buttonStyle.textWidth, height: viewModel.buttonStyle.buttonHeight,
@@ -119,7 +124,7 @@ public struct MSQASignInButton: View {
       iconView
         .padding(.leading, MSQASignInButtonElementPadding)
       Spacer()
-      Text(MSQASignInButtonHelper.localizedString(forText: viewModel.text))
+      textView
         .fixedSize()
         .frame(
           width: viewModel.buttonStyle.textWidth, height: viewModel.buttonStyle.buttonHeight,
@@ -133,7 +138,7 @@ public struct MSQASignInButton: View {
       Spacer()
       iconView
         .padding(.trailing, MSQASignInButtonElementPadding)
-      Text(MSQASignInButtonHelper.localizedString(forText: viewModel.text))
+      textView
         .fixedSize()
         .frame(
           width: viewModel.buttonStyle.textWidth, height: viewModel.buttonStyle.buttonHeight,
@@ -153,5 +158,9 @@ public struct MSQASignInButton: View {
       fatalError("Failed to load Microsoft brand logo")
     }
     return Image(uiImage: iconImage)
+  }
+
+  private var textView: Text {
+    return Text(MSQASignInButtonHelper.localizedString(forText: viewModel.text))
   }
 }

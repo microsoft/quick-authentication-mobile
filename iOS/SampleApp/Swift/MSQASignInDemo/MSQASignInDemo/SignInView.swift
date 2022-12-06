@@ -40,7 +40,6 @@ struct SignInView: View {
       }
     )
     .accessibilityIdentifier("MSQASignInButton")
-    .accessibility(hint: Text("Sign in with Microsoft button."))
     .padding()
     VStack {
       HStack {
