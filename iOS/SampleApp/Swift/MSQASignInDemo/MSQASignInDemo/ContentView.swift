@@ -25,39 +25,37 @@
 //
 //-----------------------------------------------------------------------------
 
-import MicrosoftQuickAuth
 import SwiftUI
 
-@main
-struct MSQASignInDemoApp: App {
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+struct ContentView: View {
+  @EnvironmentObject var authenticationViewModel: QuickAuthenticationViewModel
 
-  var body: some Scene {
-    WindowGroup {
-      ContentView()
-        .environmentObject(appDelegate.authenticationViewModel)
+  var body: some View {
+    return Group {
+      NavigationView {
+        switch authenticationViewModel.state {
+        case .signedOut:
+          SignInView(authenticationViewModel)
+            .navigationTitle(
+              NSLocalizedString(
+                "Sign in with Microsoft",
+                comment: "Sign in with Microsoft"
+              )
+            )
+            .environmentObject(authenticationViewModel)
+        case .signedIn:
+          UserProfileView().navigationTitle(
+            NSLocalizedString(
+              "User profile",
+              comment: "User profile"
+            )
+          )
+          .environmentObject(authenticationViewModel)
+        case .checkingStatus:
+          Text("Checking status...")
+        }
+      }
+      .navigationViewStyle(StackNavigationViewStyle())
     }
-  }
-}
-
-final class AppDelegate: UIResponder, UIApplicationDelegate {
-  var authenticationViewModel = QuickAuthenticationViewModel()
-
-  func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    return true
-  }
-
-  func application(
-    _ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-  ) -> Bool {
-    let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
-    if sourceApplication != nil {
-      return authenticationViewModel.client.handle(
-        url, sourceApplication: sourceApplication!)
-    }
-    return true
   }
 }

@@ -11,6 +11,9 @@
 		0220D98229346C23002025A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0220D98129346C23002025A0 /* Assets.xcassets */; };
 		0220D98529346C23002025A0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0220D98429346C23002025A0 /* Preview Assets.xcassets */; };
 		0220D98C29346C53002025A0 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220D98B29346C53002025A0 /* SignInView.swift */; };
+		29963F372954596D008F6067 /* QuickAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29963F362954596D008F6067 /* QuickAuthenticationViewModel.swift */; };
+		29963F3929545F2D008F6067 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29963F3829545F2D008F6067 /* ContentView.swift */; };
+		29963F3B29554A8D008F6067 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29963F3A29554A8D008F6067 /* ProfileView.swift */; };
 		7206902584CDE1731B24C89C /* Pods_MSQASignInDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F0CEC19C2BDA7F80BE443AB /* Pods_MSQASignInDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +26,9 @@
 		02758316293F144500493008 /* MSQASignInDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MSQASignInDemo.entitlements; sourceTree = "<group>"; };
 		02758317293F154900493008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0F0CEC19C2BDA7F80BE443AB /* Pods_MSQASignInDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSQASignInDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29963F362954596D008F6067 /* QuickAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAuthenticationViewModel.swift; sourceTree = "<group>"; };
+		29963F3829545F2D008F6067 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		29963F3A29554A8D008F6067 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		83A0675116B90A6886834EAB /* Pods-MSQASignInDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInDemo.release.xcconfig"; path = "Target Support Files/Pods-MSQASignInDemo/Pods-MSQASignInDemo.release.xcconfig"; sourceTree = "<group>"; };
 		B34A278854A21A5BBAEAEC9A /* Pods-MSQASignInDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSQASignInDemo.debug.xcconfig"; path = "Target Support Files/Pods-MSQASignInDemo/Pods-MSQASignInDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,6 +69,9 @@
 				02758317293F154900493008 /* Info.plist */,
 				02758316293F144500493008 /* MSQASignInDemo.entitlements */,
 				0220D97D29346C22002025A0 /* MSQASignInDemoApp.swift */,
+				29963F362954596D008F6067 /* QuickAuthenticationViewModel.swift */,
+				29963F3829545F2D008F6067 /* ContentView.swift */,
+				29963F3A29554A8D008F6067 /* ProfileView.swift */,
 				0220D98B29346C53002025A0 /* SignInView.swift */,
 				0220D98129346C23002025A0 /* Assets.xcassets */,
 				0220D98329346C23002025A0 /* Preview Content */,
@@ -210,6 +219,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0220D98C29346C53002025A0 /* SignInView.swift in Sources */,
+				29963F372954596D008F6067 /* QuickAuthenticationViewModel.swift in Sources */,
+				29963F3B29554A8D008F6067 /* ProfileView.swift in Sources */,
+				29963F3929545F2D008F6067 /* ContentView.swift in Sources */,
 				0220D97E29346C22002025A0 /* MSQASignInDemoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
