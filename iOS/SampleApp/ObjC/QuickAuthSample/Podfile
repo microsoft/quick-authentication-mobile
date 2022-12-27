@@ -3,6 +3,6 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'QuickAuthSample' do
-    pod 'MicrosoftQuickAuth', :path => '../../'
+    pod 'MicrosoftQuickAuth', :path => '../../../../'
     project 'QuickAuthSample.xcodeproj'
 end
