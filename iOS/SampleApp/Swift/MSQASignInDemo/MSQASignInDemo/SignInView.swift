@@ -30,17 +30,27 @@ import MicrosoftQuickAuth
 import SwiftUI
 
 struct SignInView: View {
-  @ObservedObject var signInButtonViewModel = MSQASignInButtonViewModel(
-    signInClient: MSQASignInClient(
-      configuration: MSQAConfiguration(clientID: "c4e50099-e6cd-43e4-a7c6-ffb3cebce505"), error: nil
-    ), presentingViewController: nil, completionBlock: { _, _ in /* Handle account info or error */ })
+  @ObservedObject var signInButtonViewModel: MSQASignInButtonViewModel
+
+  init(_ viewModel: QuickAuthenticationViewModel) {
+    signInButtonViewModel = MSQASignInButtonViewModel(
+      signInClient: viewModel.client, presentingViewController: nil,
+      completionBlock: { (account, error) in
+        if account != nil {
+          viewModel.state = .signedIn(account!)
+          viewModel.accountInfo = account
+        }
+        if error != nil {
+          print("Sign in failed")
+        }
+      })
+  }
 
   var body: some View {
-    Spacer()
-    MSQASignInButton(viewModel: signInButtonViewModel)
-      .accessibilityIdentifier("MSQASignInButton")
-      .padding()
     VStack {
+      MSQASignInButton(viewModel: signInButtonViewModel)
+        .accessibilityIdentifier("Microsoft sign in button")
+        .padding()
       HStack {
         Text("Button type:")
           .padding(.leading)
@@ -108,6 +118,5 @@ struct SignInView: View {
         Spacer()
       }
     }.pickerStyle(.segmented)
-    Spacer()
   }
 }

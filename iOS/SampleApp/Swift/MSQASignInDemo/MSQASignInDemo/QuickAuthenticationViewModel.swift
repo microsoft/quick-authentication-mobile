@@ -26,38 +26,37 @@
 //-----------------------------------------------------------------------------
 
 import MicrosoftQuickAuth
-import SwiftUI
 
-@main
-struct MSQASignInDemoApp: App {
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+final class QuickAuthenticationViewModel: ObservableObject {
+  @Published var state: State = .checkingStatus
+  @Published var accountInfo: MSQAAccountInfo?
+  @Published var client: MSQASignInClient = MSQASignInClient(
+    configuration: MSQAConfiguration(clientID: "c4e50099-e6cd-43e4-a7c6-ffb3cebce505"), error: nil)
 
-  var body: some Scene {
-    WindowGroup {
-      ContentView()
-        .environmentObject(appDelegate.authenticationViewModel)
+  init() {
+    self.client.getCurrentAccount { accountInfo, error in
+      if accountInfo != nil {
+        self.state = .signedIn(accountInfo!)
+        self.accountInfo = accountInfo!
+      } else {
+        self.state = .signedOut
+      }
     }
+  }
+
+  func signOut() {
+    client.signOut(completionBlock: { error in
+      if error == nil {
+        self.state = .signedOut
+      }
+    })
   }
 }
 
-final class AppDelegate: UIResponder, UIApplicationDelegate {
-  var authenticationViewModel = QuickAuthenticationViewModel()
-
-  func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    return true
-  }
-
-  func application(
-    _ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-  ) -> Bool {
-    let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
-    if sourceApplication != nil {
-      return authenticationViewModel.client.handle(
-        url, sourceApplication: sourceApplication!)
-    }
-    return true
+extension QuickAuthenticationViewModel {
+  enum State {
+    case signedIn(MSQAAccountInfo)
+    case signedOut
+    case checkingStatus
   }
 }

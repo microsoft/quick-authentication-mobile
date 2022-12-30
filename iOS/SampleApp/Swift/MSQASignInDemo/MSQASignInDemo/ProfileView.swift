@@ -25,39 +25,48 @@
 //
 //-----------------------------------------------------------------------------
 
+import MSQASignInSwift
 import MicrosoftQuickAuth
 import SwiftUI
 
-@main
-struct MSQASignInDemoApp: App {
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+struct UserProfileView: View {
+  @EnvironmentObject var authenticationViewModel: QuickAuthenticationViewModel
 
-  var body: some Scene {
-    WindowGroup {
-      ContentView()
-        .environmentObject(appDelegate.authenticationViewModel)
+  var body: some View {
+    return Group {
+      VStack(spacing: 10) {
+        HStack(alignment: .top) {
+          if let data = authenticationViewModel.accountInfo?.base64Photo,
+            let photo = UIImage(data: Data(base64Encoded: data) ?? Data())
+          {
+            Image(uiImage: photo)
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+              .frame(width: 45, height: 45, alignment: .center)
+              .scaledToFit()
+              .clipShape(Circle())
+              .accessibilityLabel(Text("User profile image."))
+          }
+          VStack(alignment: .leading) {
+            Text((authenticationViewModel.accountInfo?.fullName)!)
+              .font(.headline)
+            Text((authenticationViewModel.accountInfo?.email)!)
+            Spacer()
+            Text("Id token:")
+            Text((authenticationViewModel.accountInfo?.idToken)!)
+          }
+        }
+        Spacer()
+      }
+      .toolbar {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+          Button(NSLocalizedString("Sign Out", comment: "Sign out button"), action: signOut)
+        }
+      }
     }
   }
-}
 
-final class AppDelegate: UIResponder, UIApplicationDelegate {
-  var authenticationViewModel = QuickAuthenticationViewModel()
-
-  func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    return true
-  }
-
-  func application(
-    _ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-  ) -> Bool {
-    let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
-    if sourceApplication != nil {
-      return authenticationViewModel.client.handle(
-        url, sourceApplication: sourceApplication!)
-    }
-    return true
+  func signOut() {
+    authenticationViewModel.signOut()
   }
 }
