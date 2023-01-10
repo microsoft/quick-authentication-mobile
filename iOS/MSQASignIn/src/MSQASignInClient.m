@@ -423,7 +423,7 @@ NS_ASSUME_NONNULL_BEGIN
 
                          if (error) {
                            [MSQALogger.sharedInstance
-                               logWithLevel:MSQALogLevelError
+                               logWithLevel:MSQALogLevelInfo
                                      format:error.domain];
                          }
                          MSQAInteractiveTokenParameters *interactiveParams =
