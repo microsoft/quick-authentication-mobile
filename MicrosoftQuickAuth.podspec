@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "MicrosoftQuickAuth"
-  s.version      = "0.0.5"
+  s.version      = "0.0.6"
   s.summary      = "Enables iOS applications to sign in with Microsoft account."
   s.summary = <<-DESC
   The Microsoft Quick Auth SDK allows users to sign in with their Microsoft account from third-party applications.
