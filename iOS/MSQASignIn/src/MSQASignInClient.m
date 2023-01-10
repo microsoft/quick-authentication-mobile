@@ -420,14 +420,12 @@ NS_ASSUME_NONNULL_BEGIN
 
                            return;
                          }
-                         if (error &&
-                             error.code != MSALErrorInteractionRequired) {
-                           [MSQASignInClient callBlockOnMainThread:^{
-                             completionBlock(nil, error);
-                           }];
-                           return;
-                         }
 
+                         if (error) {
+                           [MSQALogger.sharedInstance
+                               logWithLevel:MSQALogLevelInfo
+                                     format:error.domain];
+                         }
                          MSQAInteractiveTokenParameters *interactiveParams =
                              [MSQASignInClient
                                  createInteractiveTokenParametersWithController:
