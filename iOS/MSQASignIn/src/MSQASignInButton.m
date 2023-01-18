@@ -58,7 +58,9 @@ static const CGFloat kSmallButtonHeight = 28;
 
 static const CGFloat kStandardCornerRadius = 4;
 
-static const CGFloat kFontSizeDeltaForAccessibilityLarger = 4;
+/// The ratio of font size used for accessibility larger text.
+static const CGFloat kFontSizeRatioForAccessibilityLarger = 1.25;
+
 static const CGFloat kLargeTextSize = 16;
 static const CGFloat kMediumTextSize = 14;
 static const CGFloat kSmallTextSize = 12;
@@ -669,7 +671,7 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 - (UIFont *)buttonTextFont {
   CGFloat size =
       self.isAccessibilityLargerEnabled
-          ? kFontSizeDeltaForAccessibilityLarger + [self buttonTextFontSize]
+          ? kFontSizeRatioForAccessibilityLarger * [self buttonTextFontSize]
           : [self buttonTextFontSize];
   // We only try to apply the SegoeUI-SemiBold font for English, other languages
   // use the system default.
