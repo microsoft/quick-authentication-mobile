@@ -58,6 +58,9 @@ static const CGFloat kSmallButtonHeight = 28;
 
 static const CGFloat kStandardCornerRadius = 4;
 
+/// The ratio of font size used for accessibility larger text.
+static const CGFloat kFontSizeRatioForAccessibilityLarger = 1.25;
+
 static const CGFloat kLargeTextSize = 16;
 static const CGFloat kMediumTextSize = 14;
 static const CGFloat kSmallTextSize = 12;
@@ -99,6 +102,9 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 
 /// Indicate if the layout direction is from right to left.
 @property(nonatomic, assign) BOOL isRTL;
+
+/// Indicate if the accessibility large text is enabled.
+@property(nonatomic, assign) BOOL isAccessibilityLargerEnabled;
 
 @end
 
@@ -170,6 +176,13 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
   [self addTarget:self
                 action:@selector(onButtonClicked)
       forControlEvents:UIControlEventTouchUpInside];
+
+  [[NSNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(didChangePreferredContentSize:)
+             name:UIContentSizeCategoryDidChangeNotification
+           object:nil];
+  self.isAccessibilityLargerEnabled = [self isAccessibilityLarger];
 
   self.clipsToBounds = YES;
   self.backgroundColor = [UIColor clearColor];
@@ -406,6 +419,25 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
          constraintA.constant == constraintB.constant;
 }
 
+- (BOOL)isAccessibilityLarger {
+  NSArray *largeSizes = @[
+    UIContentSizeCategoryAccessibilityLarge,
+    UIContentSizeCategoryAccessibilityExtraLarge,
+    UIContentSizeCategoryAccessibilityExtraExtraLarge,
+    UIContentSizeCategoryAccessibilityExtraExtraExtraLarge
+  ];
+  return [largeSizes containsObject:[[UIApplication sharedApplication]
+                                        preferredContentSizeCategory]];
+}
+
+- (void)didChangePreferredContentSize:(NSNotification *)notification {
+  BOOL isAccessibilityLarger = [self isAccessibilityLarger];
+  if (self.isAccessibilityLargerEnabled != isAccessibilityLarger) {
+    self.isAccessibilityLargerEnabled = isAccessibilityLarger;
+    [self updateUI];
+  }
+}
+
 #pragma mark - Handle user interaction
 
 - (void)buttonDidTouch {
@@ -637,7 +669,10 @@ typedef NS_ENUM(NSUInteger, MSQASignInButtonState) {
 }
 
 - (UIFont *)buttonTextFont {
-  CGFloat size = [self buttonTextFontSize];
+  CGFloat size =
+      self.isAccessibilityLargerEnabled
+          ? kFontSizeRatioForAccessibilityLarger * [self buttonTextFontSize]
+          : [self buttonTextFontSize];
   // We only try to apply the SegoeUI-SemiBold font for English, other languages
   // use the system default.
   if (![MSQASignInButton isEnglish]) {
