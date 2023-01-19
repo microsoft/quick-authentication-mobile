@@ -39,7 +39,7 @@ jobs:
     inputs:
       secureFile: 'ExportOptions.plist'
 
-  - bash: 'cd iOS/SampleApp/ && pod install'
+  - bash: 'cd iOS/SampleApp/ObjC/QuickAuthSample/ && pod install'
     displayName: 'Install dependencies'
 
   - task: Xcode@5
