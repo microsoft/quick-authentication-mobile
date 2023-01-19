@@ -49,7 +49,7 @@ jobs:
       scheme: 'SampleAppiOS'
       sdk: 'iphoneos'
       configuration: 'Debug'
-      xcWorkspacePath: 'iOS/SampleApp/QuickAuthSample.xcworkspace'
+      xcWorkspacePath: 'iOS/SampleApp/ObjC/QuickAuthSample/QuickAuthSample.xcworkspace'
       xcodeVersion: 'default'
       packageApp: true
       signingOption: default
