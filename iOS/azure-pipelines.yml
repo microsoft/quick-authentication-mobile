@@ -3,8 +3,21 @@
 # Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
-trigger: none
-pr: none
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - iOS
+
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - iOS
 
 pool:
   vmImage: 'macos-latest'
@@ -24,7 +37,7 @@ jobs:
     displayName: 'Install Provisioning Profile'
     inputs:
       provisioningProfileLocation: 'secureFiles'
-      provProfileSecureFile: '3f1fb761-5e70-4635-ab90-4cd46a498cbb.mobileprovision'
+      provProfileSecureFile: 'e18260a2-1481-4299-97a5-0164a39837c0.mobileprovision'
       removeProfile: true
 
   - task: DownloadSecureFile@1
