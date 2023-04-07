@@ -52,7 +52,7 @@ jobs:
           TargetPath: $(Build.ArtifactStagingDirectory)
       - task: EsrpRelease@2
         inputs:
-          ConnectedServiceName: 'QuickAuthESRPReleaseConnection'
+          ConnectedServiceName: '$(connectedServiceName)'
           Intent: 'PackageDistribution'
           ContentType: 'Maven'
           PackageLocation: '$(Build.ArtifactStagingDirectory)'
@@ -60,4 +60,4 @@ jobs:
           Approvers: '$(approvers)'
           ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
           MainPublisher: 'ESRPRELPACMANTEST'
-          DomainTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+          DomainTenantId: '$(domainTenantId)'
